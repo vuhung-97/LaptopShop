@@ -1,0 +1,298 @@
+﻿@model IEnumerable<LaptopShop.ViewModels.LaptopViewModel>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<!-- Hero Section -->
+<div class="container-fluid bg-light py-4 mb-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="font-weight-bold mb-2">Kết quả tìm kiếm</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent p-0 m-0">
+                        <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tìm kiếm</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-lg-4 text-lg-right">
+                <span class="badge badge-primary rounded-pill px-3 py-2 font-weight-normal">
+                    <i class="fa fa-laptop mr-1"></i> Tìm thấy <b>@Model.Count()</b> sản phẩm
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="product-item mb-4">
+                    <div class="product-card-wrapper">
+                        <!-- Product Image with Overlay Effects -->
+                        <div class="product-img-container">
+                            <a asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.IdLaptop">
+                                <img class="product-img" src="~/img/cat-4.jpg" alt="@item.TenLapTop">
+                            </a>
+                            <!-- Quick Action Buttons -->
+                            <div class="product-actions">
+                                <a asp-action="AddToListHeart" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-heart"></i></a>
+                                <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-shopping-cart"></i></a>
+                                <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop = "@item.IdLaptop" class="action-btn"><i class="fa fa-search"></i></a>
+                            </div>
+                            <!-- Sale Badge if needed -->
+                            <div class="sale-badge">-30%</div>
+                        </div>
+
+                        <!-- Product Details -->
+                        <div class="product-info">
+                            <div class="product-category">@item.TenLoai</div>
+                            <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="product-name"><h5>@item.TenLapTop</h5></a>
+
+                            <!-- Price Section -->
+                            <div class="product-price">
+                                <span class="current-price">VNĐ @item.GiaBan</span>
+                                <span class="original-price">VNĐ @(item.GiaBan * 130 / 100)</span>
+                            </div>
+
+                            <!-- Ratings -->
+                            <div class="product-rating">
+                                <div class="stars">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <span class="rating-count">(99)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Pagination -->
+<div class="container my-5">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trước</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Sau</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // Hiệu ứng hover cho sản phẩm
+        $('.product-card').hover(
+            function() {
+                $(this).addClass('shadow');
+                $(this).find('.product-action').fadeIn(300);
+            },
+            function() {
+                $(this).removeClass('shadow');
+                $(this).find('.product-action').fadeOut(300);
+            }
+        );
+
+        // Giới hạn tiêu đề sản phẩm
+        $('.product-title').each(function() {
+            var text = $(this).text();
+            if (text.length > 40) {
+                $(this).text(text.substring(0, 40) + '...');
+            }
+        });
+    });
+</script>
+
+<style>
+    .product-card {
+        transition: all 0.3s ease;
+    }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .product-action {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 10px 0;
+        display: none;
+    }
+
+    .object-fit-cover {
+        object-fit: cover;
+    }
+
+    .product-badge {
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .product-item {
+        transition: all 0.3s ease;
+    }
+
+    .product-card-wrapper {
+        background-color: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .product-card-wrapper:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+        }
+
+    .product-img-container {
+        position: relative;
+        overflow: hidden;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
+
+    .product-img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-img-container:hover .product-img {
+        transform: scale(1.08);
+    }
+
+    .product-actions {
+        position: absolute;
+        bottom: -50px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 0;
+        background: rgba(255, 255, 255, 0.9);
+        transition: bottom 0.3s ease;
+    }
+
+    .product-img-container:hover .product-actions {
+        bottom: 0;
+    }
+
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #fff;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .action-btn:hover {
+            background: #007bff;
+            color: white;
+        }
+
+    .sale-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #ff6b6b;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .product-info {
+        padding: 18px 15px;
+        text-align: center;
+    }
+
+    .product-category {
+        color: #6c757d;
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .product-name {
+        display: block;
+        color: #343a40;
+        font-weight: 600;
+        font-size: 15px;
+        text-decoration: none;
+        margin-bottom: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        transition: color 0.2s ease;
+    }
+
+        .product-name:hover {
+            color: #007bff;
+        }
+
+    .product-price {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .current-price {
+        color: #343a40;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .original-price {
+        color: #adb5bd;
+        font-size: 14px;
+        text-decoration: line-through;
+    }
+
+    .product-rating {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .stars {
+        color: #ffc107;
+        letter-spacing: 2px;
+    }
+
+    .rating-count {
+        font-size: 12px;
+        color: #6c757d;
+    }
+</style>

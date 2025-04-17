@@ -1,0 +1,21 @@
+﻿@{
+    //Layout = "_DanhSachHangHoa";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>404 - Not Found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="~/css/404.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.5/lottie.min.js"></script>
+</head>
+<body>
+    <div class="notfound-container">
+        <div id="svgContainer" class="animation"></div>
+        <p class="pb-4 text-danger">@TempData["Message"]</p><br />
+        <a href="/" class="back-button">Quay về trang chủ</a>
+    </div>
+    <script src="~/js/404.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+﻿@model IEnumerable<LaptopShop.ViewModels.CartViewModel>
+<a href="#" class="cart-btn btn px-2 mx-1">
+    <i class="fas fa-shopping-cart text-primary" style="font-size: 24px;"></i>
+    <span class="badge-cart">@(Model?.Count() ?? 0)</span>
+</a>

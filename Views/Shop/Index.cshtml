@@ -1,0 +1,9 @@
+﻿@model IEnumerable<LaptopShop.ViewModels.LaptopViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_DanhSachLaptopLayout";
+}
+
+<!-- DanhSachHangHoa start -->
+@await Html.PartialAsync("LaptopItem", Model)
+<!-- DanhSachHangHoa end -->

@@ -1,0 +1,89 @@
+﻿@model IEnumerable<LaptopShop.ViewModels.ThuongHieuViewModel>
+@foreach (var item in Model)
+{
+    <a asp-action="Search" asp-controller="HangHoa" asp-route-querry="@item.IdThuongHieu" class="brand-logo-link">
+        <div class="brand-logo-container">
+            <div class="brand-logo-inner">
+                <img src="~/Hinh/NhaCC/@item.Logo" alt="@item.TenThuongHieu" class="brand-logo-img">
+            </div>
+        </div>
+    </a>
+}
+
+<!-- CSS to add to your stylesheet -->
+<style>
+    .brand-logo-link {
+        display: block;
+        padding: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .brand-logo-container {
+        width: 230px;
+        height: 150px;
+        background: #ffffff;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .brand-logo-inner {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .brand-logo-img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+        transition: all 0.4s ease;
+        filter: grayscale(30%);
+    }
+
+    .brand-logo-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+        .brand-logo-container:hover .brand-logo-inner {
+            background: #ffffff;
+        }
+
+        .brand-logo-container:hover .brand-logo-img {
+            transform: scale(1.08);
+            filter: grayscale(0%);
+        }
+
+    /* Simple gradient border effect */
+    .brand-logo-container:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 20px;
+        border: 1px solid transparent;
+        background: linear-gradient(145deg, rgba(255,255,255,0), rgba(0,123,255,0.2));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .brand-logo-container:hover:after {
+        opacity: 1;
+    }
+</style>

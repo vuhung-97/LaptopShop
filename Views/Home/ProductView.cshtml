@@ -7,12 +7,12 @@
                 <!-- Product Image with Overlay Effects -->
                 <div class="product-img-container">
                     <a asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.IdLaptop">
-                        <img class="product-img" src="~/img/cat-4.jpg" alt="@item.TenLapTop">
+                        <img class="product-img" src="~/Hinh/Laptop/@item.HinhAnh" alt="@item.TenLapTop">
                     </a>
                     <!-- Quick Action Buttons -->
                     <div class="product-actions">
-                        <a asp-action="AddToListHeart" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-heart"></i></a>
-                        <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-shopping-cart"></i></a>
+                        <a asp-action="AddToListHeartInHome" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-heart"></i></a>
+                        <a asp-action="AddToCartInHome" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-shopping-cart"></i></a>
                         <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-search"></i></a>
                     </div>
                     <!-- Sale Badge if needed -->
@@ -26,8 +26,8 @@
 
                     <!-- Price Section -->
                     <div class="current-price">
-                        <span class="current-price">VNĐ @item.GiaBan</span><br />
-                        <span class="original-price">@(item.GiaBan * 130 / 100)</span>
+                        <span class="current-price">@string.Format("{0:N0}", item.GiaBan) VNĐ</span><br />
+                        <span class="original-price">@string.Format("{0:N0}", item.GiaBan * 130 / 100) VNĐ</span>
                     </div>
 
                     <!-- Ratings -->

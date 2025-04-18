@@ -5,6 +5,286 @@
       "PackagePath": "staticwebassets\\LaptopShop.j3co77rom6.bundle.scp.css"
     },
     {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop.sql",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop.sql"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_aspire5.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_aspire5.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_aspire7.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_aspire7.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_chromebook15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_chromebook15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_conceptd7.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_conceptd7.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_nitro5.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_nitro5.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_predator_helios300.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_predator_helios300.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_predator_triton500.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_predator_triton500.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_spin5.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_spin5.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_swift1.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_swift1.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\acer_swift3.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\acer_swift3.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_chromebook_flip.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_chromebook_flip.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_rog_strix_g15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_rog_strix_g15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_rog_zephyrus_g14.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_rog_zephyrus_g14.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_tuf_dash_f15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_tuf_dash_f15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_tuf_gaming_a15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_tuf_gaming_a15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_vivobook15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_vivobook15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_vivobook_s14.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_vivobook_s14.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_zenbook13.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_zenbook13.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_zenbook_flip14.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_zenbook_flip14.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\asus_zenbook_pro_duo.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\asus_zenbook_pro_duo.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_alienware_m15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_alienware_m15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_area51m.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_area51m.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_g5_15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_g5_15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_g7_15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_g7_15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_inspiron15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_inspiron15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_latitude7420.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_latitude7420.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_precision7550.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_precision7550.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_vostro15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_vostro15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_xps13.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_xps13.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\dell_xps17.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\dell_xps17.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_elite_dragonfly.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_elite_dragonfly.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_elitebook850.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_elitebook850.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_envy13.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_envy13.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_omen15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_omen15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_pavilion15.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_pavilion15.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_pavilion_x360.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_pavilion_x360.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_probook450.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_probook450.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_spectre_x360.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_spectre_x360.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_spectre_x360_14.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_spectre_x360_14.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\hp_zbook_create_g7.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\hp_zbook_create_g7.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_ideapad3.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_ideapad3.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_ideapad_flex5.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_ideapad_flex5.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_legion5.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_legion5.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_legion7i.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_legion7i.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_thinkpad_e14.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_thinkpad_e14.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_thinkpad_p1.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_thinkpad_p1.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_thinkpad_x1_carbon.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_thinkpad_x1_carbon.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_thinkpad_x1_extreme.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_thinkpad_x1_extreme.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_thinkpad_x1_yoga.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_thinkpad_x1_yoga.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\lenovo_yoga9i.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\lenovo_yoga9i.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_12_inch.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_12_inch.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_air_m1.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_air_m1.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_air_m2.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_air_m2.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_air_retina.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_air_retina.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_pro_13.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_pro_13.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_pro_13_retina.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_pro_13_retina.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_pro_14.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_pro_14.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_pro_16.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_pro_16.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_pro_m1max.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_pro_m1max.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\Laptop\\macbook_pro_m1pro.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\Laptop\\macbook_pro_m1pro.jpg"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\ThongTinShop.sql",
+      "PackagePath": "staticwebassets\\Hinh\\ThongTinShop.sql"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\ThuongHieu\\acer.png",
+      "PackagePath": "staticwebassets\\Hinh\\ThuongHieu\\acer.png"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\ThuongHieu\\apple.png",
+      "PackagePath": "staticwebassets\\Hinh\\ThuongHieu\\apple.png"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\ThuongHieu\\asus.png",
+      "PackagePath": "staticwebassets\\Hinh\\ThuongHieu\\asus.png"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\ThuongHieu\\dell.png",
+      "PackagePath": "staticwebassets\\Hinh\\ThuongHieu\\dell.png"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\ThuongHieu\\hp.png",
+      "PackagePath": "staticwebassets\\Hinh\\ThuongHieu\\hp.png"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\ThuongHieu\\lenovo.png",
+      "PackagePath": "staticwebassets\\Hinh\\ThuongHieu\\lenovo.png"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\chonloailaptop.png",
+      "PackagePath": "staticwebassets\\Hinh\\chonloailaptop.png"
+    },
+    {
+      "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\Hinh\\logoshop.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\logoshop.jpg"
+    },
+    {
       "Id": "E:\\c#\\LaptopShop\\LaptopShop\\wwwroot\\LICENSE.txt",
       "PackagePath": "staticwebassets\\LICENSE.txt"
     },

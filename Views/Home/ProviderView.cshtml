@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<LaptopShop.ViewModels.ThuongHieuViewModel>
 @foreach (var item in Model)
 {
-    <a asp-action="Search" asp-controller="HangHoa" asp-route-querry="@item.IdThuongHieu" class="brand-logo-link">
+    <a asp-action="Index" asp-controller="Shop" asp-route-idthuonghieu="@item.IdThuongHieu" class="brand-logo-link">
         <div class="brand-logo-container">
             <div class="brand-logo-inner">
-                <img src="~/Hinh/NhaCC/@item.Logo" alt="@item.TenThuongHieu" class="brand-logo-img">
+                <img src="~/Hinh/ThuongHieu/@item.Logo" alt="@item.TenThuongHieu" class="brand-logo-img">
             </div>
         </div>
     </a>
@@ -59,14 +59,14 @@
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
-        .brand-logo-container:hover .brand-logo-inner {
-            background: #ffffff;
-        }
+    .brand-logo-container:hover .brand-logo-inner {
+        background: #ffffff;
+    }
 
-        .brand-logo-container:hover .brand-logo-img {
-            transform: scale(1.08);
-            filter: grayscale(0%);
-        }
+    .brand-logo-container:hover .brand-logo-img {
+        transform: scale(1.08);
+        filter: grayscale(0%);
+    }
 
     /* Simple gradient border effect */
     .brand-logo-container:after {

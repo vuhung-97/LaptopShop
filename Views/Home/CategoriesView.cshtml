@@ -2,10 +2,10 @@
 @foreach (var item in Model)
 {
     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" asp-controller="HangHoa" asp-action="Index" asp-route-loai="@item.IdLoai">
+        <a class="text-decoration-none" asp-controller="Shop" asp-action="Index" asp-route-idloai="@item.IdLoai">
             <div class="cat-item d-flex align-items-center mb-4 shadow-hover">
                 <div class="cat-img-container">
-                    <img class="cat-img" src="" alt="@item.TenLoai">
+                    <img class="cat-img" src="~/Hinh/chonloailaptop.png" alt="@item.TenLoai">
                     <div class="cat-img-overlay"></div>
                 </div>
                 <div class="cat-info">

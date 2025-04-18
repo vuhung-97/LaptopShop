@@ -44,6 +44,35 @@ namespace LaptopShop.Controllers
 
             return RedirectToAction("Index", "Shop");
         }
+        public IActionResult AddToListHeartInHome(string idlaptop, int quantity = 1)
+        {
+            var danhsach = lstHeart;
+            var item = danhsach.SingleOrDefault(it => it.Id == idlaptop);
+            if (item == null)
+            {
+                var temp = db.Laptops.SingleOrDefault(p => p.IdLaptop == idlaptop);
+                if (temp == null)
+                {
+                    item = new CartViewModel();
+                    return Redirect("/404");
+                }
+                else
+                {
+                    item = new CartViewModel()
+                    {
+                        Id = temp.IdLaptop,
+                        Name = temp.TenLapTop,
+                        Hinh = temp.HinhAnh ?? "",
+                        Price = temp.GiaBan
+                    };
+                    danhsach.Add(item);
+                }
+            }
+
+            HttpContext.Session.Set(DsTenKey.lIST_HEART_KEY, danhsach);
+
+            return RedirectToAction("Index", "Home");
+        }
 
         public IActionResult RemoveFromListHeart(string idlaptop)
         {

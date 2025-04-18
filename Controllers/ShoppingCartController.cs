@@ -23,7 +23,11 @@ namespace LaptopShop.Controllers
             Add(idlaptop, soluong);
             return RedirectToAction("Index", "Shop");
         }
-
+        public IActionResult AddToCartInHome(string idlaptop, int soluong = 1)
+        {
+            Add(idlaptop, soluong);
+            return RedirectToAction("Index", "Home");
+        }
         public IActionResult AddToCartAndShow(string idlaptop, int soluong = 1)
         {
             Add(idlaptop, soluong);

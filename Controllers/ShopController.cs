@@ -37,7 +37,11 @@ namespace LaptopShop.Controllers
                 GiaBan = p.GiaBan,
                 HinhAnh = p.HinhAnh,
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
-                TenLoai = p.IdLoaiNavigation.TenLoai
+                TenLoai = p.IdLoaiNavigation.TenLoai,
+                Cpu = p.IdThongTinNavigation.Cpu,
+                Ram = p.IdThongTinNavigation.Ram,
+                Ocung = p.IdThongTinNavigation.Ocung,
+                ManHinh = p.IdThongTinNavigation.ManHinh
             }).ToList();
 
             return View(lap);
@@ -72,23 +76,39 @@ namespace LaptopShop.Controllers
 
         public IActionResult Detail(string? idlaptop, int soluong = 1)
         {
-            var laptop = db.Laptops.Include(p => p.IdThuongHieuNavigation)
+            var lt = db.Laptops.Include(p => p.IdThuongHieuNavigation)
                                    .Include(p => p.IdLoaiNavigation)
                                    .SingleOrDefault(p => p.IdLaptop == idlaptop);
-            if (laptop == null)
-            {
-                TempData["Messange"] = "Không tìm thấy sản phẩm nào!";
-                return RedirectToAction("PageNotFound", "Home");
-            }
+            var d = db.ThongTinChiTiets.SingleOrDefault(p => p.IdThongTin == lt.IdThongTin);
 
-            var laptopDetail = new LaptopViewModel
+            var laptop = new LaptopViewModel
             {
-                IdLaptop = laptop.IdLaptop,
-                TenLapTop = laptop.TenLapTop,
-                GiaBan = laptop.GiaBan,
-                HinhAnh = laptop.HinhAnh,
-                ThuongHieu = laptop.IdThuongHieuNavigation.TenThuongHieu,
-                TenLoai = laptop.IdLoaiNavigation.TenLoai
+                IdLaptop = lt.IdLaptop,
+                TenLapTop = lt.TenLapTop,
+                GiaBan = lt.GiaBan,
+                HinhAnh = lt.HinhAnh,
+                ThuongHieu = lt.IdThuongHieuNavigation.TenThuongHieu,
+                TenLoai = lt.IdLoaiNavigation.TenLoai
+            };
+
+            var detail = new DetailViewModel
+            {
+                IdThongTin = d.IdThongTin,
+                Ram = d.Ram,
+                Ocung = d.Ocung,
+                ManHinh = d.ManHinh,
+                Pin = d.Pin,
+                DoHoa = d.DoHoa,
+                Cpu = d.Cpu,
+                CongGiaoTiep = d.CongGiaoTiep,
+                HeDieuHanh = d.HeDieuHanh,
+                TrongLuong = d.TrongLuong
+            };
+
+            var laptopDetail = new LaptopDetailViewModel
+            {
+                Laptop = laptop,
+                Detail = detail
             };
 
             ViewBag.sl = soluong;

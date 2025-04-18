@@ -1,4 +1,4 @@
-﻿@model LaptopShop.ViewModels.LaptopViewModel
+﻿@model LaptopShop.ViewModels.LaptopDetailViewModel
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -13,7 +13,7 @@
             <div id="product-carousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner bg-light">
                     <div class="carousel-item active">
-                        <img class="w-100 h-100" src="~/img/cat-4.jpg" alt="Image">
+                        <img class="w-100 h-100" src="~/Hinh/Laptop/@Model.Laptop.HinhAnh" alt="@Model.Laptop.TenLapTop">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
@@ -27,7 +27,7 @@
 
         <div class="col-lg-7 h-auto mb-30">
             <div class="h-100 bg-light p-30">
-                <h5>@Model.TenLoai: @Model.ThuongHieu</h5><h3><b>@Model.TenLapTop</b></h3>
+                <h5>@Model.Laptop.TenLoai: @Model.Laptop.ThuongHieu</h5><h3><b>@Model.Laptop.TenLapTop</b></h3>
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
                         <small class="fas fa-star"></small>
@@ -38,7 +38,7 @@
                     </div>
                     <small class="pt-1">(99 Reviews)</small>
                 </div>
-                <h3 class="font-weight-semi-bold mb-4">VNĐ @Model.GiaBan</h3>
+                <h3 class="font-weight-semi-bold mb-4">@string.Format("{0:N0}", Model.Laptop.GiaBan) VNĐ</h3>
                 <p class="mb-4">
                     
                 </p>
@@ -68,7 +68,7 @@
                     </form>
                 </div>
                
-                <form asp-action="AddToCartAndShow" asp-controller="ShoppingCart" asp-route-idlaptop="@Model.IdLaptop">
+                <form asp-action="AddToCartAndShow" asp-controller="ShoppingCart" asp-route-idlaptop="@Model.Laptop.IdLaptop">
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity mr-3" style="width: 130px;">
                             <div class="input-group-btn">
@@ -122,40 +122,49 @@
                         <h4 class="mb-3">Product Description</h4>
                     </div>
                     <div class="tab-pane fade" id="tab-pane-2">
-                        <h4 class="mb-3">Additional Information</h4>
-                        <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.</p>
+                        <h4 class="mb-3">Thông Tin Cấu Hình Chi Tiết</h4>
                         <div class="row">
-                            <div class="col-md-6">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item px-0">
-                                        Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                    </li>
-                                    <li class="list-group-item px-0">
-                                        Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                    </li>
-                                    <li class="list-group-item px-0">
-                                        Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                    </li>
-                                    <li class="list-group-item px-0">
-                                        Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item px-0">
-                                        Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                    </li>
-                                    <li class="list-group-item px-0">
-                                        Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                    </li>
-                                    <li class="list-group-item px-0">
-                                        Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                    </li>
-                                    <li class="list-group-item px-0">
-                                        Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                    </li>
-                                </ul>
+                            <div class="col-12">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td width="25%" class="fw-bold">CPU:</td>
+                                            <td>@Model.Detail.Cpu</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">RAM:</td>
+                                            <td>@Model.Detail.Ram</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Ổ cứng:</td>
+                                            <td>@Model.Detail.Ocung</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Màn hình:</td>
+                                            <td>@Model.Detail.ManHinh</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Card đồ họa:</td>
+                                            <td>@Model.Detail.DoHoa</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Kết nối:</td>
+                                            <td>@Model.Detail.CongGiaoTiep</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Pin:</td>
+                                            <td>@Model.Detail.Pin</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Hệ điều hành:</td>
+                                            <td>@Model.Detail.HeDieuHanh</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Trọng lượng:</td>
+                                            <td>@Model.Detail.TrongLuong</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

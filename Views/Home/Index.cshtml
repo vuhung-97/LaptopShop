@@ -6,17 +6,17 @@
 
 <!--Products Start-->
 <div class="container-fluid pt-5">
-    <!-- Thêm nút View More -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-0"><span class="bg-secondary pr-3">Products</span></h2>
         <!-- Thêm nút View More -->
-        <a href="/HangHoa" class="btn btn-outline-primary btn-lg px-4 py-2 rounded-pill shadow-sm">View More >></a>
+        <a asp-action="Index" asp-controller="Shop" class="btn btn-outline-primary btn-lg px-4 py-2 rounded-pill shadow-sm">View More >></a>
     </div>
     <div class="row px-xl-5 pb-3">
         @await Html.PartialAsync("ProductView", Model.LaptopList)
     </div>
 </div>
 <!--Products End-->
+
 <!-- Categories Start -->
 <div class="container-fluid pt-5">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categories</span></h2>
@@ -25,6 +25,7 @@
     </div>
 </div>
 <!-- Categories End -->
+
 <!-- Provider Start -->
 <div class="container-fluid py-5">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Provider</span></h2>

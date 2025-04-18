@@ -1,75 +1,47 @@
-﻿@{
+﻿@model LaptopShop.ViewModels.CheckoutViewModel
+@{
     ViewData["Title"] = "Thanh toán";
     Layout = "_MyLayoutCustomer";
+    double tongtien = (Model.GioHang != null)
+        ? Model.GioHang.Sum(p => p.ThanhTien)
+        : 0;
+    double tienship = tongtien != 0 ? 30000 : 0;
 }
 
 <!-- Checkout Start -->
-<div class="container-fluid py-5">
-    <div class="container">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
-            <span class="bg-secondary pr-3">Thanh toán đơn hàng</span>
-        </h2>
+<form asp-action="DatHang" asp-controller="Checkout" method="post">
+    <div class="container-fluid py-5">
+        <div class="container">
+            <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+                <span class="bg-secondary pr-3">Thanh toán đơn hàng</span>
+            </h2>
 
-        <div class="row px-xl-5">
-            <div class="col-lg-8">
-                <!-- Billing Address -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-primary text-white py-3">
-                        <h5 class="mb-0">Thông tin thanh toán</h5>
-                    </div>
-                    <div class="card-body p-4">
-                        <form>
+            <div class="row px-xl-5">
+                <div class="col-lg-8">
+                    <!-- Billing Address -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h5 class="mb-0">Thông tin thanh toán</h5>
+                        </div>
+                        <div class="card-body p-4">
                             <div class="row">
-                                <div class="col-md-6 form-group mb-3">
+                                <div class="col-md-6 form-group mb-3" >
                                     <label class="font-weight-bold mb-2">Họ</label>
-                                    <input class="form-control" type="text" placeholder="Nguyễn">
+                                    <input asp-for="ThongTinKhachHang.Ho" class="form-control" type="text" placeholder="Nguyễn">
                                 </div>
                                 <div class="col-md-6 form-group mb-3">
                                     <label class="font-weight-bold mb-2">Tên</label>
-                                    <input class="form-control" type="text" placeholder="Văn A">
+                                    <input asp-for="ThongTinKhachHang.Ten" class="form-control" type="text" placeholder="Văn A">
                                 </div>
                                 <div class="col-md-6 form-group mb-3">
                                     <label class="font-weight-bold mb-2">Email</label>
-                                    <input class="form-control" type="email" placeholder="example@email.com">
+                                    <input asp-for="ThongTinKhachHang.Email" class="form-control" type="email" placeholder="example@email.com">
                                 </div>
                                 <div class="col-md-6 form-group mb-3">
                                     <label class="font-weight-bold mb-2">Số điện thoại</label>
-                                    <input class="form-control" type="tel" placeholder="0912 345 678">
+                                    <input asp-for="ThongTinKhachHang.SoDienThoai" class="form-control" type="tel" placeholder="0912 345 678">
                                 </div>
-                                <div class="col-md-12 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Địa chỉ</label>
-                                    <input class="form-control" type="text" placeholder="123 Đường ABC">
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Tỉnh/Thành phố</label>
-                                    <select class="form-control">
-                                        <option selected>Hồ Chí Minh</option>
-                                        <option>Hà Nội</option>
-                                        <option>Đà Nẵng</option>
-                                        <option>Cần Thơ</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Quận/Huyện</label>
-                                    <select class="form-control">
-                                        <option selected>Quận 1</option>
-                                        <option>Quận 2</option>
-                                        <option>Quận 3</option>
-                                        <option>Quận Bình Thạnh</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Phường/Xã</label>
-                                    <select class="form-control">
-                                        <option selected>Phường Bến Nghé</option>
-                                        <option>Phường Bến Thành</option>
-                                        <option>Phường Đa Kao</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Mã bưu điện</label>
-                                    <input class="form-control" type="text" placeholder="700000">
-                                </div>
+                                
                                 <div class="col-md-12 form-group mb-3">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="newaccount">
@@ -79,178 +51,155 @@
                                 <div class="col-md-12">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="shipto">
-                                        <label class="custom-control-label" for="shipto" data-toggle="collapse" data-target="#shipping-address">Giao hàng đến địa chỉ khác</label>
+                                        <label class="custom-control-label" for="shipto" data-toggle="collapse" data-target="#shipping-address">Giao hàng đến địa chỉ</label>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div class="collapse mb-4" id="shipping-address">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-primary text-white py-3">
+                                <h5 class="mb-0">Địa chỉ giao hàng</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row">
+                                    <div class="col-md-12 form-group mb-3">
+                                        <label class="font-weight-bold mb-2">Địa chỉ</label>
+                                        <input asp-for="ThongTinKhachHang.DiaChi" class="form-control" type="text" placeholder="123 Đường ABC">
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label class="font-weight-bold mb-2">Tỉnh/Thành phố</label>
+                                        <select asp-for="ThongTinKhachHang.TinhThanh" class="form-control">
+                                            <option selected>Hồ Chí Minh</option>
+                                            <option>Hà Nội</option>
+                                            <option>Đà Nẵng</option>
+                                            <option>Cần Thơ</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label class="font-weight-bold mb-2">Quận/Huyện</label>
+                                        <select asp-for="ThongTinKhachHang.QuanHuyen" class="form-control">
+                                            <option selected>Quận 1</option>
+                                            <option>Quận 2</option>
+                                            <option>Quận 3</option>
+                                            <option>Quận Bình Thạnh</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label class="font-weight-bold mb-2">Phường/Xã</label>
+                                        <select asp-for="ThongTinKhachHang.PhuongXa" class="form-control">
+                                            <option selected>Phường Bến Nghé</option>
+                                            <option>Phường Bến Thành</option>
+                                            <option>Phường Đa Kao</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label class="font-weight-bold mb-2">Mã bưu điện</label>
+                                        <input asp-for="ThongTinKhachHang.MaBuuDien" class="form-control" type="text" placeholder="700000">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Shipping Address -->
-                <div class="collapse mb-4" id="shipping-address">
-                    <div class="card border-0 shadow-sm">
+                <div class="col-lg-4">
+                    <!-- Order Summary -->
+                    <div class="card border-0 shadow-sm mb-4">
                         <div class="card-header bg-primary text-white py-3">
-                            <h5 class="mb-0">Địa chỉ giao hàng</h5>
+                            <h5 class="mb-0">Thông tin đơn hàng</h5>
                         </div>
                         <div class="card-body p-4">
-                            <div class="row">
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Họ</label>
-                                    <input class="form-control" type="text" placeholder="Nguyễn">
+                            <div>
+                                <h6 class="font-weight-bold mb-3">Sản phẩm</h6>
+                                @foreach(var item in Model.GioHang)
+                                {
+                                    <div class="product-item d-flex justify-content-between align-items-center pb-3 mb-3 border-bottom">
+                                        <div class="d-flex align-items-center">
+                                            <img src="/Hinh/Laptop/@item.Hinh" alt="Laptop" class="img-fluid mr-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                            <div>
+                                                <h6 class="mb-1">@item.Name</h6>
+                                                <small class="text-muted">SL: @item.Amount</small>
+                                            </div>
+                                        </div>
+                                        <span class="font-weight-medium">@string.Format("{0:N0}", item.ThanhTien) VNĐ</span>
+                                    </div>
+                                }
+                            </div>
+                            <div class="border-bottom pt-2 pb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <h6>Tạm tính:</h6>
+                                    <h6>@string.Format("{0:N0}", tongtien) VNĐ</h6>
                                 </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Tên</label>
-                                    <input class="form-control" type="text" placeholder="Văn A">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="font-weight-medium">Phí vận chuyển:</h6>
+                                    <h6 class="font-weight-medium">@string.Format("{0:N0}", tienship) VNĐ</h6>
                                 </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Email</label>
-                                    <input class="form-control" type="email" placeholder="example@email.com">
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Số điện thoại</label>
-                                    <input class="form-control" type="tel" placeholder="0912 345 678">
-                                </div>
-                                <div class="col-md-12 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Địa chỉ</label>
-                                    <input class="form-control" type="text" placeholder="123 Đường ABC">
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Tỉnh/Thành phố</label>
-                                    <select class="form-control">
-                                        <option selected>Hồ Chí Minh</option>
-                                        <option>Hà Nội</option>
-                                        <option>Đà Nẵng</option>
-                                        <option>Cần Thơ</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Quận/Huyện</label>
-                                    <select class="form-control">
-                                        <option selected>Quận 1</option>
-                                        <option>Quận 2</option>
-                                        <option>Quận 3</option>
-                                        <option>Quận Bình Thạnh</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Phường/Xã</label>
-                                    <select class="form-control">
-                                        <option selected>Phường Bến Nghé</option>
-                                        <option>Phường Bến Thành</option>
-                                        <option>Phường Đa Kao</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Mã bưu điện</label>
-                                    <input class="form-control" type="text" placeholder="700000">
+                            </div>
+                            <div class="pt-3">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="font-weight-bold">Tổng cộng:</h5>
+                                    <h5 class="font-weight-bold text-primary">@string.Format("{0:N0}", tongtien + tienship) VNĐ</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4">
-                <!-- Order Summary -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-primary text-white py-3">
-                        <h5 class="mb-0">Thông tin đơn hàng</h5>
-                    </div>
-                    <div class="card-body p-4">
-                        <div>
-                            <h6 class="font-weight-bold mb-3">Sản phẩm</h6>
-                            <div class="product-item d-flex justify-content-between align-items-center pb-3 mb-3 border-bottom">
-                                <div class="d-flex align-items-center">
-                                    <img src="/img/product-1.jpg" alt="Laptop" class="img-fluid mr-3" style="width: 60px; height: 60px; object-fit: cover;">
-                                    <div>
-                                        <h6 class="mb-1">Laptop Asus VivoBook</h6>
-                                        <small class="text-muted">SL: 1</small>
+                    <!-- Payment Methods -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h5 class="mb-0">Phương thức thanh toán</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="col">
+                                <div class="payment-method mb-3 p-3 border rounded">
+                                    <div class="custom-control custom-radio d-flex align-items-center">
+                                        <input type="radio" class="custom-control-input align-items-center" id="cod" checked asp-for="ThongTinKhachHang.PhuongThucThanhToan" value="0">
+                                        <label class="custom-control-label d-flex align-items-center w-100" for="cod">
+                                            <i class="fa fa-money-bill-wave text-primary me-3" style="font-size: 24px; margin-right:5px;"></i>
+                                            <div class="text-wrap">
+                                                <span class="d-block fw-bold">Thanh toán khi nhận hàng</span>
+                                                @* <small class="text-muted">Thanh toán bằng tiền mặt khi nhận hàng</small> *@
+                                            </div>
+                                        </label>
                                     </div>
                                 </div>
-                                <span class="font-weight-medium">15,990,000₫</span>
-                            </div>
-                            <div class="product-item d-flex justify-content-between align-items-center pb-3 mb-3 border-bottom">
-                                <div class="d-flex align-items-center">
-                                    <img src="/img/product-2.jpg" alt="Laptop" class="img-fluid mr-3" style="width: 60px; height: 60px; object-fit: cover;">
-                                    <div>
-                                        <h6 class="mb-1">Chuột Logitech MX Master</h6>
-                                        <small class="text-muted">SL: 1</small>
+                                <div class="payment-method mb-3 p-3 border rounded">
+                                    <div class="custom-control custom-radio d-flex align-items-center">
+                                        <input type="radio" class="custom-control-input" value="1" id="bank" asp-for="ThongTinKhachHang.PhuongThucThanhToan" checked>
+                                        <label class="custom-control-label d-flex align-items-center w-100" for="bank">
+                                            <i class="fa fa-university text-primary me-3" style="font-size: 24px; margin-right:5px;"></i>
+                                            <div class="text-wrap">
+                                                <span class="d-block fw-bold">Chuyển khoản ngân hàng</span>
+                                                @* <small class="text-muted">Chuyển khoản trước khi giao hàng</small> *@
+                                            </div>
+                                        </label>
                                     </div>
                                 </div>
-                                <span class="font-weight-medium">1,290,000₫</span>
-                            </div>
-                        </div>
-                        <div class="border-bottom pt-2 pb-3">
-                            <div class="d-flex justify-content-between mb-2">
-                                <h6>Tạm tính:</h6>
-                                <h6>17,280,000₫</h6>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <h6 class="font-weight-medium">Phí vận chuyển:</h6>
-                                <h6 class="font-weight-medium">30,000₫</h6>
-                            </div>
-                        </div>
-                        <div class="pt-3">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="font-weight-bold">Tổng cộng:</h5>
-                                <h5 class="font-weight-bold text-primary">17,310,000₫</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Payment Methods -->
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-primary text-white py-3">
-                        <h5 class="mb-0">Phương thức thanh toán</h5>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="payment-methods">
-                            <div class="payment-method mb-3 p-3 border rounded">
-                                <div class="custom-control custom-radio d-flex align-items-center">
-                                    <input type="radio" class="custom-control-input" name="payment" id="cod" checked>
-                                    <label class="custom-control-label d-flex align-items-center w-100" for="cod">
-                                        <i class="fa fa-money-bill-wave text-primary mr-3" style="font-size: 24px;"></i>
-                                        <div>
-                                            <span class="d-block font-weight-bold">Thanh toán khi nhận hàng</span>
-                                            <small class="text-muted">Thanh toán bằng tiền mặt khi nhận hàng</small>
-                                        </div>
-                                    </label>
+                                <div class="payment-method mb-4 p-3 border rounded">
+                                    <div class="custom-control custom-radio d-flex align-items-center">
+                                        <input type="radio" class="custom-control-input" id="momo" asp-for="ThongTinKhachHang.PhuongThucThanhToan" value="2">
+                                        <label class="custom-control-label d-flex align-items-center w-100" for="momo">
+                                            <i class="fa fa-credit-card text-primary me-3" style="font-size: 24px; margin-right:5px;"></i>
+                                            <div class="text-wrap">
+                                                <span class="d-block fw-bold">Thanh toán Momo/Zalopay</span>
+                                                @* <small class="text-muted">Thanh toán qua ví điện tử</small> *@
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="payment-method mb-3 p-3 border rounded">
-                                <div class="custom-control custom-radio d-flex align-items-center">
-                                    <input type="radio" class="custom-control-input" name="payment" id="bank">
-                                    <label class="custom-control-label d-flex align-items-center w-100" for="bank">
-                                        <i class="fa fa-university text-primary mr-3" style="font-size: 24px;"></i>
-                                        <div>
-                                            <span class="d-block font-weight-bold">Chuyển khoản ngân hàng</span>
-                                            <small class="text-muted">Chuyển khoản trước khi giao hàng</small>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="payment-method mb-4 p-3 border rounded">
-                                <div class="custom-control custom-radio d-flex align-items-center">
-                                    <input type="radio" class="custom-control-input" name="payment" id="momo">
-                                    <label class="custom-control-label d-flex align-items-center w-100" for="momo">
-                                        <i class="fa fa-credit-card text-primary mr-3" style="font-size: 24px;"></i>
-                                        <div>
-                                            <span class="d-block font-weight-bold">Thanh toán Momo/Zalopay</span>
-                                            <small class="text-muted">Thanh toán qua ví điện tử</small>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold">
+                                <i class="fa fa-check-circle me-2"></i>  Đặt hàng ngay
+                            </button>
                         </div>
-                        <button class="btn btn-primary btn-block py-3 font-weight-bold">
-                            <i class="fa fa-check-circle mr-2"></i>Đặt hàng ngay
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 <!-- Checkout End -->

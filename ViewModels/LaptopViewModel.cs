@@ -16,5 +16,12 @@ namespace LaptopShop.ViewModels
 
         public string? TenLoai { get; set; }
 
+        public string? Cpu { get; set; }
+
+        public string? Ram { get; set; }
+
+        public string? Ocung { get; set; }
+
+        public string? ManHinh { get; set; }
     }
 }

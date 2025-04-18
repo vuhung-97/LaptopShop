@@ -1,0 +1,77 @@
+﻿@model LaptopShop.ViewModels.CheckoutViewModel
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+    Layout = "_MyLayoutCustomer";
+    double tongtien = Model.GioHang.Sum(p => p.ThanhTien);
+    double tienship = tongtien != 0 ? 30000 : 0;
+    var soDienThoai = Model.ThongTinKhachHang.SoDienThoai;
+    var soDaChe = string.IsNullOrEmpty(soDienThoai) || soDienThoai.Length < 4
+        ? soDienThoai
+        : new string('*', soDienThoai.Length - 4) + soDienThoai[^4..]; // lấy 4 số cuối
+}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="fa fa-check-circle text-success" style="font-size: 80px;"></i>
+                    </div>
+                    <h2 class="fw-bold mb-3">Đặt hàng thành công!</h2>
+                    <p class="text-muted mb-4">Cảm ơn quý khách đã tin tưởng và mua sắm tại cửa hàng chúng tôi.</p>
+
+                    <div class="alert alert-light border p-4 mb-4">
+                        <div class="row mb-3">
+                            <div class="col-md-6 text-md-start text-center">
+                                <span class="text-muted">Mã đơn hàng:</span>
+                            </div>
+                            <div class="col-md-6 text-md-end text-center">
+                                <span class="fw-bold">#ORD12345678</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 text-md-start text-center">
+                                <span class="text-muted">Thời gian đặt hàng:</span>
+                            </div>
+                            <div class="col-md-6 text-md-end text-center">
+                                <span class="fw-bold">@ViewBag.Time</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="mb-4">
+                        Chúng tôi đã gửi email xác nhận đơn hàng đến địa chỉ email của quý khách.
+                        Quý khách có thể theo dõi trạng thái đơn hàng trong tài khoản hoặc qua mã đơn hàng.
+                    </p>
+
+                    <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+                        <a asp-action="Index" asp-controller="Shop" class="btn btn-primary px-4 py-2">
+                            <i class="fa fa-shopping-bag me-2"></i>Tiếp tục mua sắm
+                        </a>
+                        <a asp-action="Index" asp-controller="ShoppingCart" class="btn btn-outline-secondary px-4 py-2">
+                            <i class="fa fa-receipt me-2"></i>Xem đơn hàng
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Thông tin vận chuyển</h5>
+                    <p class="mb-1"><span class="text-muted">Người nhận:</span>@(@Model.ThongTinKhachHang.Ho + " " + Model.ThongTinKhachHang.Ten)</p>
+                    <p class="mb-1"><span class="text-muted">Số điện thoại:</span>@soDaChe</p>
+                    <p class="mb-1"><span class="text-muted">Địa chỉ:</span>@(Model.ThongTinKhachHang.DiaChi + ", " + Model.ThongTinKhachHang.PhuongXa + ", " + Model.ThongTinKhachHang.QuanHuyen + ", " + Model.ThongTinKhachHang.TinhThanh)</p>
+                    <p class="mb-0"><span class="text-muted">Phương thức vận chuyển:</span> Giao hàng tiêu chuẩn (2-3 ngày)</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="text-muted">Nếu quý khách cần hỗ trợ, vui lòng liên hệ</p>
+                <p class="mb-0">
+                    <i class="fa fa-phone me-2"></i>Hotline: <strong>1800 1234</strong> |
+                    <i class="fa fa-envelope me-2"></i>Email: <strong>hotro@example.com</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

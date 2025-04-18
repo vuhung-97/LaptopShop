@@ -286,3 +286,4 @@ E:\c#\LaptopShop\LaptopShop\bin\Debug\net8.0\runtimes\win\lib\net7.0\Microsoft.W
 E:\c#\LaptopShop\LaptopShop\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
 E:\c#\LaptopShop\LaptopShop\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 E:\c#\LaptopShop\LaptopShop\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
+E:\c#\LaptopShop\LaptopShop\obj\Debug\net8.0\LaptopShop.sourcelink.json

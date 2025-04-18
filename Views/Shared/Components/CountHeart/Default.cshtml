@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<LaptopShop.ViewModels.CartViewModel>
-<a href="#" class="wishlist-btn btn px-2 mx-1">
+<a asp-action="Index" asp-controller="Heart" class="wishlist-btn btn px-2 mx-1">
     <i class="fas fa-heart text-primary" style="font-size: 24px;"></i>
     <span class="badge-cart">@(Model?.Count() ?? 0)</span>
 </a>

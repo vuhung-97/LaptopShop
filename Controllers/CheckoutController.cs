@@ -70,6 +70,9 @@ namespace LaptopShop.Controllers
 
             return View(result); // hoặc trả về trang cảm ơn
         }
-
+        public IActionResult ShowHoaDon()
+        {
+            return View();
+        }
     }
 }

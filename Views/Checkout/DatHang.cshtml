@@ -45,10 +45,8 @@
                     </p>
 
                     <div class="d-grid gap-3 d-md-flex justify-content-md-center">
-                        <a asp-action="Index" asp-controller="Shop" class="btn btn-primary px-4 py-2">
-                            <i class="fa fa-shopping-bag me-2"></i>Tiếp tục mua sắm
-                        </a>
-                        <a asp-action="Index" asp-controller="ShoppingCart" class="btn btn-outline-secondary px-4 py-2">
+                        @await Html.PartialAsync("ButtonContinueShopping")
+                        <a asp-action="Index" asp-controller="ShoppingCart" class="btn btn-outline-secondary px-4 py-2 rounded-pill shadow-sm fw-medium border-2 transition-all">
                             <i class="fa fa-receipt me-2"></i>Xem đơn hàng
                         </a>
                     </div>
@@ -75,3 +73,37 @@
         </div>
     </div>
 </div>
+
+
+
+<style>
+    .btn {
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #4361ee;
+        border-color: #4361ee;
+    }
+
+        .btn-primary:hover {
+            background-color: #3a56d4;
+            border-color: #3a56d4;
+            transform: translateY(-2px);
+        }
+
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .transition-all {
+        transition: all 0.3s ease;
+    }
+</style>

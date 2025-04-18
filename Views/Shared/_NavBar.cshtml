@@ -76,7 +76,7 @@
                                 @await Component.InvokeAsync("CountHeart")
                                 @await Component.InvokeAsync("CountCart")
                             </div>
-
+                            
                             @if (user == "")
                             {
                                 <a asp-action="Index" asp-controller="Login" class="login-btn ml-3">
@@ -87,9 +87,18 @@
                             {
                                 <div class="user-profile ml-3">
                                     <span class="user-greeting mr-2">Hello, @user!</span>
-                                    <a asp-action="Logout" asp-controller="Login" class="logout-btn">
-                                        <i class="fa fa-sign-out-alt mr-1"></i> Log out
-                                    </a>
+                                    <div class="d-flex">
+                                        <a asp-action="Logout" asp-controller="Login" class="logout-btn">
+                                            <i class="fa fa-sign-out-alt mr-1"></i> Log out
+                                        </a>
+                                        @if(user == "admin")
+                                        {
+                                            <a asp-action="Index" asp-controller="Setting" class="setting-btn mr-2">
+                                                <i class="fa fa-cog mr-1"></i> Setting
+                                            </a>
+                                        }
+                                        
+                                    </div>
                                 </div>
                             }
                         </div>
@@ -297,5 +306,23 @@
         display: none;
     }
 
+    /* Setting Button Styling */
+    .setting-btn {
+        display: inline-block;
+        background-color: transparent;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.3);
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-weight: 500;
+        transition: all 0.3s;
+        font-size: 14px;
     }
+
+        .setting-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-color: #e6be2e;
+            color: #e6be2e;
+            text-decoration: none;
+        }
 </style>

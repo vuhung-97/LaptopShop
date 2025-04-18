@@ -23,13 +23,11 @@ namespace MyShopApp.Controllers
 
             HttpContext.Session.SetString(DsTenKey.USER_NAME_KEY, us);
 
-            if (us == "admin")
-                return View();
             return RedirectToAction("Index", "Home");
         }
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear(); // hoặc .Clear() nếu muốn xóa hết
+            HttpContext.Session.Clear(); // hoặc .Remove("Tên session") nếu muốn xóa session cụ thể
             return RedirectToAction("Index", "Home");
         }
 

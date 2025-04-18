@@ -62,9 +62,19 @@ namespace LaptopShop.Controllers
 
             // Ví dụ: lưu vào cơ sở dữ liệu hoặc ghi log
 
-            var lstCart = Model.GioHang;
+            var ListCart = HttpContext.Session.Get(DsTenKey.CART_KEY);
+            var lstCart = new List<CartViewModel>();
+
+            if(ListCart != null)
+            {
+                // Chuyển lại dữ liệu từ byte về List<CartViewModel>
+                lstCart = JsonSerializer.Deserialize<List<CartViewModel>>(ListCart);
+            }    
 
             var result = new CheckoutViewModel() { GioHang = lstCart, ThongTinKhachHang = model };
+
+            HttpContext.Session.Set<List<CartViewModel>>(DsTenKey.ORDER_KEY, lstCart);
+            HttpContext.Session.Remove(DsTenKey.CART_KEY);
 
             ViewBag.Time = DateTime.Now.ToString("dd/MM/yyyy - hh/mm/ss");
 

@@ -3,9 +3,57 @@
     ViewData["Title"] = "Index";
     Layout = "_DanhSachLaptopLayout";
 }
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h2 class="font-weight-bold mb-2">Kết quả tìm kiếm</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent p-0 m-0">
+                            <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Trang chủ</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tìm kiếm</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-4 text-lg-right">
+                    <span class="badge badge-primary rounded-pill px-3 py-2 font-weight-normal">
+                        <i class="fa fa-laptop mr-1"></i> Tìm thấy <b>@Model.Count()</b> sản phẩm
+                    </span>
+                </div>
+            </div>
+            <div class="d-flex align-items-center">
+                
+                <div class="dropdown mr-3">
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-sort mr-1"></i> Sắp xếp theo
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right shadow-sm border-0" aria-labelledby="sortDropdown">
+                        <a class="dropdown-item" href="#"><i class="fa fa-calendar-alt mr-2"></i> Mới nhất</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-fire mr-2"></i> Phổ biến</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-star mr-2"></i> Đánh giá cao</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-sort-amount-down mr-2"></i> Giá: Cao đến thấp</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-sort-amount-up mr-2"></i> Giá: Thấp đến cao</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="showingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-list mr-1"></i> Hiển thị: 20
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right shadow-sm border-0" aria-labelledby="showingDropdown">
+                        <a class="dropdown-item" href="#">10 sản phẩm</a>
+                        <a class="dropdown-item active" href="#">20 sản phẩm</a>
+                        <a class="dropdown-item" href="#">30 sản phẩm</a>
+                        <a class="dropdown-item" href="#">Tất cả</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Hero Section -->
-<div class="container-fluid bg-light py-4 mb-4">
+@* <div class="container-fluid bg-light py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-8">
@@ -24,17 +72,14 @@
             </div>
         </div>
     </div>
-</div>
-
-<div class="container">
-    <div class="row product-list">
-        @await Html.PartialAsync("LaptopItem", Model)
-    </div>
-</div>
+</div> *@
 <div id="pagination"></div>
+<div class="row product-list">
+    @await Html.PartialAsync("LaptopItem", Model)
+</div>
 
 
-<script>
+ <script>
           // Tạo phân trang cho danh sách sản phẩm
     const products = @Html.Raw(Json.Serialize(Model));
     const productsPerPage = 12; // Số sản phẩm trên mỗi trang
@@ -60,12 +105,6 @@
 
         // Cập nhật trạng thái active cho nút phân trang
         updatePaginationButtons();
-
-        // Cuộn lên đầu danh sách sản phẩm
-        document.querySelector('.product-list').scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
     }
 
     // Tạo nút phân trang

@@ -4,8 +4,191 @@
     ViewData["Title"] = "Search";
     Layout = "_DanhSachLaptopLayout";
 }
-
+<!-- Hero Section -->
+<div class="container-fluid bg-light py-4 mb-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="font-weight-bold mb-2">Kết quả tìm kiếm</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent p-0 m-0">
+                        <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tìm kiếm</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-lg-4 text-lg-right">
+                <span class="badge badge-primary rounded-pill px-3 py-2 font-weight-normal">
+                    <i class="fa fa-laptop mr-1"></i> Tìm thấy <b>@Model.Count()</b> sản phẩm
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pagination"></div>
 <!-- DanhSachHangHoa start -->
-@await Html.PartialAsync("LaptopItem", Model)
+<div class="row product-list">
+    @await Html.PartialAsync("LaptopItem", Model)
+</div>
 
+
+<script>
+          // Tạo phân trang cho danh sách sản phẩm
+    const products = @Html.Raw(Json.Serialize(Model));
+    const productsPerPage = 12; // Số sản phẩm trên mỗi trang
+    let currentPage = 1;
+
+    // Hiển thị sản phẩm theo trang
+    function displayProducts(page) {
+        currentPage = page;
+
+        // Ẩn/hiện các sản phẩm theo trang
+        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
+
+        productElements.forEach((product, index) => {
+            const start = (page - 1) * productsPerPage;
+            const end = start + productsPerPage;
+
+            if (index >= start && index < end) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+
+        // Cập nhật trạng thái active cho nút phân trang
+        updatePaginationButtons();
+    }
+
+    // Tạo nút phân trang
+    function setupPagination() {
+        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
+        const pageCount = Math.ceil(productElements.length / productsPerPage);
+        const pagination = document.getElementById('pagination');
+
+        // Xóa nội dung cũ nếu có
+        pagination.innerHTML = '';
+
+        // Nếu chỉ có 1 trang thì không cần hiển thị phân trang
+        if (pageCount <= 1) return;
+
+        // Tạo container cho phân trang
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'container mt-4 mb-5';
+
+        const paginationRow = document.createElement('div');
+        paginationRow.className = 'row';
+
+        const paginationCol = document.createElement('div');
+        paginationCol.className = 'col-12 d-flex justify-content-center';
+
+        const paginationNav = document.createElement('nav');
+        paginationNav.setAttribute('aria-label', 'Phân trang');
+
+        const paginationUl = document.createElement('ul');
+        paginationUl.className = 'pagination';
+
+        // Nút Previous
+        const prevLi = document.createElement('li');
+        prevLi.className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
+
+        const prevLink = document.createElement('a');
+        prevLink.className = 'page-link';
+        prevLink.href = '#';
+        prevLink.setAttribute('aria-label', 'Previous');
+        prevLink.innerHTML = '<span aria-hidden="true">&laquo;</span>';
+        prevLink.onclick = (e) => {
+            e.preventDefault();
+            if (currentPage > 1) {
+                displayProducts(currentPage - 1);
+            }
+        };
+
+        prevLi.appendChild(prevLink);
+        paginationUl.appendChild(prevLi);
+
+        // Tạo các nút số trang
+        for (let i = 1; i <= pageCount; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item' + (i === currentPage ? ' active' : '');
+
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = '#';
+            a.textContent = i;
+            a.onclick = (e) => {
+                e.preventDefault();
+                displayProducts(i);
+            };
+
+            li.appendChild(a);
+            paginationUl.appendChild(li);
+        }
+
+        // Nút Next
+        const nextLi = document.createElement('li');
+        nextLi.className = 'page-item' + (currentPage === pageCount ? ' disabled' : '');
+
+        const nextLink = document.createElement('a');
+        nextLink.className = 'page-link';
+        nextLink.href = '#';
+        nextLink.setAttribute('aria-label', 'Next');
+        nextLink.innerHTML = '<span aria-hidden="true">&raquo;</span>';
+        nextLink.onclick = (e) => {
+            e.preventDefault();
+            if (currentPage < pageCount) {
+                displayProducts(currentPage + 1);
+            }
+        };
+
+        nextLi.appendChild(nextLink);
+        paginationUl.appendChild(nextLi);
+
+        // Thêm các phần tử vào DOM
+        paginationNav.appendChild(paginationUl);
+        paginationCol.appendChild(paginationNav);
+        paginationRow.appendChild(paginationCol);
+        paginationContainer.appendChild(paginationRow);
+        pagination.appendChild(paginationContainer);
+    }
+
+    // Cập nhật trạng thái nút phân trang
+    function updatePaginationButtons() {
+        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
+        const pageCount = Math.ceil(productElements.length / productsPerPage);
+        const pageItems = document.querySelectorAll('.pagination .page-item');
+
+        if (pageItems.length === 0) return;
+
+        // Cập nhật nút Previous
+        pageItems[0].className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
+
+        // Cập nhật các nút số trang
+        for (let i = 1; i <= pageCount; i++) {
+            if (i < pageItems.length - 1) {
+                pageItems[i].className = 'page-item' + (i === currentPage ? ' active' : '');
+            }
+        }
+
+        // Cập nhật nút Next
+        if (pageItems.length > 1) {
+            pageItems[pageItems.length - 1].className = 'page-item' + (currentPage === pageCount ? ' disabled' : '');
+        }
+    }
+
+    // Khởi tạo khi trang được tải
+    document.addEventListener('DOMContentLoaded', function() {
+        // Đảm bảo tất cả sản phẩm được hiển thị trước khi thiết lập phân trang
+        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
+        productElements.forEach(product => {
+            product.style.display = 'block';
+        });
+
+        // Thiết lập phân trang
+        setupPagination();
+
+        // Hiển thị trang đầu tiên
+        displayProducts(1);
+    });
+</script>
 <!-- DanhSachHangHoa end -->

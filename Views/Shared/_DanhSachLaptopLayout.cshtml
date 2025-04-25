@@ -7,6 +7,19 @@
     string IdThuongHieu = "";
     var nhaccstr = Context.Request.Query["idthuonghieu"].ToString();
     IdThuongHieu = nhaccstr;
+
+    int IdKhoangGia = 0;
+    var khoanggia = Context.Request.Query["priceRange"].ToString();
+
+    if (int.TryParse(khoanggia, out var parsed))
+    {
+        IdKhoangGia = parsed;
+    }
+    else
+    {
+        // Không parse được => giữ giá trị mặc định hoặc xử lý riêng
+        IdKhoangGia = 0;
+    }
 }
 @* @await Html.PartialAsync("Breadcrumb") *@
 <!-- Shop Start -->
@@ -21,10 +34,9 @@
                 <div class="card-body">
                     @await Component.InvokeAsync("MenuLoai", new { idloai = IdLoai })
                     @await Component.InvokeAsync("MenuThuongHieu", new { idthuonghieu = IdThuongHieu })
-                    <!-- Placeholder for filter components -->
-                    <div class="filter-placeholder">
-                        <p class="text-muted">Các bộ lọc sẽ được hiển thị tại đây</p>
-                    </div>
+                    <!--Start Filter by Price-->
+                    @await Component.InvokeAsync("MenuGia", new { selectedPriceRange = IdKhoangGia })
+                    <!--End Filter by Price-->
                 </div>
             </div>
         </div>

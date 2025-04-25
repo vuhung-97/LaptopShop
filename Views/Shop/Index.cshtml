@@ -23,29 +23,29 @@
                 </div>
             </div>
             <div class="d-flex align-items-center">
-                
                 <div class="dropdown mr-3">
                     <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-sort mr-1"></i> Sắp xếp theo
                     </button>
                     <div class="dropdown-menu dropdown-menu-right shadow-sm border-0" aria-labelledby="sortDropdown">
-                        <a class="dropdown-item" href="#"><i class="fa fa-calendar-alt mr-2"></i> Mới nhất</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-fire mr-2"></i> Phổ biến</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-star mr-2"></i> Đánh giá cao</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-sort-amount-down mr-2"></i> Giá: Cao đến thấp</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-sort-amount-up mr-2"></i> Giá: Thấp đến cao</a>
+                        <a class="dropdown-item" href="#" data-sort="desc">
+                            <i class="fa fa-sort-amount-down mr-2"></i> Giá: Cao đến thấp
+                        </a>
+                        <a class="dropdown-item" href="#" data-sort="asc">
+                            <i class="fa fa-sort-amount-up mr-2"></i> Giá: Thấp đến cao
+                        </a>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="showingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-list mr-1"></i> Hiển thị: 20
+                        <i class="fa fa-list mr-1"></i> Hiển thị: 10
                     </button>
                     <div class="dropdown-menu dropdown-menu-right shadow-sm border-0" aria-labelledby="showingDropdown">
-                        <a class="dropdown-item" href="#">10 sản phẩm</a>
-                        <a class="dropdown-item active" href="#">20 sản phẩm</a>
-                        <a class="dropdown-item" href="#">30 sản phẩm</a>
-                        <a class="dropdown-item" href="#">Tất cả</a>
+                        <a class="dropdown-item" href="#" data-value="10">10 sản phẩm</a>
+                        <a class="dropdown-item" href="#" data-value="20">20 sản phẩm</a>
+                        <a class="dropdown-item" href="#" data-value="0">Tất cả</a>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -79,22 +79,23 @@
 </div>
 
 
- <script>
-          // Tạo phân trang cho danh sách sản phẩm
+<script>
+        // Tạo phân trang cho danh sách sản phẩm
     const products = @Html.Raw(Json.Serialize(Model));
-    const productsPerPage = 12; // Số sản phẩm trên mỗi trang
+    let productsPerPage = 12; // Mặc định
     let currentPage = 1;
+    let currentSortOrder = "";
 
     // Hiển thị sản phẩm theo trang
     function displayProducts(page) {
         currentPage = page;
 
-        // Ẩn/hiện các sản phẩm theo trang
         const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
+        const totalProducts = productElements.length;
 
         productElements.forEach((product, index) => {
             const start = (page - 1) * productsPerPage;
-            const end = start + productsPerPage;
+            const end = productsPerPage === 0 ? totalProducts : start + productsPerPage;
 
             if (index >= start && index < end) {
                 product.style.display = 'block';
@@ -103,23 +104,20 @@
             }
         });
 
-        // Cập nhật trạng thái active cho nút phân trang
         updatePaginationButtons();
     }
 
     // Tạo nút phân trang
     function setupPagination() {
         const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
-        const pageCount = Math.ceil(productElements.length / productsPerPage);
+        const totalProducts = productElements.length;
+        const pageCount = productsPerPage === 0 ? 1 : Math.ceil(totalProducts / productsPerPage);
         const pagination = document.getElementById('pagination');
 
-        // Xóa nội dung cũ nếu có
         pagination.innerHTML = '';
 
-        // Nếu chỉ có 1 trang thì không cần hiển thị phân trang
         if (pageCount <= 1) return;
 
-        // Tạo container cho phân trang
         const paginationContainer = document.createElement('div');
         paginationContainer.className = 'container mt-4 mb-5';
 
@@ -135,26 +133,23 @@
         const paginationUl = document.createElement('ul');
         paginationUl.className = 'pagination';
 
-        // Nút Previous
+        // Previous
         const prevLi = document.createElement('li');
         prevLi.className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
 
         const prevLink = document.createElement('a');
         prevLink.className = 'page-link';
         prevLink.href = '#';
-        prevLink.setAttribute('aria-label', 'Previous');
         prevLink.innerHTML = '<span aria-hidden="true">&laquo;</span>';
         prevLink.onclick = (e) => {
             e.preventDefault();
-            if (currentPage > 1) {
-                displayProducts(currentPage - 1);
-            }
+            if (currentPage > 1) displayProducts(currentPage - 1);
         };
 
         prevLi.appendChild(prevLink);
         paginationUl.appendChild(prevLi);
 
-        // Tạo các nút số trang
+        // Page numbers
         for (let i = 1; i <= pageCount; i++) {
             const li = document.createElement('li');
             li.className = 'page-item' + (i === currentPage ? ' active' : '');
@@ -172,26 +167,22 @@
             paginationUl.appendChild(li);
         }
 
-        // Nút Next
+        // Next
         const nextLi = document.createElement('li');
         nextLi.className = 'page-item' + (currentPage === pageCount ? ' disabled' : '');
 
         const nextLink = document.createElement('a');
         nextLink.className = 'page-link';
         nextLink.href = '#';
-        nextLink.setAttribute('aria-label', 'Next');
         nextLink.innerHTML = '<span aria-hidden="true">&raquo;</span>';
         nextLink.onclick = (e) => {
             e.preventDefault();
-            if (currentPage < pageCount) {
-                displayProducts(currentPage + 1);
-            }
+            if (currentPage < pageCount) displayProducts(currentPage + 1);
         };
 
         nextLi.appendChild(nextLink);
         paginationUl.appendChild(nextLi);
 
-        // Thêm các phần tử vào DOM
         paginationNav.appendChild(paginationUl);
         paginationCol.appendChild(paginationNav);
         paginationRow.appendChild(paginationCol);
@@ -199,42 +190,110 @@
         pagination.appendChild(paginationContainer);
     }
 
-    // Cập nhật trạng thái nút phân trang
+    // Cập nhật trạng thái phân trang
     function updatePaginationButtons() {
         const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
-        const pageCount = Math.ceil(productElements.length / productsPerPage);
+        const pageCount = productsPerPage === 0 ? 1 : Math.ceil(productElements.length / productsPerPage);
         const pageItems = document.querySelectorAll('.pagination .page-item');
 
         if (pageItems.length === 0) return;
 
-        // Cập nhật nút Previous
         pageItems[0].className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
 
-        // Cập nhật các nút số trang
         for (let i = 1; i <= pageCount; i++) {
             if (i < pageItems.length - 1) {
                 pageItems[i].className = 'page-item' + (i === currentPage ? ' active' : '');
             }
         }
 
-        // Cập nhật nút Next
         if (pageItems.length > 1) {
             pageItems[pageItems.length - 1].className = 'page-item' + (currentPage === pageCount ? ' disabled' : '');
         }
     }
 
+    // Xử lý sự kiện khi click vào dropdown "Hiển thị"
+    document.querySelectorAll('#showingDropdown + .dropdown-menu a').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            productsPerPage = parseInt(this.getAttribute('data-value'));
+            currentPage = 1;
+
+            // Cập nhật text button
+            document.getElementById('showingDropdown').innerHTML = `<i class="fa fa-list mr-1"></i> Hiển thị: ${productsPerPage === 0 ? 'Tất cả' : productsPerPage}`;
+
+            // Cập nhật class active cho dropdown item
+            document.querySelectorAll('#showingDropdown + .dropdown-menu a').forEach(a => a.classList.remove('active'));
+            this.classList.add('active');
+
+            setupPagination();
+            displayProducts(1);
+        });
+    });
+
     // Khởi tạo khi trang được tải
     document.addEventListener('DOMContentLoaded', function() {
-        // Đảm bảo tất cả sản phẩm được hiển thị trước khi thiết lập phân trang
         const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
         productElements.forEach(product => {
             product.style.display = 'block';
         });
 
-        // Thiết lập phân trang
         setupPagination();
-
-        // Hiển thị trang đầu tiên
         displayProducts(1);
     });
+    document.querySelectorAll('#sortDropdown + .dropdown-menu a').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            currentSortOrder = this.getAttribute('data-sort');
+            sortAndDisplayProducts();
+        });
+    });
+        function sortAndDisplayProducts() {
+        // Sắp xếp products theo giá bán
+        if (currentSortOrder === "asc") {
+            products.sort((a, b) => a.GiaBan - b.GiaBan);
+        } else if (currentSortOrder === "desc") {
+            products.sort((a, b) => b.GiaBan - a.GiaBan);
+        }
+
+        // Cập nhật lại product-list
+        const productContainer = document.querySelector('.product-list');
+        productContainer.innerHTML = ''; // Xóa hết sản phẩm cũ
+
+        // Tạo lại các sản phẩm theo thứ tự mới
+        products.forEach(product => {
+            const productHtml = `
+                <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                    <div class="card shadow-sm border-0 rounded">
+                        <img src="${product.HinhAnh}" class="card-img-top" alt="${product.TenLapTop}">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.TenLapTop}</h5>
+                            <p class="card-text">Giá: ${product.GiaBan.toLocaleString()} đ</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            productContainer.insertAdjacentHTML('beforeend', productHtml);
+        });
+
+        // Reset và cập nhật lại phân trang
+        setupPagination();
+        displayProducts(1);
+    }
+        document.querySelectorAll('#sortDropdown + .dropdown-menu a').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const sortOrder = this.getAttribute('data-sort');
+
+            fetch(`/Shop/SortProduct?sortOrder=${sortOrder}`)
+                .then(response => response.text())
+                .then(html => {
+                    document.querySelector('.product-list').innerHTML = html;
+                    setupPagination();  // nếu cần phân trang lại
+                    displayProducts(1);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    });
+
 </script>
+

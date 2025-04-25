@@ -157,7 +157,7 @@
                             <div class="col">
                                 <div class="payment-method mb-3 p-3 border rounded">
                                     <div class="custom-control custom-radio d-flex align-items-center">
-                                        <input type="radio" class="custom-control-input align-items-center" id="cod" checked asp-for="ThongTinKhachHang.PhuongThucThanhToan" value="0">
+                                        <input type="radio" class="custom-control-input align-items-center" id="cod" asp-for="ThongTinKhachHang.PhuongThucThanhToan" value="0" checked>
                                         <label class="custom-control-label d-flex align-items-center w-100" for="cod">
                                             <i class="fa fa-money-bill-wave text-primary me-3" style="font-size: 24px; margin-right:5px;"></i>
                                             <div class="text-wrap">
@@ -169,12 +169,12 @@
                                 </div>
                                 <div class="payment-method mb-3 p-3 border rounded">
                                     <div class="custom-control custom-radio d-flex align-items-center">
-                                        <input type="radio" class="custom-control-input" value="1" id="bank" asp-for="ThongTinKhachHang.PhuongThucThanhToan" checked>
+                                        <input type="radio" class="custom-control-input" value="1" id="bank" asp-for="ThongTinKhachHang.PhuongThucThanhToan">
                                         <label class="custom-control-label d-flex align-items-center w-100" for="bank">
                                             <i class="fa fa-university text-primary me-3" style="font-size: 24px; margin-right:5px;"></i>
                                             <div class="text-wrap">
                                                 <span class="d-block fw-bold">Chuyển khoản ngân hàng</span>
-                                                @* <small class="text-muted">Chuyển khoản trước khi giao hàng</small> *@
+                                                <small class="text-muted">Chưa hỗ trợ</small>
                                             </div>
                                         </label>
                                     </div>
@@ -186,7 +186,7 @@
                                             <i class="fa fa-credit-card text-primary me-3" style="font-size: 24px; margin-right:5px;"></i>
                                             <div class="text-wrap">
                                                 <span class="d-block fw-bold">Thanh toán Momo/Zalopay</span>
-                                                @* <small class="text-muted">Thanh toán qua ví điện tử</small> *@
+                                                <small class="text-muted">Chưa hỗ trợ</small>
                                             </div>
                                         </label>
                                     </div>

@@ -2,6 +2,7 @@
 using LaptopShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 
 namespace LaptopShop.Controllers
 {
@@ -10,7 +11,7 @@ namespace LaptopShop.Controllers
         private readonly ShopLaptopContext db;
 
         public ShopController(ShopLaptopContext context) => db = context;
-        public IActionResult Index(string? idloai, string? idthuonghieu)
+        public IActionResult Index(string? idloai, string? idthuonghieu, int? idkhoanggia = null)
         {
             var laptops = db.Laptops.AsQueryable();
 
@@ -22,6 +23,20 @@ namespace LaptopShop.Controllers
             if (!string.IsNullOrEmpty(idthuonghieu))
             {
                 laptops = laptops.Where(p => p.IdThuongHieu == idthuonghieu);
+            }
+
+            double? minPrice = null;
+            double? maxPrice = null;
+            if (idkhoanggia.HasValue)
+            {
+                var priceFilterVM = new PriceFilterViewModel();
+                var selectedRange = priceFilterVM.PriceRanges.FirstOrDefault(r => r.Id == idkhoanggia.Value);
+                if (selectedRange != null)
+                {
+                    minPrice = selectedRange.MinPrice;
+                    maxPrice = selectedRange.MaxPrice;
+                    laptops = laptops.Where(p => p.GiaBan >= minPrice && (maxPrice == null || p.GiaBan <= maxPrice));
+                }
             }
 
             if (laptops.Count() == 0)
@@ -42,7 +57,7 @@ namespace LaptopShop.Controllers
                 Ram = p.IdThongTinNavigation.Ram,
                 Ocung = p.IdThongTinNavigation.Ocung,
                 ManHinh = p.IdThongTinNavigation.ManHinh
-            }).ToList();
+            }).OrderByDescending(p => p.GiaBan).ToList();
 
             return View(lap);
         }
@@ -114,6 +129,37 @@ namespace LaptopShop.Controllers
             ViewBag.sl = soluong;
 
             return View("Detail", laptopDetail);
+        }
+        public IActionResult SortProduct(string sortOrder)
+        {
+            var lap = db.Laptops.Select(p => new LaptopViewModel
+            {
+                IdLaptop = p.IdLaptop,
+                TenLapTop = p.TenLapTop,
+                GiaBan = p.GiaBan,
+                HinhAnh = p.HinhAnh,
+                ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
+                TenLoai = p.IdLoaiNavigation.TenLoai,
+                Cpu = p.IdThongTinNavigation.Cpu,
+                Ram = p.IdThongTinNavigation.Ram,
+                Ocung = p.IdThongTinNavigation.Ocung,
+                ManHinh = p.IdThongTinNavigation.ManHinh
+            });
+
+            // Sắp xếp theo sortOrder
+            switch (sortOrder)
+            {
+                case "asc":
+                    lap = lap.OrderBy(p => p.GiaBan);
+                    break;
+                case "desc":
+                    lap = lap.OrderByDescending(p => p.GiaBan);
+                    break;
+                default:
+                    break;
+            }
+
+            return PartialView("LaptopItem", lap.ToList());
         }
     }
 }

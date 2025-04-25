@@ -5,13 +5,13 @@
 
 @foreach (var item in Model)
 {
-    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+    <div class="col-lg-4 col-md-6 col-sm-6 mb-4" data-product-id="@item.IdLaptop" data-price="@item.GiaBan">
         <div class="product-item mb-4">
             <div class="product-card-wrapper">
                 <!-- Product Image with Overlay Effects -->
                 <div class="product-img-container">
                     
-                    <img class="product-img" src="~/Hinh/Laptop/@item.HinhAnh" alt="@item.TenLapTop">
+                    <img class="product-img" style="height:400px;" src="~/Hinh/Laptop/@item.HinhAnh" alt="@item.TenLapTop">
                     <!-- Quick Action Buttons -->
                     <div class="product-actions">
                         <a asp-action="AddToListHeart" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-heart"></i></a>

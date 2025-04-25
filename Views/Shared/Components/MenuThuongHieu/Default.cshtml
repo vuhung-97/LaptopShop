@@ -1,45 +1,135 @@
 ﻿@model IEnumerable<LaptopShop.ViewModels.ThuongHieuViewModel>
-
-
 @{
     string? thuonghieudangchon = ViewBag.CheckedThuongHieu as string;
-
     string loai = "";
     var idloai = Context.Request.Query["idloai"].ToString();
     loai = idloai;
 }
 
-<h5 class="section-title position-relative text-uppercase mb-3">
-    <span class="bg-secondary pr-3">Theo thương hiệu:</span>
-</h5>
-<div class="bg-light p-4 mb-30">
-    <form>
-        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-            <input type="checkbox" class="custom-control-input" id="price-all"
-            @(thuonghieudangchon == "" ? "checked" : "") />
-            <label for="price-all" class="custom-control-label">
-                <a asp-controller="Shop" asp-action="Index" asp-route-idloai="@loai">All</a>
-            </label>
-        </div>
+<div class="filter-card shadow-sm rounded border">
+    <div class="filter-header gradient-bg-brand text-white py-3 px-4 rounded-top">
+        <h5 class="m-0 font-weight-bold">
+            <i class="fas fa-tag me-2"></i>  Theo thương hiệu
+        </h5>
+    </div>
 
-        @foreach (var item in Model)
-        {
-            var isChecked = (thuonghieudangchon != "" && thuonghieudangchon == item.IdThuongHieu);
-            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                <input type="checkbox"
-                       class="custom-control-input"
-                       id="price-@item.IdThuongHieu"
-                @(isChecked ? "checked" : "") />
-
-                <label for="price-@item.IdThuongHieu" class="custom-control-label">
-                    <a asp-controller="Shop"
-                       asp-action="Index"
-                       asp-route-idloai="@loai"
-                       asp-route-idthuonghieu="@item.IdThuongHieu">@item.TenThuongHieu</a>
-                </label>
-
-                <span class="badge border font-weight-normal">@item.SoLuong</span>
+    <div class="filter-body bg-white p-4">
+        <form>
+            <div class="filter-item d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" disabled class="custom-control-input hover-effect" id="brand-all"
+                    @(thuonghieudangchon == "" ? "checked" : "") />
+                    <label for="brand-all" class="custom-control-label">
+                        <a class="filter-link @(thuonghieudangchon == "" ? "active-filter" : "")"
+                           asp-controller="Shop"
+                           asp-action="Index"
+                           asp-route-idloai="@loai">
+                            <span>Tất cả thương hiệu</span>
+                        </a>
+                    </label>
+                </div>
+                <span class="badge bg-secondary rounded-pill px-3 py-2">Tất cả</span>
             </div>
-        }
-    </form>
+
+            <div class="filter-list">
+                @foreach (var item in Model)
+                {
+                    var isChecked = (thuonghieudangchon != "" && thuonghieudangchon == item.IdThuongHieu);
+                    <div class="filter-item d-flex align-items-center justify-content-between mb-3 hover-highlight py-1">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"
+                                   class="custom-control-input"
+                                   id="brand-@item.IdThuongHieu" disabled
+                            @(isChecked ? "checked" : "") />
+                            <label for="brand-@item.IdThuongHieu" class="custom-control-label">
+                                <a class="filter-link @(isChecked ? "active-filter" : "")"
+                                   asp-controller="Shop"
+                                   asp-action="Index"
+                                   asp-route-idloai="@loai"
+                                   asp-route-idthuonghieu="@item.IdThuongHieu">
+                                    @item.TenThuongHieu
+                                </a>
+                            </label>
+                        </div>
+                        <span class="badge brand-badge rounded-pill px-3 py-2">@item.SoLuong</span>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
 </div>
+
+<style>
+    /* Tùy chỉnh checkbox disabled */
+    .custom-control-input:disabled ~ .custom-control-label {
+        color: #333; /* Đảm bảo chữ không bị mờ */
+        cursor: pointer; /* Giữ con trỏ chuột để người dùng biết vẫn có thể click vào liên kết */
+    }
+
+    .custom-control-input:disabled:checked ~ .custom-control-label::before {
+        background-color: #FFD333; /* Màu nền checkbox khi được chọn */
+        border-color: #FFD333;
+        opacity: 0.8; /* Giảm độ mờ để trông rõ ràng hơn */
+    }
+
+    .custom-control-input:disabled ~ .custom-control-label::before {
+        background-color: #f8f9fa; /* Màu nền checkbox khi không được chọn */
+        border-color: #ccc;
+    }
+    .filter-card {
+        transition: all 0.3s ease;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .gradient-bg-brand {
+        background: linear-gradient(135deg, #FFD333, #FFF4B2);
+    }
+
+    .filter-link {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: block;
+    }
+
+        .filter-link:hover {
+            color: #FFD333;
+            transform: translateX(3px);
+        }
+
+    .active-filter {
+        color: #FFD333;
+        font-weight: 600;
+    }
+
+    .hover-highlight:hover {
+        background-color: rgba(255, 245, 245, 0.8);
+        border-radius: 5px;
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::before {
+        background-color: #FFD333;
+        border-color: #FFD333;
+    }
+
+    .badge {
+        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+
+    .brand-badge {
+        background-color: #FFD333;
+        color: white;
+    }
+
+    .hover-highlight:hover .badge {
+        transform: scale(1.05);
+    }
+
+    .filter-body {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+</style>

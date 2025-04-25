@@ -90,7 +90,7 @@ namespace LaptopShop.Controllers
                 ManHinh = p.IdThongTinNavigation.ManHinh
             }).ToList();
 
-            return View("Index" , result);
+            return View("Index", result);
         }
 
         public IActionResult Detail(string? idlaptop, int soluong = 1)
@@ -162,8 +162,7 @@ namespace LaptopShop.Controllers
                 default:
                     break;
             }
-
             return PartialView("LaptopItem", lap.ToList());
         }
-    }
+    }    
 }

@@ -42,27 +42,6 @@
     </div>
 </div>
 
-<!-- Hero Section -->
-@* <div class="container-fluid bg-light py-4 mb-4">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h2 class="font-weight-bold mb-2">Kết quả tìm kiếm</h2>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb bg-transparent p-0 m-0">
-                        <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Trang chủ</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Tìm kiếm</li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="col-lg-4 text-lg-right">
-                <span class="badge badge-primary rounded-pill px-3 py-2 font-weight-normal">
-                    <i class="fa fa-laptop mr-1"></i> Tìm thấy <b>@Model.Count()</b> sản phẩm
-                </span>
-            </div>
-        </div>
-    </div>
-</div> *@
 <div id="pagination"></div>
 <div class="row product-list">
     @await Html.PartialAsync("LaptopItem", Model)
@@ -109,7 +88,7 @@
         //if (pageCount <= 1) return;
 
         const paginationContainer = document.createElement('div');
-        paginationContainer.className = 'container mt-4 mb-5';
+        paginationContainer.className = 'container mt-4';
 
         const paginationRow = document.createElement('div');
         paginationRow.className = 'row';
@@ -272,7 +251,7 @@
         document.querySelectorAll('#sortDropdown + .dropdown-menu a').forEach(item => {
         item.addEventListener('click', function (e) {
             e.preventDefault();
-            const sortOrder = this.getAttribute('data-sort');
+            const sortOrder = this.getAttribute('data-sort');   
 
             fetch(`/Shop/SortProduct?sortOrder=${sortOrder}`)
                 .then(response => response.text())

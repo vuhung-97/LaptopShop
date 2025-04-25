@@ -23,22 +23,20 @@
 }
 @* @await Html.PartialAsync("Breadcrumb") *@
 <!-- Shop Start -->
-<div class="container-fluid d-flex flex-column min-vh-100 py-4 mt-4 ">
+<div class="container-fluid d-flex flex-column min-vh-100 py-4">
     <div class="row px-xl-5">
         <!-- Shop Sidebar Start -->
         <div class="col-lg-3 col-md-4 " style="max-width: 408px">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Bộ lọc sản phẩm</h5>
-                </div>
-                <div class="card-body">
-                    @await Component.InvokeAsync("MenuLoai", new { idloai = IdLoai })
-                    @await Component.InvokeAsync("MenuThuongHieu", new { idthuonghieu = IdThuongHieu })
-                    <!--Start Filter by Price-->
-                    @await Component.InvokeAsync("MenuGia", new { selectedPriceRange = IdKhoangGia })
-                    <!--End Filter by Price-->
-                </div>
+            <div class="card-body">
+                @await Component.InvokeAsync("MenuLoai", new { idloai = IdLoai })
+                @await Component.InvokeAsync("MenuThuongHieu", new { idthuonghieu = IdThuongHieu })
+                @* <!--Start Filter by Price-->
+                @await Component.InvokeAsync("MenuGia", new { selectedPriceRange = IdKhoangGia })
+                <!--End Filter by Price--> *@
             </div>
+            @* <div class="card border-0 shadow-sm mb-4">
+                
+            </div> *@
         </div>
         <!-- Shop Sidebar End -->
         <!-- Shop Product Start -->

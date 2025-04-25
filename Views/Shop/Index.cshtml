@@ -6,21 +6,11 @@
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <h2 class="font-weight-bold mb-2">Kết quả tìm kiếm</h2>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb bg-transparent p-0 m-0">
-                            <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Trang chủ</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Tìm kiếm</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="col-lg-4 text-lg-right">
-                    <span class="badge badge-primary rounded-pill px-3 py-2 font-weight-normal">
-                        <i class="fa fa-laptop mr-1"></i> Tìm thấy <b>@Model.Count()</b> sản phẩm
-                    </span>
-                </div>
+            <div class="col-4">
+                <h2 class="font-weight-bold mb-2 " style="white-space: nowrap;">Kết quả tìm kiếm:</h2>
+                <span class="badge badge-primary rounded-pill px-3 py-2 font-weight-normal">
+                    <i class="fa fa-laptop mr-1"></i> Tìm thấy <b>@Model.Count()</b> sản phẩm
+                </span>
             </div>
             <div class="d-flex align-items-center">
                 <div class="dropdown mr-3">
@@ -40,7 +30,7 @@
                     <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="showingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-list mr-1"></i> Hiển thị: 10
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right shadow-sm border-0" aria-labelledby="showingDropdown">
+                    <div style="z-index:1000;" class="dropdown-menu dropdown-menu-right shadow-sm border-0" aria-labelledby="showingDropdown">
                         <a class="dropdown-item" href="#" data-value="10">10 sản phẩm</a>
                         <a class="dropdown-item" href="#" data-value="20">20 sản phẩm</a>
                         <a class="dropdown-item" href="#" data-value="0">Tất cả</a>
@@ -116,7 +106,7 @@
 
         pagination.innerHTML = '';
 
-        if (pageCount <= 1) return;
+        //if (pageCount <= 1) return;
 
         const paginationContainer = document.createElement('div');
         paginationContainer.className = 'container mt-4 mb-5';
@@ -125,7 +115,7 @@
         paginationRow.className = 'row';
 
         const paginationCol = document.createElement('div');
-        paginationCol.className = 'col-12 d-flex justify-content-center';
+        paginationCol.className = 'col-6 offset-3 d-flex justify-content-center';
 
         const paginationNav = document.createElement('nav');
         paginationNav.setAttribute('aria-label', 'Phân trang');

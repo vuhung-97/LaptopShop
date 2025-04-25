@@ -83,10 +83,14 @@ namespace LaptopShop.Controllers
                 GiaBan = p.GiaBan,
                 HinhAnh = p.HinhAnh,
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
-                TenLoai = p.IdLoaiNavigation.TenLoai
+                TenLoai = p.IdLoaiNavigation.TenLoai,
+                Cpu = p.IdThongTinNavigation.Cpu,
+                Ram = p.IdThongTinNavigation.Ram,
+                Ocung = p.IdThongTinNavigation.Ocung,
+                ManHinh = p.IdThongTinNavigation.ManHinh
             }).ToList();
 
-            return View(result);
+            return View("Index" , result);
         }
 
         public IActionResult Detail(string? idlaptop, int soluong = 1)

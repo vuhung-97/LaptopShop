@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "_DanhSachLaptopLayout";
+    string? idloai = Context.Request.Query["idloai"].ToString();
+    string? idthuonghieu = Context.Request.Query["idthuonghieu"].ToString();
+    string? idkhoanggia = Context.Request.Query["idkhoanggia"].ToString();
 }
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
@@ -12,16 +15,33 @@
                     <i class="fa fa-laptop mr-1"></i> Tìm thấy <b>@Model.Count()</b> sản phẩm
                 </span>
             </div>
+            @* <a asp-controller="Shop"
+               asp-action="Index"
+               asp-route-idloai="@idloai"
+               asp-route-idthuonghieu="@idthuonghieu"
+               asp-route-idkhoanggia="@idkhoanggia" asp-route-sapxeptang="true">giam dan</a> *@
             <div class="d-flex align-items-center">
                 <div class="dropdown mr-3">
                     <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-sort mr-1"></i> Sắp xếp theo
                     </button>
                     <div class="dropdown-menu dropdown-menu-right shadow-sm border-0" aria-labelledby="sortDropdown">
-                        <a class="dropdown-item" href="#" data-sort="desc">
+                        <a class="dropdown-item" 
+                           asp-controller="Shop"
+                           asp-action="Index"
+                           asp-route-idloai="@idloai"
+                           asp-route-idthuonghieu="@idthuonghieu"
+                           asp-route-idkhoanggia="@idkhoanggia" 
+                           asp-route-sapxeptang="false">
                             <i class="fa fa-sort-amount-down mr-2"></i> Giá: Cao đến thấp
                         </a>
-                        <a class="dropdown-item" href="#" data-sort="asc">
+                        <a class="dropdown-item" 
+                           asp-controller="Shop"
+                           asp-action="Index"
+                           asp-route-idloai="@idloai"
+                           asp-route-idthuonghieu="@idthuonghieu"
+                           asp-route-idkhoanggia="@idkhoanggia" 
+                           asp-route-sapxeptang="true">
                             <i class="fa fa-sort-amount-up mr-2"></i> Giá: Thấp đến cao
                         </a>
                     </div>
@@ -209,60 +229,60 @@
         setupPagination();
         displayProducts(1);
     });
-    document.querySelectorAll('#sortDropdown + .dropdown-menu a').forEach(item => {
-        item.addEventListener('click', function (e) {
-            e.preventDefault();
-            currentSortOrder = this.getAttribute('data-sort');
-            sortAndDisplayProducts();
-        });
-    });
-        function sortAndDisplayProducts() {
-        // Sắp xếp products theo giá bán
-        if (currentSortOrder === "asc") {
-            products.sort((a, b) => a.GiaBan - b.GiaBan);
-        } else if (currentSortOrder === "desc") {
-            products.sort((a, b) => b.GiaBan - a.GiaBan);
-        }
+    // document.querySelectorAll('#sortDropdown + .dropdown-menu a').forEach(item => {
+    //     item.addEventListener('click', function (e) {
+    //         e.preventDefault();
+    //         currentSortOrder = this.getAttribute('data-sort');
+    //         sortAndDisplayProducts();
+    //     });
+    // });
+    //     function sortAndDisplayProducts() {
+    //     // Sắp xếp products theo giá bán
+    //     if (currentSortOrder === "asc") {
+    //         products.sort((a, b) => a.GiaBan - b.GiaBan);
+    //     } else if (currentSortOrder === "desc") {
+    //         products.sort((a, b) => b.GiaBan - a.GiaBan);
+    //     }
 
-        // Cập nhật lại product-list
-        const productContainer = document.querySelector('.product-list');
-        productContainer.innerHTML = ''; // Xóa hết sản phẩm cũ
+    //     // Cập nhật lại product-list
+    //     const productContainer = document.querySelector('.product-list');
+    //     productContainer.innerHTML = ''; // Xóa hết sản phẩm cũ
 
-        // Tạo lại các sản phẩm theo thứ tự mới
-        products.forEach(product => {
-            const productHtml = `
-                <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
-                    <div class="card shadow-sm border-0 rounded">
-                        <img src="${product.HinhAnh}" class="card-img-top" alt="${product.TenLapTop}">
-                        <div class="card-body">
-                            <h5 class="card-title">${product.TenLapTop}</h5>
-                            <p class="card-text">Giá: ${product.GiaBan.toLocaleString()} đ</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-            productContainer.insertAdjacentHTML('beforeend', productHtml);
-        });
+    //     // Tạo lại các sản phẩm theo thứ tự mới
+    //     products.forEach(product => {
+    //         const productHtml = `
+    //             <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+    //                 <div class="card shadow-sm border-0 rounded">
+    //                     <img src="${product.HinhAnh}" class="card-img-top" alt="${product.TenLapTop}">
+    //                     <div class="card-body">
+    //                         <h5 class="card-title">${product.TenLapTop}</h5>
+    //                         <p class="card-text">Giá: ${product.GiaBan.toLocaleString()} đ</p>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         `;
+    //         productContainer.insertAdjacentHTML('beforeend', productHtml);
+    //     });
 
-        // Reset và cập nhật lại phân trang
-        setupPagination();
-        displayProducts(1);
-    }
-        document.querySelectorAll('#sortDropdown + .dropdown-menu a').forEach(item => {
-        item.addEventListener('click', function (e) {
-            e.preventDefault();
-            const sortOrder = this.getAttribute('data-sort');   
+    //     // Reset và cập nhật lại phân trang
+    //     setupPagination();
+    //     displayProducts(1);
+    // }
+    //     document.querySelectorAll('#sortDropdown + .dropdown-menu a').forEach(item => {
+    //     item.addEventListener('click', function (e) {
+    //         e.preventDefault();
+    //         const sortOrder = this.getAttribute('data-sort');   
 
-            fetch(`/Shop/SortProduct?sortOrder=${sortOrder}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector('.product-list').innerHTML = html;
-                    setupPagination();  // nếu cần phân trang lại
-                    displayProducts(1);
-                })
-                .catch(error => console.error('Error:', error));
-        });
-    });
+    //         fetch(`/Shop/SortProduct?sortOrder=${sortOrder}`)
+    //             .then(response => response.text())
+    //             .then(html => {
+    //                 document.querySelector('.product-list').innerHTML = html;
+    //                 setupPagination();  // nếu cần phân trang lại
+    //                 displayProducts(1);
+    //             })
+    //             .catch(error => console.error('Error:', error));
+    //     });
+    // });
 
 </script>
 

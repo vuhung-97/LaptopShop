@@ -11,7 +11,7 @@ namespace LaptopShop.Controllers
         private readonly ShopLaptopContext db;
 
         public ShopController(ShopLaptopContext context) => db = context;
-        public IActionResult Index(string? idloai, string? idthuonghieu, int? idkhoanggia = null)
+        public IActionResult Index(string? idloai, string? idthuonghieu, int? idkhoanggia = null, bool? sapxeptang = false)
         {
             var laptops = db.Laptops.AsQueryable();
 
@@ -57,9 +57,18 @@ namespace LaptopShop.Controllers
                 Ram = p.IdThongTinNavigation.Ram,
                 Ocung = p.IdThongTinNavigation.Ocung,
                 ManHinh = p.IdThongTinNavigation.ManHinh
-            }).OrderByDescending(p => p.GiaBan).ToList();
+            });
 
-            return View(lap);
+            if (sapxeptang == true)
+            {
+                lap = lap.OrderBy(p => p.GiaBan);
+            }
+            else if (sapxeptang == false)
+            {
+                lap = lap.OrderByDescending(p => p.GiaBan);
+            }
+
+            return View(lap.ToList());
         }
 
         public IActionResult Search(string? query)

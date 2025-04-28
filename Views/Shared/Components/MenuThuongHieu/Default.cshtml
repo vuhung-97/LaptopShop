@@ -1,9 +1,8 @@
 ﻿@model IEnumerable<LaptopShop.ViewModels.ThuongHieuViewModel>
 @{
-    string? thuonghieudangchon = ViewBag.CheckedThuongHieu as string;
-    string loai = "";
-    var idloai = Context.Request.Query["idloai"].ToString();
-    loai = idloai;
+    string? thuonghieudangchon = Context.Request.Query["idthuonghieu"].ToString();
+    string? idloai = Context.Request.Query["idloai"].ToString();
+    string? idkhoanggia = Context.Request.Query["idkhoanggia"].ToString();
 }
 
 <div class="filter-card shadow-sm rounded border">
@@ -23,7 +22,8 @@
                         <a class="filter-link @(thuonghieudangchon == "" ? "active-filter" : "")"
                            asp-controller="Shop"
                            asp-action="Index"
-                           asp-route-idloai="@loai">
+                           asp-route-idloai="@idloai"
+                           asp-route-idkhoanggia="@idkhoanggia">
                             <span>Tất cả thương hiệu</span>
                         </a>
                     </label>
@@ -45,7 +45,8 @@
                                 <a class="filter-link @(isChecked ? "active-filter" : "")"
                                    asp-controller="Shop"
                                    asp-action="Index"
-                                   asp-route-idloai="@loai"
+                                   asp-route-idloai="@idloai"
+                                   asp-route-idkhoanggia="@idkhoanggia"
                                    asp-route-idthuonghieu="@item.IdThuongHieu">
                                     @item.TenThuongHieu
                                 </a>

@@ -30,9 +30,9 @@
             <div class="card-body">
                 @await Component.InvokeAsync("MenuLoai", new { idloai = IdLoai })
                 @await Component.InvokeAsync("MenuThuongHieu", new { idthuonghieu = IdThuongHieu })
-                @* <!--Start Filter by Price-->
+                <!--Start Filter by Price-->
                 @await Component.InvokeAsync("MenuGia", new { selectedPriceRange = IdKhoangGia })
-                <!--End Filter by Price--> *@
+                <!--End Filter by Price-->
             </div>
             @* <div class="card border-0 shadow-sm mb-4">
                 

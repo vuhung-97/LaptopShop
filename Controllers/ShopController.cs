@@ -42,7 +42,7 @@ namespace LaptopShop.Controllers
             if (laptops.Count() == 0)
             {
                 TempData["Messange"] = "Không tìm thấy sản phẩm nào!";
-                return RedirectToAction("PageNotFound", "Home");
+                //return RedirectToAction("PageNotFound", "Home");
             }
 
             var lap = laptops.Select(p => new LaptopViewModel

@@ -15,6 +15,8 @@ public partial class Laptop
 
     public string? HinhAnh { get; set; }
 
+    public int? SoLuong { get; set; }
+
     public string? IdThongTin { get; set; }
 
     public string? IdLoai { get; set; }

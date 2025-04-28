@@ -77,5 +77,6 @@ namespace LaptopShop.Controllers
             HttpContext.Session.Set(DsTenKey.CART_KEY, giohang);
             return RedirectToAction("Index");
         }
+
     }
 }

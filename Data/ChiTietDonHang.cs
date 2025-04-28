@@ -5,7 +5,7 @@ namespace LaptopShop.Data;
 
 public partial class ChiTietDonHang
 {
-    public int IdDonHang { get; set; }
+    public string IdDonHang { get; set; } = null!;
 
     public string IdLaptop { get; set; } = null!;
 

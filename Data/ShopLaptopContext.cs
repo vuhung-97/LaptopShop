@@ -30,18 +30,20 @@ public partial class ShopLaptopContext : DbContext
     public virtual DbSet<ThuongHieu> ThuongHieus { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-
-        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-R51A4CO\\HUNGVU;Initial Catalog=ShopLaptop;Integrated Security=True;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-R51A4CO\\HUNGVU;Database=ShopLaptop;Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ChiTietDonHang>(entity =>
         {
-            entity.HasKey(e => new { e.IdDonHang, e.IdLaptop }).HasName("PK__ChiTietD__2470A5988E500BFB");
+            entity.HasKey(e => new { e.IdDonHang, e.IdLaptop }).HasName("PK__ChiTietD__2470A598A92AAD91");
 
             entity.ToTable("ChiTietDonHang");
 
-            entity.Property(e => e.IdDonHang).HasColumnName("ID_DonHang");
+            entity.Property(e => e.IdDonHang)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("ID_DonHang");
             entity.Property(e => e.IdLaptop)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -50,41 +52,46 @@ public partial class ShopLaptopContext : DbContext
 
             entity.HasOne(d => d.IdDonHangNavigation).WithMany(p => p.ChiTietDonHangs)
                 .HasForeignKey(d => d.IdDonHang)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ChiTietDo__ID_Do__47DBAE45");
+                .HasConstraintName("FK__ChiTietDo__ID_Do__48CFD27E");
 
             entity.HasOne(d => d.IdLaptopNavigation).WithMany(p => p.ChiTietDonHangs)
                 .HasForeignKey(d => d.IdLaptop)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ChiTietDo__ID_La__48CFD27E");
+                .HasConstraintName("FK__ChiTietDo__ID_La__49C3F6B7");
         });
 
         modelBuilder.Entity<DonHang>(entity =>
         {
-            entity.HasKey(e => e.IdDonHang).HasName("PK__DonHang__99B72639E665AE4B");
+            entity.HasKey(e => e.IdDonHang).HasName("PK__DonHang__99B726390AAC453D");
 
             entity.ToTable("DonHang");
 
             entity.Property(e => e.IdDonHang)
-                .ValueGeneratedNever()
+                .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("ID_DonHang");
+            entity.Property(e => e.DiaChiGiao).HasMaxLength(500);
             entity.Property(e => e.IdTaiKhoan)
                 .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("ID_TaiKhoan");
             entity.Property(e => e.NgayCapNhat)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.NgayDatHang).HasColumnType("datetime");
+            entity.Property(e => e.NgayDat)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.TongTien).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.TrangThai).HasMaxLength(50);
 
             entity.HasOne(d => d.IdTaiKhoanNavigation).WithMany(p => p.DonHangs)
                 .HasForeignKey(d => d.IdTaiKhoan)
-                .HasConstraintName("FK__DonHang__ID_TaiK__44FF419A");
+                .HasConstraintName("FK__DonHang__ID_TaiK__4AB81AF0");
         });
 
         modelBuilder.Entity<Laptop>(entity =>
         {
-            entity.HasKey(e => e.IdLaptop).HasName("PK__Laptop__DC783A1A9F8E5440");
+            entity.HasKey(e => e.IdLaptop).HasName("PK__Laptop__DC783A1AD85C8E4D");
 
             entity.ToTable("Laptop");
 
@@ -106,26 +113,25 @@ public partial class ShopLaptopContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("ID_ThuongHieu");
-            entity.Property(e => e.TenLapTop)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.SoLuong).HasDefaultValue(0);
+            entity.Property(e => e.TenLapTop).HasMaxLength(50);
 
             entity.HasOne(d => d.IdLoaiNavigation).WithMany(p => p.Laptops)
                 .HasForeignKey(d => d.IdLoai)
-                .HasConstraintName("FK__Laptop__ID_Loai__3F466844");
+                .HasConstraintName("FK__Laptop__ID_Loai__4BAC3F29");
 
             entity.HasOne(d => d.IdThongTinNavigation).WithMany(p => p.Laptops)
                 .HasForeignKey(d => d.IdThongTin)
-                .HasConstraintName("FK__Laptop__ID_Thong__3E52440B");
+                .HasConstraintName("FK__Laptop__ID_Thong__4CA06362");
 
             entity.HasOne(d => d.IdThuongHieuNavigation).WithMany(p => p.Laptops)
                 .HasForeignKey(d => d.IdThuongHieu)
-                .HasConstraintName("FK__Laptop__ID_Thuon__3D5E1FD2");
+                .HasConstraintName("FK__Laptop__ID_Thuon__4D94879B");
         });
 
         modelBuilder.Entity<Loai>(entity =>
         {
-            entity.HasKey(e => e.IdLoai).HasName("PK__Loai__914C2314AEFE9BB7");
+            entity.HasKey(e => e.IdLoai).HasName("PK__Loai__914C2314B55F0AE6");
 
             entity.ToTable("Loai");
 
@@ -138,21 +144,31 @@ public partial class ShopLaptopContext : DbContext
 
         modelBuilder.Entity<TaiKhoan>(entity =>
         {
-            entity.HasKey(e => e.IdTaiKhoan).HasName("PK__TaiKhoan__0E3EC2101FEFBC0C");
+            entity.HasKey(e => e.IdTaiKhoan).HasName("PK__TaiKhoan__0E3EC210E4A0320D");
 
             entity.ToTable("TaiKhoan");
 
+            entity.HasIndex(e => e.HoTen, "UQ__TaiKhoan__27AEE13CD54A04FE").IsUnique();
+
+            entity.HasIndex(e => e.Email, "UQ__TaiKhoan__A9D10534FE6D2019").IsUnique();
+
             entity.Property(e => e.IdTaiKhoan)
                 .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("ID_TaiKhoan");
-            entity.Property(e => e.HoTen).HasMaxLength(100);
-            entity.Property(e => e.Loai).HasMaxLength(50);
+            entity.Property(e => e.DiaChi).HasMaxLength(500);
+            entity.Property(e => e.DienThoai).HasMaxLength(20);
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.HoTen).HasMaxLength(255);
+            entity.Property(e => e.Loai)
+                .HasMaxLength(50)
+                .HasDefaultValue("KhachHang");
             entity.Property(e => e.MatKhau).HasMaxLength(100);
         });
 
         modelBuilder.Entity<ThongTinChiTiet>(entity =>
         {
-            entity.HasKey(e => e.IdThongTin).HasName("PK__ThongTin__BB9645AFF6935E06");
+            entity.HasKey(e => e.IdThongTin).HasName("PK__ThongTin__BB9645AFF6AA8306");
 
             entity.ToTable("ThongTinChiTiet");
 
@@ -179,7 +195,7 @@ public partial class ShopLaptopContext : DbContext
 
         modelBuilder.Entity<ThuongHieu>(entity =>
         {
-            entity.HasKey(e => e.IdThuongHieu).HasName("PK__ThuongHi__AB2A011AAE9E6012");
+            entity.HasKey(e => e.IdThuongHieu).HasName("PK__ThuongHi__AB2A011A6B4FDC0D");
 
             entity.ToTable("ThuongHieu");
 

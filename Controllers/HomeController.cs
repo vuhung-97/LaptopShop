@@ -23,7 +23,7 @@ namespace LaptopShop.Controllers
             {
                 IdLaptop = p.IdLaptop,
                 TenLapTop = p.TenLapTop,
-                GiaBan = p.GiaBan,
+                GiaBan = p.GiaBan ?? 0,
                 HinhAnh = p.HinhAnh,
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
                 TenLoai = p.IdLoaiNavigation.TenLoai

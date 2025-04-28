@@ -11,7 +11,7 @@ public partial class ChiTietDonHang
 
     public int? SoLuong { get; set; }
 
-    public decimal? DonGia { get; set; }
+    public double? DonGia { get; set; }
 
     public virtual DonHang IdDonHangNavigation { get; set; } = null!;
 

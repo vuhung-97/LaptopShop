@@ -34,7 +34,7 @@ namespace LaptopShop.Controllers
                         Id = temp.IdLaptop,
                         Name = temp.TenLapTop,
                         Hinh = temp.HinhAnh ?? "",
-                        Price = temp.GiaBan
+                        Price = temp.GiaBan ?? 0
                     };
                     danhsach.Add(item);
                 }
@@ -63,7 +63,7 @@ namespace LaptopShop.Controllers
                         Id = temp.IdLaptop,
                         Name = temp.TenLapTop,
                         Hinh = temp.HinhAnh ?? "",
-                        Price = temp.GiaBan
+                        Price = temp.GiaBan ?? 0
                     };
                     danhsach.Add(item);
                 }

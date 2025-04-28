@@ -7,11 +7,11 @@ public partial class DonHang
 {
     public int IdDonHang { get; set; }
 
-    public string IdTaiKhoan { get; set; }
+    public string? IdTaiKhoan { get; set; }
 
     public DateTime? NgayDatHang { get; set; }
 
-    public decimal? TongTien { get; set; }
+    public double? TongTien { get; set; }
 
     public DateTime? NgayCapNhat { get; set; }
 

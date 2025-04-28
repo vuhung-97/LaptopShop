@@ -72,23 +72,26 @@
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Tỉnh/Thành phố</label>
-                                        <select id="tinhThanhSelect" name="ThongTinKhachHang.TinhThanh" class="form-control">
+                                        <select id="tinhThanhSelect" name="TinhThanhCode" class="form-control">
                                             <option selected disabled>Chọn Tỉnh/Thành phố</option>
                                         </select>
+                                        <input type="hidden" id="tinhThanhName" name="ThongTinKhachHang.TinhThanh" asp-for="ThongTinKhachHang.TinhThanh" />
                                     </div>
 
                                     <div class="col-md-6 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Quận/Huyện</label>
-                                        <select id="quanHuyenSelect" name="ThongTinKhachHang.QuanHuyen" class="form-control">
+                                        <select id="quanHuyenSelect" name="QuanHuyenCode" class="form-control">
                                             <option selected disabled>Chọn Quận/Huyện</option>
                                         </select>
+                                        <input type="hidden" id="quanHuyenName" name="ThongTinKhachHang.QuanHuyen" asp-for="ThongTinKhachHang.QuanHuyen" />
                                     </div>
 
                                     <div class="col-md-6 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Phường/Xã</label>
-                                        <select id="phuongXaSelect" name="ThongTinKhachHang.PhuongXa" class="form-control">
+                                        <select id="phuongXaSelect" name="PhuongXaCode" class="form-control">
                                             <option selected disabled>Chọn Phường/Xã</option>
                                         </select>
+                                        <input type="hidden" id="phuongXaName" name="ThongTinKhachHang.PhuongXa" asp-for="ThongTinKhachHang.PhuongXa" />
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Mã bưu điện</label>
@@ -199,43 +202,52 @@
 <!-- Checkout End -->
 
 <script>
-        document.addEventListener('DOMContentLoaded', function () {
+             document.addEventListener('DOMContentLoaded', function () {
+        // Fetch and populate Tỉnh/Thành phố
         fetch('/Checkout/GetTinhThanh')
             .then(response => response.json())
             .then(data => {
                 const select = document.getElementById('tinhThanhSelect');
                 data.forEach(item => {
                     const option = document.createElement('option');
-                    option.value = item.code; // Sử dụng mã code thay vì tên
+                    option.value = item.code;
                     option.text = item.name;
+                    option.setAttribute('data-name', item.name);
                     select.appendChild(option);
                 });
             })
             .catch(error => console.error('Lỗi load tỉnh thành:', error));
 
+        // Event listener for Tỉnh/Thành phố change
         document.getElementById('tinhThanhSelect').addEventListener('change', function () {
             const selectedTinhThanhCode = this.value;
+            const selectedTinhThanhName = this.options[this.selectedIndex].getAttribute('data-name');
+
+            // Update the hidden input with the selected name
+            document.getElementById('tinhThanhName').value = selectedTinhThanhName;
+            console.log('Tỉnh/Thành phố đã chọn:', selectedTinhThanhName);
+
             if (selectedTinhThanhCode) {
+                // Clear dependent dropdowns
+                resetDropdown('quanHuyenSelect', 'Chọn Quận/Huyện');
+                resetDropdown('phuongXaSelect', 'Chọn Phường/Xã');
+
+                // Clear hidden inputs for dependent fields
+                document.getElementById('quanHuyenName').value = '';
+                document.getElementById('phuongXaName').value = '';
+
+                // Fetch Quận/Huyện data based on selected Tỉnh/Thành phố
                 fetch(`/Checkout/GetQuanHuyen?tinhThanhCode=${selectedTinhThanhCode}`)
                     .then(response => response.json())
                     .then(data => {
-                        // API trả về một đối tượng với thuộc tính 'districts' chứa danh sách quận huyện
                         const districts = data.districts;
                         const select = document.getElementById('quanHuyenSelect');
-                        select.innerHTML = ''; // Clear current options
 
-                        // Thêm option mặc định
-                        const defaultOption = document.createElement('option');
-                        defaultOption.selected = true;
-                        defaultOption.disabled = true;
-                        defaultOption.text = 'Chọn Quận/Huyện';
-                        select.appendChild(defaultOption);
-
-                        // Thêm các quận huyện mới vào dropdown
                         districts.forEach(item => {
                             const option = document.createElement('option');
                             option.value = item.code;
                             option.text = item.name;
+                            option.setAttribute('data-name', item.name);
                             select.appendChild(option);
                         });
                     })
@@ -243,34 +255,61 @@
             }
         });
 
+        // Event listener for Quận/Huyện change
         document.getElementById('quanHuyenSelect').addEventListener('change', function () {
             const selectedQuanHuyenCode = this.value;
+            const selectedQuanHuyenName = this.options[this.selectedIndex].getAttribute('data-name');
+
+            // Update the hidden input with the selected name
+            document.getElementById('quanHuyenName').value = selectedQuanHuyenName;
+            console.log('Quận/Huyện đã chọn:', selectedQuanHuyenName);
+
             if (selectedQuanHuyenCode) {
+                // Clear dependent dropdown
+                resetDropdown('phuongXaSelect', 'Chọn Phường/Xã');
+
+                // Clear hidden input for dependent field
+                document.getElementById('phuongXaName').value = '';
+
+                // Fetch Phường/Xã data based on selected Quận/Huyện
                 fetch(`/Checkout/GetPhuongXa?quanHuyenCode=${selectedQuanHuyenCode}`)
                     .then(response => response.json())
                     .then(data => {
-                        // API trả về một đối tượng với thuộc tính 'wards' chứa danh sách phường xã
                         const wards = data.wards;
                         const select = document.getElementById('phuongXaSelect');
-                        select.innerHTML = ''; // Clear current options
 
-                        // Thêm option mặc định
-                        const defaultOption = document.createElement('option');
-                        defaultOption.selected = true;
-                        defaultOption.disabled = true;
-                        defaultOption.text = 'Chọn Phường/Xã';
-                        select.appendChild(defaultOption);
-
-                        // Thêm các phường xã mới vào dropdown
                         wards.forEach(item => {
                             const option = document.createElement('option');
                             option.value = item.code;
                             option.text = item.name;
+                            option.setAttribute('data-name', item.name);
                             select.appendChild(option);
                         });
                     })
                     .catch(error => console.error('Lỗi load phường xã:', error));
             }
         });
+
+        // Event listener for Phường/Xã change
+        document.getElementById('phuongXaSelect').addEventListener('change', function () {
+            const selectedPhuongXaName = this.options[this.selectedIndex].getAttribute('data-name');
+
+            // Update the hidden input with the selected name
+            document.getElementById('phuongXaName').value = selectedPhuongXaName;
+            console.log('Phường/Xã đã chọn:', selectedPhuongXaName);
+        });
+
+        // Helper function to reset dropdown
+        function resetDropdown(selectId, defaultText) {
+            const select = document.getElementById(selectId);
+            select.innerHTML = ''; // Clear all options
+
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.selected = true;
+            defaultOption.disabled = true;
+            defaultOption.text = defaultText;
+            select.appendChild(defaultOption);
+        }
     });
 </script>

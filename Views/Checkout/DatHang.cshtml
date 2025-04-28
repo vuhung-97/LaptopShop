@@ -37,6 +37,14 @@
                                 <span class="fw-bold">@ViewBag.Time</span>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6 text-md-start text-center">
+                                <span class="text-muted">Trạng thái đơn hàng:</span>
+                            </div>
+                            <div class="col-md-6 text-md-end text-center">
+                                <span class="fw-bold">Chờ xác nhận</span>
+                            </div>
+                        </div>
                     </div>
 
                     <p class="mb-4">
@@ -46,7 +54,7 @@
 
                     <div class="d-grid gap-3 d-md-flex justify-content-md-center">
                         @await Html.PartialAsync("ButtonContinueShopping")
-                        <a asp-action="Index" asp-controller="ShoppingCart" class="btn btn-outline-secondary px-4 py-2 rounded-pill shadow-sm fw-medium border-2 transition-all">
+                        <a asp-action="ShowOrder" asp-controller="Checkout" class="btn btn-outline-secondary px-4 py-2 rounded-pill shadow-sm fw-medium border-2 transition-all">
                             <i class="fa fa-receipt me-2"></i>Xem đơn hàng
                         </a>
                     </div>

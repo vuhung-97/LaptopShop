@@ -1,7 +1,9 @@
-﻿using LaptopShop.Helpers;
+﻿using LaptopShop.Data;
+using LaptopShop.Helpers;
 using LaptopShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Text.Json;
 
 namespace LaptopShop.Controllers
@@ -22,19 +24,6 @@ namespace LaptopShop.Controllers
             return View(checkoutInfor);
         }
 
-        public IActionResult debug()
-        {
-            if (TempData["Errors"] != null)
-            {
-                var json = TempData["Errors"].ToString();
-                var lst = JsonSerializer.Deserialize<List<string>>(json);
-                return View(lst);
-            }
-
-            return View(new List<string>());
-        }
-
-
         [HttpPost]
         public IActionResult DatHang(CheckoutViewModel Model)
         {
@@ -42,26 +31,15 @@ namespace LaptopShop.Controllers
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values
-            .SelectMany(v => v.Errors)
-            .Select(e => e.ErrorMessage)
-            .ToList();
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
 
-                TempData["Errors"] = JsonSerializer.Serialize(errors); // cần using System.Text.Json
-                return RedirectToAction("debug", errors); // hoặc view hiện tại
+                TempData["Errors"] = JsonSerializer.Serialize(errors);
+                return View("Index");
             }
 
-            var model = Model.ThongTinKhachHang;
-
-            // Gom chuỗi thông tin
-            string fullInfo = $"Họ tên: {model.Ho} {model.Ten}\n" +
-                              $"Email: {model.Email}\n" +
-                              $"SĐT: {model.SoDienThoai}\n" +
-                              $"Địa chỉ: {model.DiaChi}, {model.PhuongXa}, {model.QuanHuyen}, {model.TinhThanh}\n" +
-                              $"Mã bưu điện: {model.MaBuuDien}\n" +
-                              $"Phương thức thanh toán: {model.PhuongThucThanhToan}";
-
-            // Ví dụ: lưu vào cơ sở dữ liệu hoặc ghi log
-
+            var model = Model.ThongTinKhachHang;            
             var ListCart = HttpContext.Session.Get(DsTenKey.CART_KEY);
             var lstCart = new List<CartViewModel>();
 
@@ -78,12 +56,39 @@ namespace LaptopShop.Controllers
 
             ViewBag.Time = DateTime.Now.ToString("dd/MM/yyyy - hh/mm/ss");
 
-            return View(result); // hoặc trả về trang cảm ơn
+            var donhang = new DonHang
+            {
+                IdDonHang = IdGenerator.GetNextId().ToString(),
+                NgayDat = DateTime.Now,
+                DiaChiGiao = model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
+                TongTien = Model.GioHang.Sum(x => x.ThanhTien),
+                TrangThai = "ChoXacNhan"
+            };
+            using (var db = new ShopLaptopContext())
+            {
+                db.DonHangs.Add(donhang);
+                db.SaveChanges();
+            }
+            TempData["Success"] = "Đặt hàng thành công! Thông tin đơn hàng của bạn đã được ghi nhận. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.";
+            return View(result);
         }
+
+        public IActionResult ShowOrder()
+        {
+            var lstCart = HttpContext.Session.Get<List<CartViewModel>>(DsTenKey.ORDER_KEY);
+            if (lstCart == null)
+            {
+                TempData["Messange"] = "Không có đơn hàng nào!";
+                return RedirectToAction("Index");
+            }
+            return View(lstCart);
+        }
+
         public IActionResult ShowHoaDon()
         {
             return View();
         }
+
         public async Task<IActionResult> GetTinhThanh()
         {
             using (var httpClient = new HttpClient())
@@ -113,4 +118,14 @@ namespace LaptopShop.Controllers
             }
         }
     }
+    public static class IdGenerator
+    {
+        private static int currentId = 0;
+
+        public static int GetNextId()
+        {
+            return ++currentId;
+        }
+    }
+
 }

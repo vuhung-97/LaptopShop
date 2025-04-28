@@ -72,28 +72,22 @@
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Tỉnh/Thành phố</label>
-                                        <select asp-for="ThongTinKhachHang.TinhThanh" class="form-control">
-                                            <option selected>Hồ Chí Minh</option>
-                                            <option>Hà Nội</option>
-                                            <option>Đà Nẵng</option>
-                                            <option>Cần Thơ</option>
+                                        <select id="tinhThanhSelect" name="ThongTinKhachHang.TinhThanh" class="form-control">
+                                            <option selected disabled>Chọn Tỉnh/Thành phố</option>
                                         </select>
                                     </div>
+
                                     <div class="col-md-6 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Quận/Huyện</label>
-                                        <select asp-for="ThongTinKhachHang.QuanHuyen" class="form-control">
-                                            <option selected>Quận 1</option>
-                                            <option>Quận 2</option>
-                                            <option>Quận 3</option>
-                                            <option>Quận Bình Thạnh</option>
+                                        <select id="quanHuyenSelect" name="ThongTinKhachHang.QuanHuyen" class="form-control">
+                                            <option selected disabled>Chọn Quận/Huyện</option>
                                         </select>
                                     </div>
+
                                     <div class="col-md-6 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Phường/Xã</label>
-                                        <select asp-for="ThongTinKhachHang.PhuongXa" class="form-control">
-                                            <option selected>Phường Bến Nghé</option>
-                                            <option>Phường Bến Thành</option>
-                                            <option>Phường Đa Kao</option>
+                                        <select id="phuongXaSelect" name="ThongTinKhachHang.PhuongXa" class="form-control">
+                                            <option selected disabled>Chọn Phường/Xã</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
@@ -203,3 +197,80 @@
     </div>
 </form>
 <!-- Checkout End -->
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+        fetch('/Checkout/GetTinhThanh')
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('tinhThanhSelect');
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.code; // Sử dụng mã code thay vì tên
+                    option.text = item.name;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Lỗi load tỉnh thành:', error));
+
+        document.getElementById('tinhThanhSelect').addEventListener('change', function () {
+            const selectedTinhThanhCode = this.value;
+            if (selectedTinhThanhCode) {
+                fetch(`/Checkout/GetQuanHuyen?tinhThanhCode=${selectedTinhThanhCode}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // API trả về một đối tượng với thuộc tính 'districts' chứa danh sách quận huyện
+                        const districts = data.districts;
+                        const select = document.getElementById('quanHuyenSelect');
+                        select.innerHTML = ''; // Clear current options
+
+                        // Thêm option mặc định
+                        const defaultOption = document.createElement('option');
+                        defaultOption.selected = true;
+                        defaultOption.disabled = true;
+                        defaultOption.text = 'Chọn Quận/Huyện';
+                        select.appendChild(defaultOption);
+
+                        // Thêm các quận huyện mới vào dropdown
+                        districts.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.code;
+                            option.text = item.name;
+                            select.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Lỗi load quận huyện:', error));
+            }
+        });
+
+        document.getElementById('quanHuyenSelect').addEventListener('change', function () {
+            const selectedQuanHuyenCode = this.value;
+            if (selectedQuanHuyenCode) {
+                fetch(`/Checkout/GetPhuongXa?quanHuyenCode=${selectedQuanHuyenCode}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // API trả về một đối tượng với thuộc tính 'wards' chứa danh sách phường xã
+                        const wards = data.wards;
+                        const select = document.getElementById('phuongXaSelect');
+                        select.innerHTML = ''; // Clear current options
+
+                        // Thêm option mặc định
+                        const defaultOption = document.createElement('option');
+                        defaultOption.selected = true;
+                        defaultOption.disabled = true;
+                        defaultOption.text = 'Chọn Phường/Xã';
+                        select.appendChild(defaultOption);
+
+                        // Thêm các phường xã mới vào dropdown
+                        wards.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.code;
+                            option.text = item.name;
+                            select.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Lỗi load phường xã:', error));
+            }
+        });
+    });
+</script>

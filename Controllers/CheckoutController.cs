@@ -84,5 +84,33 @@ namespace LaptopShop.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> GetTinhThanh()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetStringAsync("https://provinces.open-api.vn/api/p/");
+                return Content(response, "application/json");
+            }
+        }
+
+        public async Task<IActionResult> GetQuanHuyen(string tinhThanhCode)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                // Sử dụng đúng API để lấy quận huyện theo mã tỉnh thành
+                var response = await httpClient.GetStringAsync($"https://provinces.open-api.vn/api/p/{tinhThanhCode}?depth=2");
+                return Content(response, "application/json");
+            }
+        }
+
+        public async Task<IActionResult> GetPhuongXa(string quanHuyenCode)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                // Sử dụng đúng API để lấy phường xã theo mã quận huyện
+                var response = await httpClient.GetStringAsync($"https://provinces.open-api.vn/api/d/{quanHuyenCode}?depth=2");
+                return Content(response, "application/json");
+            }
+        }
     }
 }

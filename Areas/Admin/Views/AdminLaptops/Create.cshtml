@@ -1,0 +1,58 @@
+﻿@model LaptopShop.Data.Laptop
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Laptop</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdLaptop" class="control-label"></label>
+                <input asp-for="IdLaptop" class="form-control" />
+                <span asp-validation-for="IdLaptop" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdThuongHieu" class="control-label"></label>
+                <select asp-for="IdThuongHieu" class ="form-control" asp-items="ViewBag.IdThuongHieu"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TenLapTop" class="control-label"></label>
+                <input asp-for="TenLapTop" class="form-control" />
+                <span asp-validation-for="TenLapTop" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GiaBan" class="control-label"></label>
+                <input asp-for="GiaBan" class="form-control" />
+                <span asp-validation-for="GiaBan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HinhAnh" class="control-label"></label>
+                <input asp-for="HinhAnh" class="form-control" />
+                <span asp-validation-for="HinhAnh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdThongTin" class="control-label"></label>
+                <select asp-for="IdThongTin" class ="form-control" asp-items="ViewBag.IdThongTin"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdLoai" class="control-label"></label>
+                <select asp-for="IdLoai" class ="form-control" asp-items="ViewBag.IdLoai"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

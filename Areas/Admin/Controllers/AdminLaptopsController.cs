@@ -24,13 +24,15 @@ namespace LaptopShop.Areas.Admin.Controllers
 
 
         //GET: Admin/AdminLaptops
-        public async Task<IActionResult> Index(string searchString, string thuonghieu, int? minPrice, int? maxPrice, int? page)
+        public async Task<IActionResult> Index(string searchString, string thuonghieu, int? minPrice, int? maxPrice, int? page, string sortColumn, string sortOrder)
         {
             ViewData["ThuongHieuList"] = new SelectList(_context.ThuongHieus, "IdThuongHieu", "TenThuongHieu");
             ViewData["searchString"] = searchString;
             ViewData["thuonghieu"] = thuonghieu;
             ViewData["minPrice"] = minPrice;
             ViewData["maxPrice"] = maxPrice;
+            ViewData["sortColumn"] = sortColumn;
+            ViewData["sortOrder"] = sortOrder;
 
             var laptopsQuery = _context.Laptops
                 .Include(l => l.IdLoaiNavigation)
@@ -58,6 +60,38 @@ namespace LaptopShop.Areas.Admin.Controllers
             if (maxPrice.HasValue)
             {
                 laptopsQuery = laptopsQuery.Where(l => l.GiaBan <= maxPrice.Value);
+            }
+            // Thêm sắp xếp theo cột được chọn
+            if (!string.IsNullOrEmpty(sortColumn))
+            {
+                switch (sortColumn)
+                {
+                    case "TenLapTop":
+                        laptopsQuery = (sortOrder == "asc")
+                            ? laptopsQuery.OrderBy(l => l.TenLapTop)
+                            : laptopsQuery.OrderByDescending(l => l.TenLapTop);
+                        break;
+                    case "GiaBan":
+                        laptopsQuery = (sortOrder == "asc")
+                            ? laptopsQuery.OrderBy(l => l.GiaBan)
+                            : laptopsQuery.OrderByDescending(l => l.GiaBan);
+                        break;
+                    case "ThuongHieu":
+                        laptopsQuery = (sortOrder == "asc")
+                            ? laptopsQuery.OrderBy(l => l.IdThuongHieuNavigation.TenThuongHieu)
+                            : laptopsQuery.OrderByDescending(l => l.IdThuongHieuNavigation.TenThuongHieu);
+                        break;
+                    case "Loai":
+                        laptopsQuery = (sortOrder == "asc")
+                            ? laptopsQuery.OrderBy(l => l.IdLoaiNavigation.TenLoai)
+                            : laptopsQuery.OrderByDescending(l => l.IdLoaiNavigation.TenLoai);
+                        break;
+                    case "SoLuong":
+                        laptopsQuery = (sortOrder == "asc")
+                            ? laptopsQuery.OrderBy(l => l.SoLuong)
+                            : laptopsQuery.OrderByDescending(l => l.SoLuong);
+                        break;
+                }
             }
 
             int pageSize = 5;
@@ -93,9 +127,11 @@ namespace LaptopShop.Areas.Admin.Controllers
         // GET: Admin/AdminLaptops/Create
         public IActionResult Create()
         {
-            ViewData["IdLoai"] = new SelectList(_context.Loais, "IdLoai", "IdLoai");
-            ViewData["IdThongTin"] = new SelectList(_context.ThongTinChiTiets, "IdThongTin", "IdThongTin");
-            ViewData["IdThuongHieu"] = new SelectList(_context.ThuongHieus, "IdThuongHieu", "IdThuongHieu");
+            ViewData["IdLoai"] = new SelectList(_context.Loais, "IdLoai", "TenLoai");
+            ViewData["IdThongTin"] = _context.ThongTinChiTiets
+       .Select(t => new SelectListItem { Value = t.IdThongTin, Text = $"{t.Cpu} | {t.Ram} | {t.Ocung}| {t.DoHoa}| {t.ManHinh}| {t.HeDieuHanh}" })
+       .ToList();
+            ViewData["IdThuongHieu"] = new SelectList(_context.ThuongHieus, "IdThuongHieu", "TenThuongHieu");
             return View();
         }
 
@@ -104,23 +140,56 @@ namespace LaptopShop.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdLaptop,IdThuongHieu,TenLapTop,GiaBan,HinhAnh,IdThongTin,IdLoai")] Laptop laptop)
+        public async Task<IActionResult> Create( [Bind("IdLaptop,IdThuongHieu,TenLapTop,GiaBan,SoLuong,IdThongTin,IdLoai")] Laptop laptop, List<IFormFile> HinhAnhMoi)
         {
+
             if (ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
+                try
                 {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors);
-                    foreach (var error in errors)
+                    List<string> finalImages = new List<string>();
+
+                    if (HinhAnhMoi != null && HinhAnhMoi.Count > 0)
                     {
-                        Console.WriteLine(error.ErrorMessage);
+                        foreach (var file in HinhAnhMoi)
+                        {
+                            if (file.Length > 0)
+                            {
+                                var fileName = Path.GetFileName(file.FileName);
+                                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "hinh", "laptop", fileName);
+
+                                if (!System.IO.File.Exists(filePath))
+                                {
+                                    using (var stream = new FileStream(filePath, FileMode.Create))
+                                    {
+                                        await file.CopyToAsync(stream);
+                                    }
+                                }
+
+                                finalImages.Add(fileName);
+                            }
+                        }
+                    }
+
+                    laptop.HinhAnh = string.Join(",", finalImages);
+
+                    _context.Add(laptop);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!LaptopExists(laptop.IdLaptop))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
                     }
                 }
-
-                _context.Add(laptop);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
+
             ViewData["IdLoai"] = new SelectList(_context.Loais, "IdLoai", "IdLoai", laptop.IdLoai);
             ViewData["IdThongTin"] = new SelectList(_context.ThongTinChiTiets, "IdThongTin", "IdThongTin", laptop.IdThongTin);
             ViewData["IdThuongHieu"] = new SelectList(_context.ThuongHieus, "IdThuongHieu", "IdThuongHieu", laptop.IdThuongHieu);
@@ -155,7 +224,7 @@ namespace LaptopShop.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
        
-        public async Task<IActionResult> Edit(string id, [Bind("IdLaptop,IdThuongHieu,TenLapTop,GiaBan,HinhAnh,IdThongTin,IdLoai")] Laptop laptop, List<IFormFile> HinhAnhMoi, string[]? DeletedImages, string[]? OldImages)
+        public async Task<IActionResult> Edit(string id, [Bind("IdLaptop,IdThuongHieu,TenLapTop,GiaBan,HinhAnh,IdThongTin,IdLoai,SoLuong")] Laptop laptop, List<IFormFile> HinhAnhMoi, string[]? DeletedImages, string[]? OldImages)
         {
             if (id != laptop.IdLaptop)
             {

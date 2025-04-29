@@ -66,7 +66,7 @@
         flex-wrap: wrap;
         gap: 10px;
         justify-content: flex-start;
-        height: 650px; /* Đảm bảo ảnh chiếm hết chiều cao gallery */
+        height: 65vh; /* Đảm bảo ảnh chiếm hết chiều cao gallery */
     }
 
         .image-grid a {
@@ -79,7 +79,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: auto; /* Đảm bảo chiều cao ô tự điều chỉnh theo ảnh */
+            height: 30%; /* Đảm bảo chiều cao ô tự điều chỉnh theo ảnh */
         }
 
         .image-grid img {
@@ -122,7 +122,6 @@
     <!-- Bảng thông tin cấu hình -->
     <div class="table-container">
         <h3>@Html.DisplayFor(model => model.TenLapTop)</h3>
-        <hr />
         <table class="table">
             <thead>
                 <tr>
@@ -177,7 +176,17 @@
                 </tr>
                 <tr>
                     <td>Giá Bán</td>
-                    <td>@Html.DisplayFor(model => model.GiaBan)</td>
+                    <td>
+                        <span id="formattedCurrency_@Html.DisplayFor(model => model.IdLaptop)"></span>
+                        <script>
+                            currencyFormat = new Intl.NumberFormat('vi-VN').format(@Html.DisplayFor(model => model.GiaBan))+" VND";
+                            document.getElementById('formattedCurrency_@Html.DisplayFor(model => model.IdLaptop)').innerText = currencyFormat;
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tồn Kho</td>
+                    <td>@Html.DisplayFor(model => model.SoLuong)</td>
                 </tr>
             </tbody>
         </table>
@@ -211,16 +220,7 @@
     <a style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-primary" asp-action="Edit" asp-route-id="@Model.IdLaptop">Sửa</a>
     <a class="btn btn-round btn-info" asp-action="Index">Quay lại</a>
 </div>
-@section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            lightbox.option({
-                'resizeDuration': 200,
-                'wrapAround': true
-            });
-        });
-    </script>
-}
+
 
 
 

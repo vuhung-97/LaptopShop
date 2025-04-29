@@ -16,7 +16,7 @@
 
                 <div class="row">
                     <!-- Phần thông tin laptop -->
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="TenLapTop" class="control-label">Tên laptop</label>
                             <input asp-for="TenLapTop" class="form-control" />
@@ -42,17 +42,28 @@
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="GiaBan" class="control-label">Giá bán</label>
+                            <label asp-for="SoLuong" class="control-label">Tồn Kho</label>
+                            <input asp-for="SoLuong" class="form-control" min="0" />
+                            <span asp-validation-for="SoLuong" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="GiaBan" class="control-label">Giá bán (VND)</label>
                             <div class="input-group">
-                                <input asp-for="GiaBan" class="form-control" />
-                                <span class="input-group-text">VNĐ</span>
+                                <!-- Người dùng gõ vào ô này (chỉ dùng ID và class thôi) -->
+                                <input type="text" id="GiaBanFormatted" class="form-control" oninput="formatCurrencyVND(this)" />
+
+                                <!-- Dữ liệu thật được submit (ẩn) -->
+                                <input type="hidden" asp-for="GiaBan" />
                             </div>
                             <span asp-validation-for="GiaBan" class="text-danger"></span>
                         </div>
+
+
                     </div>
 
                     <!-- Phần hình ảnh -->
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label asp-for="HinhAnh" class="control-label">Hình ảnh hiện có:</label>
                         <div id="imagePreviewContainer" class="d-flex flex-wrap overflow-auto" style="max-height: 300px; border: 1px solid #ddd; padding: 10px;">
                             @if (!string.IsNullOrEmpty(Model.HinhAnh))
@@ -79,8 +90,8 @@
 
                 <!-- Nút lưu -->
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-success">Lưu thay đổi</button>
-                    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+                    <button type="submit" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-primary">Lưu thay đổi</button>
+                    <a style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-info" asp-action="Index" >Quay lại</a>
                 </div>
             </form>
         </div>
@@ -135,6 +146,34 @@
 </style>
 
 <script>
+    // dịnh dạng lại giá
+         function formatCurrencyVND(input) {
+        const rawValue = input.value.replace(/\D/g, ''); // chỉ lấy số
+        input.value = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        const hiddenInput = document.querySelector('[name="GiaBan"]');
+        if (hiddenInput) {
+            hiddenInput.value = rawValue;
+        }
+    }
+
+    function submitForm(event) {
+        // Không cần làm gì nữa nếu đã cập nhật hidden input trong formatCurrencyVND
+        return true;
+    }
+
+    window.onload = function () {
+        // Khi load trang (ví dụ đang ở chế độ Edit), tự động định dạng lại giá hiển thị
+        const hiddenInput = document.querySelector('[name="GiaBan"]');
+        const displayInput = document.getElementById('GiaBanFormatted');
+        if (hiddenInput && displayInput) {
+            let value = hiddenInput.value;
+            displayInput.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+    };
+
+
+        //phần hình ảnh
     function removeOldImage(button, imageName) {
         const wrapper = button.closest('.image-wrapper');
         wrapper.remove();
@@ -190,9 +229,9 @@
     function closeImageModal() {
         document.getElementById('imageModal').style.display = "none";
     }
-
     function submitForm(event) {
         // Không cần chỉnh sửa form trước, để ASP.NET xử lý các input Hidden bình thường
         return true; // Cho phép form submit
     }
+
 </script>

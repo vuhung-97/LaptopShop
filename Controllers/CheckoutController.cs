@@ -28,16 +28,16 @@ namespace LaptopShop.Controllers
         public IActionResult DatHang(CheckoutViewModel Model)
         {
             // Kiểm tra model nếu cần
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage)
-                .ToList();
+            //if (!ModelState.IsValid)
+            //{
+            //    var errors = ModelState.Values
+            //    .SelectMany(v => v.Errors)
+            //    .Select(e => e.ErrorMessage)
+            //    .ToList();
 
-                TempData["Errors"] = JsonSerializer.Serialize(errors);
-                return View("Index");
-            }
+            //    TempData["Errors"] = JsonSerializer.Serialize(errors);
+            //    return RedirectToAction("Index");
+            //}
 
             var model = Model.ThongTinKhachHang;            
             var ListCart = HttpContext.Session.Get(DsTenKey.CART_KEY);

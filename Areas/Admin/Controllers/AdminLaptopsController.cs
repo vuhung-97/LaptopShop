@@ -140,9 +140,9 @@ namespace LaptopShop.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( [Bind("IdLaptop,IdThuongHieu,TenLapTop,GiaBan,SoLuong,IdThongTin,IdLoai")] Laptop laptop, List<IFormFile> HinhAnhMoi)
+        public async Task<IActionResult> Create( [Bind("IdThuongHieu,TenLapTop,GiaBan,SoLuong,IdThongTin,IdLoai")] Laptop laptop, List<IFormFile> HinhAnhMoi)
         {
-
+            ModelState.Remove("IdLaptop");
             if (ModelState.IsValid)
             {
                 try
@@ -179,20 +179,15 @@ namespace LaptopShop.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LaptopExists(laptop.IdLaptop))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
             }
 
-            ViewData["IdLoai"] = new SelectList(_context.Loais, "IdLoai", "IdLoai", laptop.IdLoai);
-            ViewData["IdThongTin"] = new SelectList(_context.ThongTinChiTiets, "IdThongTin", "IdThongTin", laptop.IdThongTin);
-            ViewData["IdThuongHieu"] = new SelectList(_context.ThuongHieus, "IdThuongHieu", "IdThuongHieu", laptop.IdThuongHieu);
+            ViewData["IdLoai"] = new SelectList(_context.Loais, "IdLoai", "TenLoai");
+            ViewData["IdThongTin"] = _context.ThongTinChiTiets
+       .Select(t => new SelectListItem { Value = t.IdThongTin, Text = $"{t.Cpu} | {t.Ram} | {t.Ocung}| {t.DoHoa}| {t.ManHinh}| {t.HeDieuHanh}" })
+       .ToList();
+            ViewData["IdThuongHieu"] = new SelectList(_context.ThuongHieus, "IdThuongHieu", "TenThuongHieu");
             return View(laptop);
         }
 

@@ -62,7 +62,6 @@ namespace LaptopShop.Controllers
                 NgayDat = DateTime.Now,
                 DiaChiGiao = model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
                 TongTien = Model.GioHang.Sum(x => x.ThanhTien),
-                TrangThai = "ChoXacNhan"
             };
             using (var db = new ShopLaptopContext())
             {

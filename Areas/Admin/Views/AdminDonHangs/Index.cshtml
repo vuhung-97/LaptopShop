@@ -71,6 +71,7 @@
                                             <th>Ngày đặt hàng</th>
                                             <th>Địa chỉ</th>
                                             <th>Tổng tiền</th>
+                                            <th>Trạng Thái</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -94,10 +95,14 @@
                                                     document.getElementById('formattedCurrency_@item.IdDonHang').innerText = currencyFormat;
                                                 </script>
                                             </td>
+
+                                            <td>@item.TrangThai</td>
+
                                             <td>
                                                 <a class="btn btn-round btn-success" asp-area="Admin" asp-controller="AdminDonHangs" asp-action="Details" asp-route-id="@item.IdDonHang">Xem</a>
                                                         <a class="btn btn-round btn-danger" asp-area="Admin" asp-controller="AdminDonHangs" asp-action="Delete" asp-route-id="@item.IdDonHang">Xóa</a>
                                             </td>
+
                                         </tr>
                                     }
                                     }

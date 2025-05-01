@@ -2,11 +2,119 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
+<style>
+    /* Container chính */
+    .container1 {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: stretch; /* Đảm bảo các phần tử có chiều cao bằng nhau */
+        height: 100%; /* Đảm bảo container chính có chiều cao đầy đủ */
+    }
+
+    /* Bảng thông tin bên trái */
+    .table-container {
+        flex: 1;
+        max-width: 30%;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Bảng */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+    /* Hiển thị hình ảnh bên phải */
+    .image-gallery {
+        flex: 1;
+        max-width: 65%;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow-y: auto; /* Cho phép cuộn dọc nếu nhiều ảnh */
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Đảm bảo chiều cao gallery bằng chiều cao của bảng */
+    }
+
+    /* Lưới ảnh */
+    .image-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-start;
+        height: 65vh; /* Đảm bảo ảnh chiếm hết chiều cao gallery */
+    }
+
+        .image-grid a {
+            flex: 0 0 calc(25% - 10px); /* 3 ảnh mỗi hàng, bạn có thể thay đổi % để thu nhỏ hoặc phóng to ảnh */
+            aspect-ratio: 1/1; /* Giữ tỷ lệ vuông cho các ô ảnh */
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30%; /* Đảm bảo chiều cao ô tự điều chỉnh theo ảnh */
+        }
+
+        .image-grid img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Giữ tỷ lệ ảnh */
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+            .image-grid img:hover {
+                transform: scale(1.05);
+            }
+
+    /* Hình ảnh mặc định */
+    .default-image {
+        width: 200px;
+        margin: 20px auto;
+        opacity: 0.8;
+        border: 2px dashed #ccc;
+        padding: 10px;
+        background-color: #f4f4f4;
+    }
+
+    /* Cảnh báo văn bản */
+    .text-warning {
+        font-size: 1.2em;
+        color: #ff6600;
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+</style>
 
 <h1>Details</h1>
 
-<div>
+@* <div>
     <h4>DonHang</h4>
     <hr />
     <dl class="row">
@@ -42,8 +150,76 @@
             @Html.DisplayFor(model => model.IdTaiKhoanNavigation.IdTaiKhoan)
         </dd>
     </dl>
-</div>
+</div> *@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.IdDonHang">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+<div class="container1">
+    <!-- Bảng thông tin cấu hình -->
+    <div class="table-container">
+        <h3>ten</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Thông tin</th>
+                    <th>Cấu hình</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Loại Laptop</td>
+                    <td>@Html.DisplayFor(model => model.NgayDat)</td>
+                </tr>
+                <tr>
+                    <td>CPU</td>
+                    <td>@Html.DisplayFor(model => model.DiaChiGiao)</td>
+                </tr>
+                <tr>
+                    <td>Loại Laptop</td>
+                    <td>@Html.DisplayFor(model => model.NgayDat)</td>
+                </tr>
+                <tr>
+                    <td>CPU</td>
+                    <td>@Html.DisplayFor(model => model.DiaChiGiao)</td>
+                </tr>
+                <tr>
+                    <td>Loại Laptop</td>
+                    <td>@Html.DisplayFor(model => model.NgayDat)</td>
+                </tr>
+                <tr>
+                    <td>CPU</td>
+                    <td>@Html.DisplayFor(model => model.DiaChiGiao)</td>
+                </tr>
+                <tr>
+                    <td>Loại Laptop</td>
+                    <td>@Html.DisplayFor(model => model.NgayDat)</td>
+                </tr>
+                <tr>
+                    <td>CPU</td>
+                    <td>@Html.DisplayFor(model => model.DiaChiGiao)</td>
+                </tr>
+                <tr>
+                    <td>Giá Bán</td>
+                    <td>
+                        <span id="formattedCurrency_@Html.DisplayFor(model => model.IdDonHang)"></span>
+                        <script>
+                            currencyFormat = new Intl.NumberFormat('vi-VN').format(@Html.DisplayFor(model => model.TongTien))+" VND";
+                            document.getElementById('formattedCurrency_@Html.DisplayFor(model => model.IdDonHang)').innerText = currencyFormat;
+                        </script>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Gallery hình ảnh -->
+    <div class="image-gallery">
+        <h3>Hình ảnh Laptop</h3>
+        <hr />
+       
+    </div>
+
+</div>
+

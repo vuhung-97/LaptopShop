@@ -27,40 +27,40 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
-               @* các nút lọc sản phần *@
-                    <div class="row mb-3 align-items-center">
+                @* các nút lọc sản phần *@
+                <div class="row mb-3 align-items-center">
 
-                        <!-- Thương hiệu bên trái -->
-                        <div class="col-md-3 col-sm-12">
-                            <select class="form-control form-control-sm" id="thuonghieu" name="thuonghieu" style="max-width: 150px;">
-                                <option value="0" disabled selected>Thương Hiệu</option>
-                                @foreach (var item in ViewBag.ThuongHieuList)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                        </div>
-
-                        <!-- Giá ở giữa -->
-                        <div class="col-md-6 col-sm-12 d-flex justify-content-center">
-                            <input type="text" id="minPrice" class="form-control form-control-sm me-2" placeholder="Giá thấp nhất"
-                                   value="@ViewData["minPrice"]" style="max-width: 130px;" />
-                            <input type="text" id="maxPrice" class="form-control form-control-sm me-2" placeholder="Giá cao nhất"
-                                   value="@ViewData["maxPrice"]" style="max-width: 130px;" />
-                            <button class="btn btn-sm btn-primary" id="filterPriceBtn">Lọc theo giá</button>
-                        </div>
-
-                        <!-- Tìm kiếm bên phải sát mép -->
-                        <div class="col-md-3 col-sm-12" >
-                            <form method="get" action="@Url.Action("Index")" class="d-flex justify-content-end">
-                            <input type="text" name="searchString" class="form-control form-control-sm me-2"
-                                       value="@ViewData["searchString"]" placeholder="Tìm kiếm" style="max-width: 160px;" />
-                            <button type="submit" class="btn btn-sm btn-primary">Tìm</button>
-                            </form>
-                        </div>
+                    <!-- Thương hiệu bên trái -->
+                    <div class="col-md-3 col-sm-12">
+                        <select class="form-control form-control-sm" id="thuonghieu" name="thuonghieu" style="max-width: 150px;">
+                            <option value="0" disabled selected>Thương Hiệu</option>
+                            @foreach (var item in ViewBag.ThuongHieuList)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
                     </div>
 
-                    @* bảng dữ liệu *@
+                    <!-- Giá ở giữa -->
+                    <div class="col-md-6 col-sm-12 d-flex justify-content-center">
+                        <input type="text" id="minPrice" class="form-control form-control-sm me-2" placeholder="Giá thấp nhất"
+                        value="@ViewData["minPrice"]" style="max-width: 130px;" />
+                        <input type="text" id="maxPrice" class="form-control form-control-sm me-2" placeholder="Giá cao nhất"
+                        value="@ViewData["maxPrice"]" style="max-width: 130px;" />
+                        <button class="btn btn-sm btn-primary" id="filterPriceBtn">Lọc theo giá</button>
+                    </div>
+
+                    <!-- Tìm kiếm bên phải sát mép -->
+                    <div class="col-md-3 col-sm-12" >
+                        <form method="get" action="@Url.Action("Index")" class="d-flex justify-content-end">
+                            <input type="text" name="searchString" class="form-control form-control-sm me-2"
+                            value="@ViewData["searchString"]" placeholder="Tìm kiếm" style="max-width: 160px;" />
+                            <button type="submit" class="btn btn-sm btn-primary">Tìm</button>
+                        </form>
+                    </div>
+                </div>
+
+                @* bảng dữ liệu *@
                 <div class="x_content">
                     <div class="row">
                         <div class="col-sm-12">
@@ -68,6 +68,7 @@
                                 <table class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th style="width: 50px;">STT</th>
                                             <th data-column="TenLapTop" class="sortable">Tên Laptop</th>
                                             <th data-column="ThuongHieu" class="sortable">Thương hiệu</th>
                                             <th data-column="Loai" class="sortable">Dòng Sản Phẩm</th>
@@ -77,32 +78,37 @@
                                         </tr>
                                     </thead>
 
-                                <tbody id="laptopList">
-                                    <!-- Thêm ID vào tbody -->
-                                    @if(Model==null || !Model.Any()){
-                                        <h2 style="text-align:center">Không có sản phẩm nào!</h2>
-                                    }else{
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@item.TenLapTop</td>
-                                            <td>@item.IdThuongHieuNavigation.TenThuongHieu</td>
-                                            <td>@item.IdLoaiNavigation.TenLoai</td>
-                                            <td>@item.SoLuong</td>
-                                            <td>
-                                                <span id="formattedCurrency_@item.IdLaptop"></span>
-                                                <script>
-                                                    currencyFormat = new Intl.NumberFormat('vi-VN').format(@item.GiaBan) + " VND";
-                                                    document.getElementById('formattedCurrency_@item.IdLaptop').innerText = currencyFormat;
-                                                </script>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-round btn-success" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Details" asp-route-id="@item.IdLaptop">Xem</a>
-                                                <a class="btn btn-round btn-primary" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Edit" asp-route-id="@item.IdLaptop">Sửa</a>
-                                                <a class="btn btn-round btn-danger" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Delete" asp-route-id="@item.IdLaptop">Xóa</a>
-                                            </td>
-                                        </tr>
-                                    }
+                                    <tbody id="laptopList">
+                                        @{
+                                            int stt = (Model.PageNumber - 1) * Model.PageSize + 1;
+                                        }
+                                        <!-- Thêm ID vào tbody -->
+                                        @if(Model==null || !Model.Any()){
+                                            <h2 style="text-align:center">Không có sản phẩm nào!</h2>
+                                        }else{
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@stt</td>
+                                                    <td>@item.TenLapTop</td>
+                                                    <td>@item.IdThuongHieuNavigation.TenThuongHieu</td>
+                                                    <td>@item.IdLoaiNavigation.TenLoai</td>
+                                                    <td>@item.SoLuong</td>
+                                                    <td>
+                                                        <span id="formattedCurrency_@item.IdLaptop"></span>
+                                                        <script>
+                                                            currencyFormat = new Intl.NumberFormat('vi-VN').format(@item.GiaBan) + " VND";
+                                                            document.getElementById('formattedCurrency_@item.IdLaptop').innerText = currencyFormat;
+                                                        </script>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-round btn-success" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Details" asp-route-id="@item.IdLaptop">Xem</a>
+                                                        <a class="btn btn-round btn-primary" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Edit" asp-route-id="@item.IdLaptop">Sửa</a>
+                                                        <a class="btn btn-round btn-danger" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Delete" asp-route-id="@item.IdLaptop">Xóa</a>
+                                                    </td>
+                                                </tr>
+                                                stt++;
+                                            }
                                     }
                                 </tbody>
                                 </table>
@@ -117,23 +123,7 @@
 </div>
 
 
-@* <div class="d-flex justify-content-center">
-    @{
-        string currentSearch = Context.Request.Query["searchString"];
-    }
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = currentSearch }),
 
-            new PagedListRenderOptions
-    {
-        DisplayLinkToFirstPage = PagedListDisplayMode.Always,    // Hiển thị liên kết đến trang đầu tiên
-        DisplayLinkToLastPage = PagedListDisplayMode.Always,     // Hiển thị liên kết đến trang cuối
-        DisplayLinkToPreviousPage = PagedListDisplayMode.Always, // Hiển thị liên kết đến trang trước
-        DisplayLinkToNextPage = PagedListDisplayMode.Always,     // Hiển thị liên kết đến trang tiếp theo
-        UlElementClasses = new[] { "pagination" },               // Lớp CSS cho thẻ <ul>
-        LiElementClasses = new[] { "page-item" },                // Lớp CSS cho thẻ <li>
-        PageClasses = new[] { "page-link" }                      // Lớp CSS cho thẻ trang
-    })
-</div> *@
 
 @* // tìm kiếm, phân trang *@
 <div class="d-flex justify-content-center" style="float:right;">

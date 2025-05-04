@@ -34,12 +34,26 @@ namespace LaptopShop.Areas.Admin.Controllers
                     new SelectListItem { Value = "dahuy", Text = "Đã hủy" }
 
                 };
+            //đảo lại ngày tháng nếu nhập nhầm
+            if (minDate > maxDate)
+            {
+                var temp = minDate;
+                minDate = maxDate;
+                maxDate = temp;
+            }
+
             ViewData["TrangThai"] = trangThai;
             ViewData["searchString"] = searchString;
-            ViewData["minDate"] = minDate;
-            ViewData["maxDate"] = maxDate;
+            string minDateFormatted = minDate.HasValue ? minDate.Value.ToString("yyyy-MM-dd") : null;
+            string maxDateFormatted = maxDate.HasValue ? maxDate.Value.ToString("yyyy-MM-dd") : null;
+
+            // Trả lại dữ liệu cho view
+            ViewData["minDate"] = minDateFormatted;
+            ViewData["maxDate"] = maxDateFormatted;
             ViewData["sortColumn"] = sortColumn;
             ViewData["sortOrder"] = sortOrder;
+
+            
             // Truy vấn đơn hàng
             var donhangsQuery = _context.DonHangs.Include(d => d.IdTaiKhoanNavigation).AsQueryable();
 
@@ -102,6 +116,8 @@ namespace LaptopShop.Areas.Admin.Controllers
             int pageSize = 5;
             int pageNumber = page ?? 1;
             var donhangsPaged = donhangsQuery.ToPagedList(pageNumber, pageSize);
+            
+            
 
             return View(donhangsPaged);
         }
@@ -116,14 +132,14 @@ namespace LaptopShop.Areas.Admin.Controllers
             }
 
             var donHang = _context.DonHangs
-       .Include(d => d.IdTaiKhoanNavigation)
-       .Include(d => d.ChiTietDonHangs) // THÊM DÒNG NÀY
-           .ThenInclude(ct => ct.IdLaptopNavigation)
-               .ThenInclude(l => l.IdThuongHieuNavigation) // Nếu cần thương hiệu
-       .Include(d => d.ChiTietDonHangs)
-           .ThenInclude(ct => ct.IdLaptopNavigation)
-               .ThenInclude(l => l.IdLoaiNavigation) // Nếu cần dòng sản phẩm
-       .FirstOrDefault(d => d.IdDonHang == id);
+                    .Include(d => d.IdTaiKhoanNavigation)
+                     .Include(d => d.ChiTietDonHangs) // THÊM DÒNG NÀY
+                        .ThenInclude(ct => ct.IdLaptopNavigation)
+                            .ThenInclude(l => l.IdThuongHieuNavigation) // Nếu cần thương hiệu
+                    .Include(d => d.ChiTietDonHangs)
+                     .ThenInclude(ct => ct.IdLaptopNavigation)
+                        .ThenInclude(l => l.IdLoaiNavigation) // Nếu cần dòng sản phẩm
+                        .FirstOrDefault(d => d.IdDonHang == id);
             if (donHang == null)
             {
                 return NotFound();
@@ -133,11 +149,7 @@ namespace LaptopShop.Areas.Admin.Controllers
         }
 
         // GET: Admin/AdminDonHangs/Create
-        public IActionResult Create()
-        {
-            ViewData["IdTaiKhoan"] = new SelectList(_context.TaiKhoans, "IdTaiKhoan", "IdTaiKhoan");
-            return View();
-        }
+     
 
         // POST: Admin/AdminDonHangs/trangthai
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -154,61 +166,6 @@ namespace LaptopShop.Areas.Admin.Controllers
                 _context.SaveChanges();
             }
             return RedirectToAction("Details", new { id });
-        }
-
-
-
-        // GET: Admin/AdminDonHangs/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var donHang = await _context.DonHangs.FindAsync(id);
-            if (donHang == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdTaiKhoan"] = new SelectList(_context.TaiKhoans, "IdTaiKhoan", "IdTaiKhoan", donHang.IdTaiKhoan);
-            return View(donHang);
-        }
-
-        // POST: Admin/AdminDonHangs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("IdDonHang,IdTaiKhoan,NgayDat,DiaChiGiao,TongTien,NgayCapNhat,TrangThai")] DonHang donHang)
-        {
-            if (id != donHang.IdDonHang)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(donHang);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DonHangExists(donHang.IdDonHang))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdTaiKhoan"] = new SelectList(_context.TaiKhoans, "IdTaiKhoan", "IdTaiKhoan", donHang.IdTaiKhoan);
-            return View(donHang);
         }
 
 

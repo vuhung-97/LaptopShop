@@ -141,25 +141,6 @@
     </div>
 </div>
 
-
-@* <div class="d-flex justify-content-center">
-    @{
-        string currentSearch = Context.Request.Query["searchString"];
-    }
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = currentSearch }),
-
-            new PagedListRenderOptions
-    {
-        DisplayLinkToFirstPage = PagedListDisplayMode.Always,    // Hiển thị liên kết đến trang đầu tiên
-        DisplayLinkToLastPage = PagedListDisplayMode.Always,     // Hiển thị liên kết đến trang cuối
-        DisplayLinkToPreviousPage = PagedListDisplayMode.Always, // Hiển thị liên kết đến trang trước
-        DisplayLinkToNextPage = PagedListDisplayMode.Always,     // Hiển thị liên kết đến trang tiếp theo
-        UlElementClasses = new[] { "pagination" },               // Lớp CSS cho thẻ <ul>
-        LiElementClasses = new[] { "page-item" },                // Lớp CSS cho thẻ <li>
-        PageClasses = new[] { "page-link" }                      // Lớp CSS cho thẻ trang
-    })
-</div> *@
-
 @* // tìm kiếm, phân trang *@
 <div class="d-flex justify-content-center" style="float:right;">
     @{
@@ -269,12 +250,12 @@
 
         var currentminDate = '@ViewData["minDate"]';
         if (currentminDate) {
-            $("#minDate").val(currentminDate); // Set lại giá trị cho ô minPrice
+            $("#minDate").val(currentminDate); // Set lại giá trị cho ô ngay
         }
 
         var currentmaxDate = '@ViewData["maxDate"]';
         if (currentmaxDate) {
-            $("#maxDate").val(currentmaxDate); // Set lại giá trị cho ô maxPrice
+            $("#maxDate").val(currentmaxDate); // Set lại giá trị cho ô ngay
         }
     });
 </script>

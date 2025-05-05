@@ -45,7 +45,7 @@ namespace LaptopShop.Controllers
                 //return RedirectToAction("PageNotFound", "Home");
             }
 
-            var lap = laptops.Select(p => new LaptopViewModel
+            var lapop = laptops.Select(p => new LaptopViewModel
             {
                 IdLaptop = p.IdLaptop,
                 TenLapTop = p.TenLapTop,
@@ -57,6 +57,20 @@ namespace LaptopShop.Controllers
                 Ram = p.IdThongTinNavigation.Ram,
                 Ocung = p.IdThongTinNavigation.Ocung,
                 ManHinh = p.IdThongTinNavigation.ManHinh
+            });
+
+            var lap = lapop.AsEnumerable().Select(p => new LaptopViewModel
+            {
+                IdLaptop = p.IdLaptop,
+                TenLapTop = p.TenLapTop,
+                GiaBan = p.GiaBan,
+                HinhAnh = p.HinhAnh?.Split(",").FirstOrDefault(),
+                ThuongHieu = p.ThuongHieu,
+                TenLoai = p.TenLoai,
+                Cpu = p.Cpu,
+                Ram = p.Ram,
+                Ocung = p.Ocung,
+                ManHinh = p.ManHinh
             });
 
             if (sapxeptang == true)

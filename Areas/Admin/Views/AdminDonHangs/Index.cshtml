@@ -1,0 +1,264 @@
+﻿
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<LaptopShop.Data.DonHang> 
+@using System.Web
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+
+
+<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Danh sách đơn hàng</h3>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <!-- lọc trạng thái -->
+                <div class="row mb-3 align-items-center">
+                    <div class="col-md-3 col-sm-12">
+                        <select class="form-control form-control-sm" id="trangthai" name="trangthai" style="max-width: 150px;">
+                            @foreach (var item in ViewBag.TrangThaiList)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Giá ở giữa -->
+                    <div class="col-md-6 col-sm-12 d-flex justify-content-center">
+                        <input type="date" id="minDate" class="form-control form-control-sm me-2" 
+                        value="@ViewData["minDate"]" style="max-width: 130px;" />
+                        <input type="date" id="maxDate" class="form-control form-control-sm me-2" 
+                        value="@ViewData["maxDate"]" style="max-width: 130px;" />
+                        <button class="btn btn-sm btn-primary" id="filterPriceBtn">Lọc</button>
+                    </div>
+                    <!-- Tìm kiếm bên phải sát mép -->
+                    <div class="col-md-3 col-sm-12">
+                        <form method="get" action="@Url.Action("Index")" class="d-flex justify-content-end">
+                            <input type="text" name="searchString" class="form-control form-control-sm me-2"
+                            value="@ViewData["searchString"]" placeholder="Tìm kiếm" style="max-width: 160px;" />
+                            <button type="submit" class="btn btn-sm btn-primary">Tìm</button>
+                        </form>
+                    </div>
+                </div>
+          
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card-box table-responsive">
+                                <table class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50px;">STT</th>
+                                            <th data-column="HoTen" class="sortable">Tên tài khoản</th>
+                                            <th data-column="NgayDat" class="sortable">Ngày đặt hàng</th>
+                                            <th data-column="DiaChi" class="sortable">Địa chỉ</th>
+                                            <th data-column="TongTien" class="sortable">Tổng tiền</th>
+                                            <th data-column="TrangThai" class="sortable">Trạng Thái</th>
+                                            <th style="width: 50px;"></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="laptopList">
+                                        @{
+                                            int stt = (Model.PageNumber - 1) * Model.PageSize + 1;
+                                        }
+                                        <!-- Thêm ID vào tbody -->
+                                        @if(Model==null || !Model.Any()){
+                                            <h2 style="text-align:center">Không có đơn hàng nào!</h2>
+                                        }else{
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@stt</td>
+                                                    <td>@item.IdTaiKhoanNavigation.HoTen</td>
+                                                    <td>@item.NgayDat.ToString("dd/MM/yyyy")</td>
+                                                    <td>@item.DiaChiGiao</td>
+
+                                                    <td>
+                                                        <span id="formattedCurrency_@item.IdDonHang"></span>
+                                                        <script>
+                                                            currencyFormat = new Intl.NumberFormat('vi-VN').format(@item.TongTien) + " VND";
+                                                            document.getElementById('formattedCurrency_@item.IdDonHang').innerText = currencyFormat;
+                                                        </script>
+                                                    </td>
+
+                                                    @{
+                                                        string trangThaiHienThi = "";
+                                                        switch (@item.TrangThai)
+                                                        {
+                                                            case "DaHuy":
+                                                                trangThaiHienThi = "Đã hủy";
+                                                                break;
+                                                            case "ChoXacNhan":
+                                                                trangThaiHienThi = "Chờ xác nhận";
+                                                                break;
+                                                            case "DaGiao":
+                                                                trangThaiHienThi = "Đã giao";
+                                                                break;
+                                                            case "DangGiao":
+                                                                trangThaiHienThi = "Đang giao";
+                                                                break;
+                                                            default:
+                                                                trangThaiHienThi = "Không xác định";
+                                                                break;
+                                                        }
+                                                    }
+                                                    <td>@trangThaiHienThi</td>
+
+
+                                                    <td>
+                                                        <a class="btn btn-round btn-success" asp-area="Admin" asp-controller="AdminDonHangs" asp-action="Details" asp-route-id="@item.IdDonHang">Xem</a>
+                                                    </td>
+
+                                                </tr>
+
+                                                stt++;
+                                            }
+                                    }
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@* // tìm kiếm, phân trang *@
+<div class="d-flex justify-content-center" style="float:right;">
+    @{
+        string currentSearch = Context.Request.Query["searchString"];
+        string currentBrand = Context.Request.Query["trangthai"];
+        string currentminDate = Context.Request.Query["minDate"];
+        string currentmaxDate = Context.Request.Query["maxDate"];
+    }
+    @Html.PagedListPager(Model, page => Url.Action("Index", new
+        {
+            page,
+            searchString = Context.Request.Query["searchString"],
+            trangthai = Context.Request.Query["trangthai"],
+            minDate = Context.Request.Query["minDate"],
+            maxDate = Context.Request.Query["maxDate"],
+            sortColumn = ViewData["sortColumn"],
+            sortOrder = ViewData["sortOrder"]
+        }),
+            new PagedListRenderOptions
+    {
+        // DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+        // DisplayLinkToLastPage = PagedListDisplayMode.Always,
+        // DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        // DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        UlElementClasses = new[] { "pagination" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    })
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<script>
+    //sắp xếp theo thứ tự
+               $(document).ready(function () {
+        $(".sortable").click(function () {
+            var column = $(this).data("column");
+            var urlParams = new URLSearchParams(window.location.search);
+            var currentSortOrder = urlParams.get("sortOrder") || "asc"; // Lấy trạng thái từ URL
+
+            var newSortOrder = currentSortOrder === "asc" ? "desc" : "asc"; // Đảo trạng thái
+
+            var searchString = '@Html.Raw(HttpUtility.JavaScriptStringEncode(ViewData["searchString"]?.ToString() ?? ""))';
+            var trangthai = '@ViewData["trangthai"]';
+            var minDate = '@ViewData["minDate"]';
+            var maxDate = '@ViewData["maxDate"]';
+            var page = 1; // Reset về trang đầu
+
+            var url = '@Url.Action("Index", "AdminDonHangs")' + '?';
+
+            if (searchString) url += 'searchString=' + encodeURIComponent(searchString) + '&';
+            if (trangthai) url += 'trangthai=' + trangthai + '&';
+            if (minDate) url += 'minDate=' + minDate + '&';
+            if (maxDate) url += 'maxDate=' + maxDate + '&';
+
+            url += 'sortColumn=' + column + '&';
+            url += 'sortOrder=' + newSortOrder + '&';
+            url += 'page=' + page;
+
+            window.location.href = url;
+        });
+    });
+    //lọc
+    $(document).ready(function () {
+        function redirectWithParams() {
+            var trangthai = $("#trangthai").val();
+            var minDate = $("#minDate").val();
+            var maxDate = $("#maxDate").val();
+            var currentSearch = '@Html.Raw(HttpUtility.JavaScriptStringEncode(ViewData["searchString"]?.ToString() ?? ""))';//theem thuw vien
+            var currentPage = 1; // Reset về trang đầu khi lọc
+
+            var url = '@Url.Action("Index", "AdminDonHangs")' + '?';
+
+            if (currentSearch)
+                url += 'searchString=' + encodeURIComponent(currentSearch) + '&';
+            if (trangthai)
+                url += 'trangthai=' + trangthai + '&';
+            if (minDate)
+                url += 'minDate=' + minDate + '&';
+            if (maxDate)
+                url += 'maxDate=' + maxDate + '&';
+
+            url += 'page=' + currentPage;
+
+            window.location.href = url;
+        }
+
+        // Khi chọn trạng thái
+        $("#trangthai").change(function () {
+            redirectWithParams();
+        });
+
+        // Khi bấm nút "Lọc"
+        $("#filterPriceBtn").click(function () {
+            redirectWithParams();
+        });
+         // Giữ giá trị ô trạng thái và các bộ lọc khi trang được tải lại
+        var currentTrangThai = '@ViewData["TrangThai"]';
+        if (currentTrangThai) {
+            $("#trangthai").val(currentTrangThai); // Set lại giá trị cho ô thương hiệu
+        }
+
+        var currentSearch = '@ViewData["searchString"]';
+        if (currentSearch) {
+            $("#searchString").val(currentSearch); // Set lại giá trị cho ô tìm kiếm
+        }
+
+        var currentminDate = '@ViewData["minDate"]';
+        if (currentminDate) {
+            $("#minDate").val(currentminDate); // Set lại giá trị cho ô ngay
+        }
+
+        var currentmaxDate = '@ViewData["maxDate"]';
+        if (currentmaxDate) {
+            $("#maxDate").val(currentmaxDate); // Set lại giá trị cho ô ngay
+        }
+    });
+</script>
+
+
+

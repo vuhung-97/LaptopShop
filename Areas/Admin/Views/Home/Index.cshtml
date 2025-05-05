@@ -1,0 +1,393 @@
+﻿@using System.Text.Json
+
+@model LaptopShop.Areas.Model.Thongke
+@{
+    ViewData["Title"] = "AdminIndex";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    /* Đảm bảo chiều cao card bằng nhau */
+    .card-equal-height {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 200px; /* Đảm bảo mỗi card có chiều cao tối thiểu */
+    transition: all 0.3s ease;
+    }
+    /* Đảm bảo rằng phần body của card sẽ lấp đầy chiều cao còn lại */
+    .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    flex-grow: 1; /* Giúp phần thân của card giãn đầy đủ chiều cao */
+    }
+
+    /* Khi di chuột vào card, tạo hiệu ứng đẩy lên nhẹ và đổ bóng */
+    .card-equal-height:hover {
+    transform: translateY(-5px); /* Đẩy card lên nhẹ */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+    }
+
+    /* Các thẻ card có chiều cao đầy đủ */
+    .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    }
+
+    /* Các hiệu ứng khi di chuột lên các liên kết trong card */
+    a.text-decoration-none {
+    display: block;
+    color: inherit;
+    }
+
+    a.text-decoration-none:hover {
+    text-decoration: none;
+    opacity: 0.9;
+    }
+
+    /* Cài đặt màu sắc mặc định cho các card */
+    .card.bg-primary {
+    background-color: #007bff;
+    }
+
+    .card.bg-success {
+    background-color: #28a745;
+    }
+
+    .card.bg-warning {
+    background-color: #ffc107;
+    }
+
+    .card.bg-danger {
+    background-color: #dc3545;
+    }
+
+    /* Các card-header trong các thẻ card */
+    .card-header h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    }
+
+    /* Điều chỉnh khoảng cách của các phần tử trong card-body */
+    .card-body .row {
+    margin-bottom: 10px;
+    }
+
+    /* Chỉnh sửa kích thước chữ của các con số */
+    .card-body .display-4 {
+    font-size: 2rem;
+    font-weight: bold;
+    }
+
+    /* Các thẻ p trong card-body */
+    .card-body p {
+    font-size: 1rem;
+    color: #f8f9fa;
+    }
+
+    /* Các thẻ col-5 và col-7 trong card-body */
+    .card-body .col-5, .card-body .col-7 {
+    display: flex;
+    flex-direction: column; /* Các phần tử trong các col sẽ hiển thị theo chiều dọc */
+    justify-content: flex-start; /* Căn lề trái */
+    }
+
+    /* Chỉnh sửa cho phần bên trái (col-5) có số lớn hơn */
+    .card-body .col-5 h2.display-4 {
+    font-size: 3rem; /* Tăng kích thước chữ số lên (ví dụ: 4rem) */
+    font-weight: bold;
+    align-items: flex-start; /* Căn trái */
+    }
+
+    /* Phần bên phải (col-7) sẽ căn trái, và hiển thị nội dung theo chiều dọc */
+    .card-body .col-7 {
+    font-size: 1rem;
+    color: #f8f9fa;
+    justify-content: flex-start; /* Căn trái cho các dòng */
+    }
+
+    /* Đảm bảo phần bên phải hiển thị theo chiều dọc */
+    .card-body .col-7 p {
+    margin-bottom: 5px; /* Căn giữa các dòng */
+    }
+    /* Giảm kích thước chữ và khoảng cách giữa các dòng trong card đơn hàng */
+    .don-hang-card .card-body .col-7 p {
+    font-size: 0.85rem; /* Nhỏ hơn 1rem */
+    margin-bottom: 3px; /* Giảm khoảng cách giữa các dòng */
+    line-height: 1.2; /* Nén dòng lại */
+    }
+
+    /* Đảm bảo card vẫn được hiển thị theo hàng ngang trong .row */
+    .row {
+    display: flex;
+    justify-content: space-between; /* Các card vẫn theo chiều ngang */
+    }
+
+    /* Đảm bảo card không bị thay đổi chiều cao khi có hiệu ứng hover */
+    .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    }
+
+    /* Các thẻ column trong .row */
+    .row {
+    margin-top: 15px;
+    }
+
+    /* Bảng thông tin bên trái */
+    .table-container {
+    flex: 1;
+
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+
+    }
+
+    /* Bảng */
+    .table {
+    width: 100%;
+    border-collapse: collapse;
+    }
+
+    .table th, .table td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ddd;
+    }
+
+    .table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    }
+
+</style>
+<div class="row">
+    <!-- Tổng số laptop -->
+    <div class="col-md-3">
+        <a asp-area="Admin" asp-controller="AdminLaptops" asp-action="Index" class="text-decoration-none text-white">
+            <div class="card text-white bg-primary mb-3 card-equal-height">
+                <div class="card-header"><h1><i class="fa fa-laptop"></i> Laptop</h1></div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Bên trái: Tổng số -->
+                        <div class="col-5 d-flex align-items-center">
+                            <h2 class="display-4 mb-0">@Model.TongSanPham <i class="fa fa-laptop"></i></h2>
+                        </div>
+                        <!-- Bên phải: Chi tiết -->
+                        <div class="col-7">
+                            <p class="mb-1">Tổng số: <strong>@Model.TongSoLuongLaptop</strong></p>
+                            <p class="mb-1">Laptop còn hàng: <strong>@Model.SoLuongConHang</strong></p>
+                            <p class="mb-0">Laptop hết hàng: <strong>@Model.SoLuongHetHang</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Tổng số đơn hàng -->
+    <div class="col-md-3">
+        <a asp-area="Admin" asp-controller="AdminDonHangs" asp-action="Index" class="text-decoration-none text-white">
+            <div class="card text-white bg-success mb-3 card-equal-height don-hang-card">
+                <div class="card-header"> <h1><i class="fa fa-archive"></i> Đơn hàng</h1></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5 d-flex align-items-center">
+                            <h2 class="display-4 mb-0">@Model.TongDonHang <i class="fa fa-archive"></i></h2>
+                        </div>
+                        <div class="col-7">
+                            @foreach (var dh in Model.DonHangTheoTrangThai)
+                            {
+                                var trangThaiCoDau = dh.Ten switch
+                                {
+                                    "danggiao" => "Đang giao",
+                                    "dagiao" => "Đã giao",
+                                    "dahuy" => "Đã hủy",
+                                    "choxacnhan" => "Chờ xác nhận",
+                                    _ => dh.Ten
+                                };
+                                <p class="mb-1">@trangThaiCoDau: <strong>@dh.SoLuong</strong></p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Doanh thu tháng hiện tại -->
+    <div class="col-md-3">
+        <a  class="text-decoration-none text-white">
+            <div class="card text-white bg-warning mb-3 card-equal-height">
+                <div class="card-header"><h1> <i class="fa fa-money"></i> Doanh thu </h1></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="d-flex align-items-center">
+                            <h2 class="display-4 mb-0" style="font-size: 3rem; word-break: break-word; white-space: normal; overflow-wrap: break-word;">@Model.DoanhThuThangHienTai.ToString("N0") <i class="fa fa-money"></i></h2>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Tổng số tài khoản -->
+    <div class="col-md-3">
+        <a asp-area="Admin" asp-controller="AdminTaiKhoans" asp-action="Index" class="text-decoration-none text-white">
+            <div class="card text-white bg-danger mb-3 card-equal-height">
+                <div class="card-header"><h1> <i class="fa fa-users"></i> Tài khoản</h1></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5 d-flex align-items-center">
+                            <h2 class="display-4 mb-0">@Model.TongTaiKhoan <i class="fa fa-users"></i></h2>
+                        </div>
+                        <div class="col-7">
+                            @foreach (var tk in Model.TaiKhoanTheoVaiTro)
+                            {
+                                var tenCoDau = tk.Ten switch
+                                {
+                                    "Admin" => "Quản trị viên",
+                                    "KhachHang" => "Khách hàng",
+                                    _ => tk.Ten
+                                };
+                                <p class="mb-1">@tenCoDau: <strong>@tk.SoLuong</strong></p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!--Biểu đồ-->
+
+<div style="display: flex;">
+    <!-- Biểu đồ thống kê -->
+    <div style="flex: 1;">
+        <form asp-action="Index" method="get" class="mb-4">
+            <label>Từ ngày: <input type="date" name="fromDate" value="@ViewBag.TuNgay" /></label>
+            <label>Đến ngày: <input type="date" name="toDate" value="@ViewBag.DenNgay" /></label>
+            <button type="submit" class="btn btn-sm btn-primary">Thống kê</button>
+        </form>
+
+        <canvas id="thongKeTheoNgay" width="1100" height="600"></canvas>
+    </div>
+
+    <!-- Danh sách 5 laptop bán chạy nhất -->
+    <div style="flex: 1; margin-left: 30px;">
+        <h4>Laptop bán chạy nhất</h4>
+        @if (ViewBag.NoLaptopSales != null)
+        {
+            <div class="alert alert-info">
+                @ViewBag.NoLaptopSales
+            </div>
+        }
+        else
+        {
+            <!-- Hiển thị bảng laptop bán chạy -->
+            <div class="table-container">
+                <table class="table" >
+                    <thead >
+                        <tr>
+                            <th style="width:10%;text-align: center">STT</th>
+                            <th style="width:40%;text-align: center">Tên laptop</th>
+                            <th style="width:20%;text-align: center">Số lượng</th>
+                            <th style="width:30%;text-align: center">Doanh thu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int stt = 1;
+                        }
+                        @foreach (var laptop in Model.LaptopBanChay)
+                        {
+                            <tr>
+                                <td style="text-align: center">@stt</td>
+                                <td style="text-align: center">@laptop.Ten</td>
+                                <td style="text-align: center">@laptop.SoLuong</td>
+                                <td style="text-align: center">@laptop.DoanhThu VND</td>
+                            </tr>
+                            stt++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+                const labels = @Html.Raw(JsonSerializer.Serialize((List<string>)ViewData["NgayHienThi"]));
+        const soDonHang = @Html.Raw(JsonSerializer.Serialize((List<int>)ViewData["SoDonHang"]));
+        const tongTien = @Html.Raw(JsonSerializer.Serialize((List<decimal>)ViewData["TongTien"]));
+
+
+        const ctx = document.getElementById('thongKeTheoNgay').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Số đơn hàng',
+                        data: soDonHang,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Doanh thu (VNĐ)',
+                        data: tongTien,
+                        backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                             beginAtZero: true,
+        title: { display: true, text: 'Số đơn hàng' },
+        ticks: {
+            precision: 0,      // <-- Ép hiển thị số nguyên
+            stepSize: 1        // <-- Bước nhảy là 1
+        }
+
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        title: { display: true, text: 'Doanh thu (VNĐ)' },
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('vi-VN');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
+
+
+
+

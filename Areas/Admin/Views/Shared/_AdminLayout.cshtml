@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>DataTables | Gentelella</title>
+
+    <!-- Bootstrap -->
+    <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link href="~/adminassets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="~/adminassets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/adminassets/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="~/adminassets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- Datatables -->
+
+    <link href="~/adminassets/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="~/adminassets/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="~/adminassets/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="~/adminassets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="~/adminassets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="~/adminassets/build/css/custom.min.css" rel="stylesheet">
+    <!-- Nhúng Lightbox -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
+
+    <style>
+        body.nav-sm .site_title span {
+            display: none !important;
+        }
+    </style>
+
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <!-- logo-->
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="site_title" style="text-decoration: none;">
+                            <span style="display: inline-block; width: 230px; height: 55px;">
+                                <div style="
+        display: flex;
+        font-weight: bold;
+        font-size: 20px;
+        border-radius: 4px;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        width: 100%;
+        height: 100%;
+      ">
+                                    <div style="
+          background-color: #394049;
+          color: white;
+          width: 114px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+                                        LAPTOP
+                                    </div>
+                                    <div style="width: 2px; background-color: white;"></div>
+                                    <div style="
+          background-color: #FFD43B;
+          color: white;
+          width: 114px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+                                        SHOP
+                                    </div>
+                                </div>
+                            </span>
+                        </a>
+                    </div>
+
+
+
+
+                    <div class="clearfix"></div>
+					
+                    <!-- menu profile quick info -->
+                    <div class="profile clearfix">
+                        <div class="profile_pic">
+                            <img src="~/hinh/icoi.jpg" alt="..." class="img-circle profile_img">
+                        </div>
+                        <div class="profile_info">
+                            <span>Xin chào</span>
+                            <h2>Admin</h2>
+                        </div>
+                    </div>
+                    <!-- /menu profile quick info -->
+
+                    <br />
+
+                    <!-- sidebar menu -->
+					@await Html.PartialAsync("_SideBarView")
+                    <!-- /sidebar menu -->
+                   
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+                    <nav class="nav navbar-nav">
+                        <ul class=" navbar-right">
+                            <li class="nav-item dropdown open" style="padding-left: 15px;">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="~/hinh/icoi.jpg" alt="">Admin
+                                </a>
+                                <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                                    
+                                    <a asp-area="" asp-controller="Home" asp-action="Index" class="dropdown-item"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                </div>
+                            </li>
+
+                           
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+            <!-- page content -->
+            <div class="right_col" role="main">
+                @RenderBody()
+            </div>
+            <!-- /page content -->
+            <!-- footer content -->
+            <div class="clearfix"></div>
+            <footer>
+                <div class="pull-right">
+                    Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+
+            <!-- /footer content -->
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="~/adminassets/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="~/adminassets/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/adminassets/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="~/adminassets/vendors/nprogress/nprogress.js"></script>
+    <!-- iCheck -->
+    <script src="~/adminassets/vendors/iCheck/icheck.min.js"></script>
+    <!-- Datatables -->
+    <script src="~/adminassets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/adminassets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+
+   
+
+
+
+
+
+    <!-- Custom Theme Scripts -->
+    <script src="~/adminassets/build/js/custom.min.js"></script>
+    <!-- Khởi tạo bảng -->
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <!-- thêm chức năng -->
+   
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -15,8 +15,6 @@ public partial class DonHang
 
     public double? TongTien { get; set; }
 
-    public DateTime? NgayCapNhat { get; set; }
-
     public string TrangThai { get; set; } = null!;
 
     public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; } = new List<ChiTietDonHang>();

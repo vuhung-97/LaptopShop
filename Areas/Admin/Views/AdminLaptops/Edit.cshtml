@@ -1,0 +1,237 @@
+﻿@model LaptopShop.Data.Laptop
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Chỉnh sửa thông tin</h1>
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Edit" enctype="multipart/form-data" onsubmit="return submitForm(event)">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="IdLaptop" />
+
+                <div class="row">
+                    <!-- Phần thông tin laptop -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TenLapTop" class="control-label">Tên laptop</label>
+                            <input asp-for="TenLapTop" class="form-control" />
+                            <span asp-validation-for="TenLapTop" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="IdThuongHieu" class="control-label">Thương hiệu</label>
+                            <select asp-for="IdThuongHieu" class="form-control" asp-items="ViewBag.IdThuongHieu"></select>
+                            <span asp-validation-for="IdThuongHieu" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="IdThongTin" class="control-label">Cấu hình</label>
+                            <select asp-for="IdThongTin" class="form-control" asp-items="@(ViewData["IdThongTin"] as List<SelectListItem>)" id="infoDropdown"></select>
+                            <span asp-validation-for="IdThongTin" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="IdLoai" class="control-label">Loại laptop</label>
+                            <select asp-for="IdLoai" class="form-control" asp-items="ViewBag.IdLoai"></select>
+                            <span asp-validation-for="IdLoai" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="SoLuong" class="control-label">Tồn Kho</label>
+                            <input asp-for="SoLuong" class="form-control" min="0" />
+                            <span asp-validation-for="SoLuong" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="GiaBan" class="control-label">Giá bán (VND)</label>
+                            <div class="input-group">
+                                <!-- Người dùng gõ vào ô này (chỉ dùng ID và class thôi) -->
+                                <input type="text" id="GiaBanFormatted" class="form-control" oninput="formatCurrencyVND(this)" />
+
+                                <!-- Dữ liệu thật được submit (ẩn) -->
+                                <input type="hidden" asp-for="GiaBan" />
+                            </div>
+                            <span asp-validation-for="GiaBan" class="text-danger"></span>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Phần hình ảnh -->
+                    <div class="col-md-6">
+                        <label asp-for="HinhAnh" class="control-label">Hình ảnh hiện có:</label>
+                        <div id="imagePreviewContainer" class="d-flex flex-wrap overflow-auto" style="max-height: 300px; border: 1px solid #ddd; padding: 10px;">
+                            @if (!string.IsNullOrEmpty(Model.HinhAnh))
+                            {
+                                var images = Model.HinhAnh.Split(",");
+                                foreach (var img in images)
+                                {
+                                    <div class="image-wrapper position-relative">
+                                        <img src="@Url.Content("~/hinh/laptop/" + img)" class="img-thumbnail img-clickable" style="width: 120px; height: 120px; margin: 5px;" onclick="openImageModal('@Url.Content("~/hinh/laptop/" + img)')" />
+                                        <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" onclick="removeOldImage(this, '@img')">❌</button>
+                                        <input type="hidden" name="OldImages" value="@img" />
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <label for="fileUpload" class="btn btn-primary">Chọn ảnh mới</label>
+                            <input type="file" id="fileUpload" name="HinhAnhMoi" class="d-none" multiple accept="image/*" onchange="previewNewImages(event)" />
+                        </div>
+                        <span asp-validation-for="HinhAnh" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Nút lưu -->
+                <div class="text-center mt-4">
+                    <button type="submit" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-primary">Lưu thay đổi</button>
+                    <a style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-info" asp-action="Index" >Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xem ảnh lớn -->
+<div id="imageModal" class="modal" onclick="closeImageModal()">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.8);
+        text-align: center;
+    }
+
+    .modal-content {
+        max-width: 60%;
+        max-height: 80%;
+        object-fit: contain;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-size: 40px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .image-wrapper img {
+        width: 120px;
+        height: 120px;
+        margin: 5px;
+        object-fit: contain; /* Giữ tỷ lệ khung hình */
+    }
+
+</style>
+
+<script>
+    // dịnh dạng lại giá
+         function formatCurrencyVND(input) {
+        const rawValue = input.value.replace(/\D/g, ''); // chỉ lấy số
+        input.value = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        const hiddenInput = document.querySelector('[name="GiaBan"]');
+        if (hiddenInput) {
+            hiddenInput.value = rawValue;
+        }
+    }
+
+    function submitForm(event) {
+        // Không cần làm gì nữa nếu đã cập nhật hidden input trong formatCurrencyVND
+        return true;
+    }
+
+    window.onload = function () {
+        // Khi load trang (ví dụ đang ở chế độ Edit), tự động định dạng lại giá hiển thị
+        const hiddenInput = document.querySelector('[name="GiaBan"]');
+        const displayInput = document.getElementById('GiaBanFormatted');
+        if (hiddenInput && displayInput) {
+            let value = hiddenInput.value;
+            displayInput.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+    };
+
+
+        //phần hình ảnh
+    function removeOldImage(button, imageName) {
+        const wrapper = button.closest('.image-wrapper');
+        wrapper.remove();
+
+        // Thêm hidden input để đánh dấu ảnh bị xóa
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'DeletedImages';
+        input.value = imageName;
+        document.forms[0].appendChild(input);
+    }
+
+    function previewNewImages(event) {
+        const container = document.getElementById('imagePreviewContainer');
+        for (let file of event.target.files) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const div = document.createElement('div');
+                div.classList.add('image-wrapper', 'position-relative');
+
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('img-thumbnail', 'img-clickable');
+                img.style.width = "120px";
+                img.style.height = "120px";
+                img.style.margin = "5px";
+
+                const button = document.createElement('button');
+                button.type = "button";
+                button.classList.add('btn', 'btn-danger', 'btn-sm', 'position-absolute');
+                button.style.top = "5px";
+                button.style.right = "5px";
+                button.innerHTML = "❌";
+                button.onclick = function () {
+                    div.remove();
+                };
+
+                div.appendChild(img);
+                div.appendChild(button);
+                container.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function openImageModal(imageSrc) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = "block";
+        modalImg.src = imageSrc;
+    }
+
+    function closeImageModal() {
+        document.getElementById('imageModal').style.display = "none";
+    }
+    function submitForm(event) {
+        // Không cần chỉnh sửa form trước, để ASP.NET xử lý các input Hidden bình thường
+        return true; // Cho phép form submit
+    }
+
+</script>

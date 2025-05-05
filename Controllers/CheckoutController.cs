@@ -56,16 +56,12 @@ namespace LaptopShop.Controllers
 
             var donhang = new DonHang
             {
-                IdDonHang = IdGenerator.GetNextId().ToString(),
+                
                 NgayDat = DateTime.Now,
                 DiaChiGiao = model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
                 TongTien = result.GioHang.Sum(x => x.ThanhTien),
                 TrangThai = "ChoXacNhan"
             };
-
-            HttpContext.Session.Set<List<CartViewModel>>(DsTenKey.ORDER_KEY, lstCart);
-            HttpContext.Session.Remove(DsTenKey.CART_KEY);
-
             using (var db = new ShopLaptopContext())
             {
                 db.DonHangs.Add(donhang);

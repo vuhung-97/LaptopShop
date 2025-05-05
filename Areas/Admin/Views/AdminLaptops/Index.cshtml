@@ -1,0 +1,267 @@
+﻿
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<LaptopShop.Data.Laptop> 
+@using System.Web
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+
+
+<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Danh Mục Sản Phẩm</h3>
+        </div>
+        <div style="float:right;"><a class="btn btn-round btn-success" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Create">Thêm sản phẩm</a></div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                @* các nút lọc sản phần *@
+                <div class="row mb-3 align-items-center">
+
+                    <!-- Thương hiệu bên trái -->
+                    <div class="col-md-3 col-sm-12">
+                        <select class="form-control form-control-sm" id="thuonghieu" name="thuonghieu" style="max-width: 150px;">
+                            <option value="0" disabled selected>Thương Hiệu</option>
+                            @foreach (var item in ViewBag.ThuongHieuList)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Giá ở giữa -->
+                    <div class="col-md-6 col-sm-12 d-flex justify-content-center">
+                        <input type="text" id="minPrice" class="form-control form-control-sm me-2" placeholder="Giá thấp nhất"
+                        value="@ViewData["minPrice"]" style="max-width: 130px;" />
+                        <input type="text" id="maxPrice" class="form-control form-control-sm me-2" placeholder="Giá cao nhất"
+                        value="@ViewData["maxPrice"]" style="max-width: 130px;" />
+                        <button class="btn btn-sm btn-primary" id="filterPriceBtn">Lọc theo giá</button>
+                    </div>
+
+                    <!-- Tìm kiếm bên phải sát mép -->
+                    <div class="col-md-3 col-sm-12" >
+                        <form method="get" action="@Url.Action("Index")" class="d-flex justify-content-end">
+                            <input type="text" name="searchString" class="form-control form-control-sm me-2"
+                            value="@ViewData["searchString"]" placeholder="Tìm kiếm" style="max-width: 160px;" />
+                            <button type="submit" class="btn btn-sm btn-primary">Tìm</button>
+                        </form>
+                    </div>
+                </div>
+
+                @* bảng dữ liệu *@
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card-box table-responsive">
+                                <table class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50px;">STT</th>
+                                            <th data-column="TenLapTop" class="sortable">Tên Laptop</th>
+                                            <th data-column="ThuongHieu" class="sortable">Thương hiệu</th>
+                                            <th data-column="Loai" class="sortable">Dòng Sản Phẩm</th>
+                                            <th data-column="SoLuong" class="sortable">Số Lượng</th>
+                                            <th data-column="GiaBan" class="sortable">Giá</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="laptopList">
+                                        @{
+                                            int stt = (Model.PageNumber - 1) * Model.PageSize + 1;
+                                        }
+                                        <!-- Thêm ID vào tbody -->
+                                        @if(Model==null || !Model.Any()){
+                                            <h2 style="text-align:center">Không có sản phẩm nào!</h2>
+                                        }else{
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>@stt</td>
+                                                    <td>@item.TenLapTop</td>
+                                                    <td>@item.IdThuongHieuNavigation.TenThuongHieu</td>
+                                                    <td>@item.IdLoaiNavigation.TenLoai</td>
+                                                    <td>@item.SoLuong</td>
+                                                    <td>
+                                                        <span id="formattedCurrency_@item.IdLaptop"></span>
+                                                        <script>
+                                                            currencyFormat = new Intl.NumberFormat('vi-VN').format(@item.GiaBan) + " VND";
+                                                            document.getElementById('formattedCurrency_@item.IdLaptop').innerText = currencyFormat;
+                                                        </script>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-round btn-success" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Details" asp-route-id="@item.IdLaptop">Xem</a>
+                                                        <a class="btn btn-round btn-primary" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Edit" asp-route-id="@item.IdLaptop">Sửa</a>
+                                                        <a class="btn btn-round btn-danger" asp-area="Admin" asp-controller="AdminLaptops" asp-action="Delete" asp-route-id="@item.IdLaptop">Xóa</a>
+                                                    </td>
+                                                </tr>
+                                                stt++;
+                                            }
+                                    }
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+@* // tìm kiếm, phân trang *@
+<div class="d-flex justify-content-center" style="float:right;">
+    @{
+        string currentSearch = Context.Request.Query["searchString"];
+        string currentBrand = Context.Request.Query["thuonghieu"];
+        string currentMinPrice = Context.Request.Query["minPrice"];
+        string currentMaxPrice = Context.Request.Query["maxPrice"];
+    }
+    @* giữ lại các giá trị khi phân trang *@
+    @Html.PagedListPager(Model, page => Url.Action("Index", new
+        {
+            page,
+            searchString = Context.Request.Query["searchString"],
+            thuonghieu = Context.Request.Query["thuonghieu"],
+            minPrice = Context.Request.Query["minPrice"],
+            maxPrice = Context.Request.Query["maxPrice"],
+            sortColumn = ViewData["sortColumn"],
+            sortOrder = ViewData["sortOrder"]
+        }),
+            new PagedListRenderOptions
+    {
+        // DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+        // DisplayLinkToLastPage = PagedListDisplayMode.Always,
+        // DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        // DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        UlElementClasses = new[] { "pagination" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    })
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    //sắp xếp theo thứ tự
+               $(document).ready(function () {
+        $(".sortable").click(function () {
+            var column = $(this).data("column");
+            var urlParams = new URLSearchParams(window.location.search);
+            var currentSortOrder = urlParams.get("sortOrder") || "asc"; // Lấy trạng thái từ URL
+
+            var newSortOrder = currentSortOrder === "asc" ? "desc" : "asc"; // Đảo trạng thái
+
+            var searchString = '@Html.Raw(HttpUtility.JavaScriptStringEncode(ViewData["searchString"]?.ToString() ?? ""))';
+            var thuonghieu = '@ViewData["thuonghieu"]';
+            var minPrice = '@ViewData["minPrice"]';
+            var maxPrice = '@ViewData["maxPrice"]';
+            var page = 1; // Reset về trang đầu
+
+            var url = '@Url.Action("Index", "AdminLaptops")' + '?';
+
+            if (searchString) url += 'searchString=' + encodeURIComponent(searchString) + '&';
+            if (thuonghieu) url += 'thuonghieu=' + thuonghieu + '&';
+            if (minPrice) url += 'minPrice=' + minPrice + '&';
+            if (maxPrice) url += 'maxPrice=' + maxPrice + '&';
+
+            url += 'sortColumn=' + column + '&';
+            url += 'sortOrder=' + newSortOrder + '&';
+            url += 'page=' + page;
+
+            window.location.href = url;
+        });
+    });
+    // tìm kiếm, lọc
+    $(document).ready(function () {
+
+        function redirectWithParams() {
+            var thuonghieuId = $("#thuonghieu").val();
+            var minPrice = $("#minPrice").val().replace(/\./g, ''); // bỏ dấu chấm
+            var maxPrice = $("#maxPrice").val().replace(/\./g, '');
+            var currentSearch = '@Html.Raw(HttpUtility.JavaScriptStringEncode(ViewData["searchString"]?.ToString() ?? ""))';//theem thuw vien
+            var currentPage = 1; // Reset về trang đầu khi lọc
+
+            var url = '@Url.Action("Index", "AdminLaptops")' + '?';
+
+            if (currentSearch)
+                url += 'searchString=' + encodeURIComponent(currentSearch) + '&';
+            if (thuonghieuId)
+                url += 'thuonghieu=' + thuonghieuId + '&';
+            if (minPrice)
+                url += 'minPrice=' + minPrice + '&';
+            if (maxPrice)
+                url += 'maxPrice=' + maxPrice + '&';
+
+            url += 'page=' + currentPage;
+
+            window.location.href = url;
+        }
+
+        // Khi chọn thương hiệu
+        $("#thuonghieu").change(function () {
+            redirectWithParams();
+        });
+
+        // Khi bấm nút "Lọc giá"
+        $("#filterPriceBtn").click(function () {
+            redirectWithParams();
+        });
+         $("#searchString").click(function () {
+            redirectWithParams();
+        });
+         // Giữ giá trị ô thương hiệu và các bộ lọc khi trang được tải lại
+        var currentThuongHieu = '@ViewData["thuonghieu"]';
+        if (currentThuongHieu) {
+            $("#thuonghieu").val(currentThuongHieu); // Set lại giá trị cho ô thương hiệu
+        }
+
+        var currentSearch = '@ViewData["searchString"]';
+        if (currentSearch) {
+            $("#searchString").val(currentSearch); // Set lại giá trị cho ô tìm kiếm
+        }
+
+        var currentMinPrice = '@ViewData["minPrice"]';
+        if (currentMinPrice) {
+            $("#minPrice").val(currentMinPrice); // Set lại giá trị cho ô minPrice
+        }
+
+        var currentMaxPrice = '@ViewData["maxPrice"]';
+        if (currentMaxPrice) {
+            $("#maxPrice").val(currentMaxPrice); // Set lại giá trị cho ô maxPrice
+        }
+    });
+    //dịnh dạng giá tiền
+    function formatNumberInputDot(input) {
+            input.addEventListener("input", function () {
+                let value = this.value.replace(/\D/g, "");
+                if (value === "") {
+                    this.value = "";
+                    return;
+                }
+                this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            });
+        }
+
+        // Gán format cho input sau khi DOM đã load xong
+        formatNumberInputDot(document.getElementById("minPrice"));
+        formatNumberInputDot(document.getElementById("maxPrice"));
+</script>
+

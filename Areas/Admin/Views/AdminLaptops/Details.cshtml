@@ -1,0 +1,226 @@
+﻿@model LaptopShop.Data.Laptop
+
+@{
+    ViewData["Title"] = "Thông tin cấu hình";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+<style>
+    /* Container chính */
+    .container1 {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: stretch; /* Đảm bảo các phần tử có chiều cao bằng nhau */
+        height: 100%; /* Đảm bảo container chính có chiều cao đầy đủ */
+    }
+
+    /* Bảng thông tin bên trái */
+    .table-container {
+        flex: 1;
+        max-width: 30%;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Bảng */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+    /* Hiển thị hình ảnh bên phải */
+    .image-gallery {
+        flex: 1;
+        max-width: 65%;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow-y: auto; /* Cho phép cuộn dọc nếu nhiều ảnh */
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Đảm bảo chiều cao gallery bằng chiều cao của bảng */
+    }
+
+    /* Lưới ảnh */
+    .image-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-start;
+        height: 65vh; /* Đảm bảo ảnh chiếm hết chiều cao gallery */
+    }
+
+        .image-grid a {
+            flex: 0 0 calc(25% - 10px); /* 3 ảnh mỗi hàng, bạn có thể thay đổi % để thu nhỏ hoặc phóng to ảnh */
+            aspect-ratio: 1/1; /* Giữ tỷ lệ vuông cho các ô ảnh */
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30%; /* Đảm bảo chiều cao ô tự điều chỉnh theo ảnh */
+        }
+
+        .image-grid img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Giữ tỷ lệ ảnh */
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+            .image-grid img:hover {
+                transform: scale(1.05);
+            }
+
+    /* Hình ảnh mặc định */
+    .default-image {
+        width: 200px;
+        margin: 20px auto;
+        opacity: 0.8;
+        border: 2px dashed #ccc;
+        padding: 10px;
+        background-color: #f4f4f4;
+    }
+
+    /* Cảnh báo văn bản */
+    .text-warning {
+        font-size: 1.2em;
+        color: #ff6600;
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+</style>
+
+
+<h1>Thông tin cấu hình</h1>
+
+<div class="container1">
+    <!-- Bảng thông tin cấu hình -->
+    <div class="table-container">
+        <h3>@Html.DisplayFor(model => model.TenLapTop)</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Thông tin</th>
+                    <th>Cấu hình</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Loại Laptop</td>
+                    <td>@Html.DisplayFor(model => model.IdLoaiNavigation.TenLoai)</td>
+                </tr>
+                <tr>
+                    <td>CPU</td>
+                    <td>@Html.DisplayFor(model => model.IdThongTinNavigation.Cpu)</td>
+                </tr>
+                <tr>
+                    <td>RAM</td>
+                    <td>@Html.DisplayFor(model => model.IdThongTinNavigation.Ram)</td>
+                </tr>
+                <tr>
+                    <td>Ổ Cứng</td>
+                    <td>@Html.DisplayFor(model => model.IdThongTinNavigation.Ocung)</td>
+                </tr>
+                <tr>
+                    <td>Màn Hình</td>
+                    <td>@Html.DisplayFor(model => model.IdThongTinNavigation.ManHinh)</td>
+                </tr>
+                <tr>
+                    <td>Đồ Họa</td>
+                    <td>@Html.DisplayFor(model => model.IdThongTinNavigation.DoHoa)</td>
+                </tr>
+                <tr>
+                    <td>Cổng Giao Tiếp</td>
+                    <td>@Html.DisplayFor(model => model.IdThongTinNavigation.CongGiaoTiep)</td>
+                </tr>
+                <tr>
+                    <td>Hệ Điều Hành</td>
+                    <td>@Html.DisplayFor(model => model.IdThongTinNavigation.HeDieuHanh)</td>
+                </tr>
+                <tr>
+                    <td>Pin</td>
+                    <td>@Html.DisplayFor(model => model.IdThongTinNavigation.Pin)</td>
+                </tr>
+                <tr>
+                    <td>Trọng Lượng</td>
+                    <td>@Html.DisplayFor(model => model.IdThongTinNavigation.TrongLuong)</td>
+                </tr>
+                <tr>
+                    <td>Thương Hiệu</td>
+                    <td>@Html.DisplayFor(model => model.IdThuongHieuNavigation.TenThuongHieu)</td>
+                </tr>
+                <tr>
+                    <td>Giá Bán</td>
+                    <td>
+                        <span id="formattedCurrency_@Html.DisplayFor(model => model.IdLaptop)"></span>
+                        <script>
+                            currencyFormat = new Intl.NumberFormat('vi-VN').format(@Html.DisplayFor(model => model.GiaBan))+" VND";
+                            document.getElementById('formattedCurrency_@Html.DisplayFor(model => model.IdLaptop)').innerText = currencyFormat;
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tồn Kho</td>
+                    <td>@Html.DisplayFor(model => model.SoLuong)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Gallery hình ảnh -->
+    <div class="image-gallery">
+        <h3>Hình ảnh Laptop</h3>
+        <hr />
+        @if (!string.IsNullOrEmpty(Model.HinhAnh))
+        {
+            var images = Model.HinhAnh.Split(",");
+            <div class="image-grid">
+                @foreach (var image in images)
+                {
+                    <a href="@Url.Content("~/hinh/laptop/" + image)" data-lightbox="laptop-gallery">
+                        <img src="@Url.Content("~/hinh/laptop/" + image)" alt="Ảnh Laptop">
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-warning">Sản phẩm này chưa có hình ảnh! Vui lòng thêm ảnh để hoàn thiện thông tin sản phẩm.</p>
+        }
+    </div>
+
+</div>
+
+<div style="margin-top:5px; ">
+    <a style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-primary" asp-action="Edit" asp-route-id="@Model.IdLaptop">Sửa</a>
+    <a class="btn btn-round btn-info" asp-action="Index">Quay lại</a>
+</div>
+
+
+
+

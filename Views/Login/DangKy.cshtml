@@ -1,0 +1,432 @@
+﻿@model LaptopShop.ViewModels.TaiKhoan
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Đăng Ký</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        
+        .address-section {
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .address-section h3 {
+            margin-top: 0;
+            color: #4CAF50;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .street-address {
+            margin-top: 15px;
+        }
+        
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        .disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <form class="container" asp-action="DangKyTaiKhoan" asp-controller="Login" method="post">
+        <h2>Đăng Ký Tài Khoản</h2>
+        <form id="registrationForm" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="username">Tài khoản:</label>
+                <input type="text" asp-for="@Model.IdTaiKhoan" name="IdTaiKhoan" required>
+                <div class="error" id="username-error">Vui lòng nhập tài khoản</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mật khẩu:</label>
+                <input type="password" asp-for="@Model.MatKhau" name="MatKhau" required>
+                <div class="error" id="password-error">Mật khẩu phải có ít nhất 8 ký tự</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="fullname">Họ và tên:</label>
+                <input type="text" asp-for="@Model.HoTen" id="fullname" name="HoTen" required>
+                <div class="error" id="fullname-error">Vui lòng nhập họ và tên</div>
+            </div>
+            
+            <div class="address-section">
+                <h3>Địa chỉ</h3>
+                <div class="form-group">
+                    <label for="province">Tỉnh/Thành phố:</label>
+                    <select id="province" asp-for="@Model.TinhThanh" name="TinhThanh" required>
+                        <option value="">-- Chọn Tỉnh/TP --</option>
+                    </select>
+                    <div class="error" id="province-error">Vui lòng chọn Tỉnh/Thành phố</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="district">Quận/Huyện:</label>
+                    <select id="district" asp-for="@Model.QuanHuyen" name="QuanHuyen" required disabled>
+                        <option value="">-- Chọn Quận/Huyện --</option>
+                    </select>
+                    <div class="error" id="district-error">Vui lòng chọn Quận/Huyện</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ward">Phường/Xã:</label>
+                    <select id="ward" asp-for="@Model.PhuongXa" name="PhuongXa" required disabled>
+                        <option value="">-- Chọn Phường/Xã --</option>
+                    </select>
+                    <div class="error" id="ward-error">Vui lòng chọn Phường/Xã</div>
+                </div>
+                
+                <div class="form-group street-address">
+                    <label for="street">Số nhà, tên đường:</label>
+                    <input type="text" asp-for="@Model.DiaChi" id="street" name="DiaChi" required>
+                    <div class="error" id="street-error">Vui lòng nhập số nhà, tên đường</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Số điện thoại:</label>
+                <input type="tel" asp-for="@Model.DienThoai" id="phone" name="DienThoai" required>
+                <div class="error" id="phone-error">Vui lòng nhập số điện thoại hợp lệ</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" asp-for="@Model.Email" id="email" name="email" required>
+                <div class="error" id="email-error">Vui lòng nhập email hợp lệ</div>
+            </div>
+            
+            <button type="submit" id="submitBtn">Đăng Ký</button>
+        </form>
+    </form>
+
+    <script>
+        // API URLs cho dữ liệu địa chỉ Việt Nam
+        const API_URL = 'https://provinces.open-api.vn/api';
+        
+        // DOM Elements
+        const provinceSelect = document.getElementById('province');
+        const districtSelect = document.getElementById('district');
+        const wardSelect = document.getElementById('ward');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // Hàm hiển thị loading
+        function showLoading(element) {
+            element.disabled = true;
+            element.classList.add('disabled');
+            element.innerHTML = '<span class="loading"></span> Đang tải...';
+        }
+        
+        // Hàm ẩn loading
+        function hideLoading(element, text) {
+            element.disabled = false;
+            element.classList.remove('disabled');
+            element.innerHTML = text;
+        }
+        
+        // Lấy danh sách tỉnh/thành phố
+        async function fetchProvinces() {
+            try {
+                showLoading(submitBtn);
+                const response = await fetch(`${API_URL}/p/`);
+                const data = await response.json();
+                
+                // Xóa options cũ
+                provinceSelect.innerHTML = '<option value="">-- Chọn Tỉnh/TP --</option>';
+                
+                // Thêm options mới
+                data.forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province.code;
+                    option.textContent = province.name;
+                    provinceSelect.appendChild(option);
+                });
+                
+                hideLoading(submitBtn, 'Đăng Ký');
+            } catch (error) {
+                console.error('Lỗi khi lấy danh sách tỉnh/thành phố:', error);
+                hideLoading(submitBtn, 'Đăng Ký');
+                alert('Không thể lấy danh sách tỉnh/thành phố. Vui lòng thử lại sau.');
+            }
+        }
+        
+        // Lấy danh sách quận/huyện theo tỉnh/thành phố
+        async function fetchDistricts(provinceCode) {
+            try {
+                showLoading(submitBtn);
+                const response = await fetch(`${API_URL}/p/${provinceCode}?depth=2`);
+                const data = await response.json();
+                
+                // Xóa options cũ
+                districtSelect.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
+                wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+                
+                // Thêm options mới
+                data.districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.code;
+                    option.textContent = district.name;
+                    districtSelect.appendChild(option);
+                });
+                
+                // Enable quận/huyện select
+                districtSelect.disabled = false;
+                wardSelect.disabled = true;
+                
+                hideLoading(submitBtn, 'Đăng Ký');
+            } catch (error) {
+                console.error('Lỗi khi lấy danh sách quận/huyện:', error);
+                hideLoading(submitBtn, 'Đăng Ký');
+                alert('Không thể lấy danh sách quận/huyện. Vui lòng thử lại sau.');
+            }
+        }
+        
+        // Lấy danh sách phường/xã theo quận/huyện
+        async function fetchWards(districtCode) {
+            try {
+                showLoading(submitBtn);
+                const response = await fetch(`${API_URL}/d/${districtCode}?depth=2`);
+                const data = await response.json();
+                
+                // Xóa options cũ
+                wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+                
+                // Thêm options mới
+                data.wards.forEach(ward => {
+                    const option = document.createElement('option');
+                    option.value = ward.code;
+                    option.textContent = ward.name;
+                    wardSelect.appendChild(option);
+                });
+                
+                // Enable phường/xã select
+                wardSelect.disabled = false;
+                
+                hideLoading(submitBtn, 'Đăng Ký');
+            } catch (error) {
+                console.error('Lỗi khi lấy danh sách phường/xã:', error);
+                hideLoading(submitBtn, 'Đăng Ký');
+                alert('Không thể lấy danh sách phường/xã. Vui lòng thử lại sau.');
+            }
+        }
+        
+        // Sự kiện khi chọn tỉnh/thành phố
+        provinceSelect.addEventListener('change', function() {
+            const provinceCode = this.value;
+            if (provinceCode) {
+                fetchDistricts(provinceCode);
+            } else {
+                districtSelect.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
+                wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+                districtSelect.disabled = true;
+                wardSelect.disabled = true;
+            }
+        });
+        
+        // Sự kiện khi chọn quận/huyện
+        districtSelect.addEventListener('change', function() {
+            const districtCode = this.value;
+            if (districtCode) {
+                fetchWards(districtCode);
+            } else {
+                wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+                wardSelect.disabled = true;
+            }
+        });
+        
+        // Xác thực form
+        function validateForm() {
+            let isValid = true;
+            
+            // Validate username
+            const username = document.getElementById('IdTaiKhoan').value;
+            if (username.trim() === '') {
+                document.getElementById('username-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('username-error').style.display = 'none';
+            }
+            
+            // Validate password
+            const password = document.getElementById('MatKhau').value;
+            if (password.length < 8) {
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('password-error').style.display = 'none';
+            }
+            
+            // Validate fullname
+            const fullname = document.getElementById('HoTen').value;
+            if (fullname.trim() === '') {
+                document.getElementById('fullname-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('fullname-error').style.display = 'none';
+            }
+            
+            // Validate province
+            const province = document.getElementById('province').value;
+            if (province === '') {
+                document.getElementById('province-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('province-error').style.display = 'none';
+            }
+            
+            // Validate district
+            const district = document.getElementById('district').value;
+            if (district === '') {
+                document.getElementById('district-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('district-error').style.display = 'none';
+            }
+            
+            // Validate ward
+            const ward = document.getElementById('ward').value;
+            if (ward === '') {
+                document.getElementById('ward-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('ward-error').style.display = 'none';
+            }
+            
+            // Validate street
+            const street = document.getElementById('street').value;
+            if (street.trim() === '') {
+                document.getElementById('street-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('street-error').style.display = 'none';
+            }
+            
+            // Validate phone
+            const phone = document.getElementById('phone').value;
+            const phonePattern = /^[0-9]{10,11}$/;
+            if (!phonePattern.test(phone)) {
+                document.getElementById('phone-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('phone-error').style.display = 'none';
+            }
+            
+            // Validate email
+            // Validate email
+            const email = document.getElementById('email').value;
+            const emailPattern = new RegExp("^[a-zA-Z0-9._%+-]+[@@][a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+            if (!emailPattern.test(email)) {
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('email-error').style.display = 'none';
+            }
+            
+            if (isValid) {
+                // Tạo một chuỗi địa chỉ đầy đủ để hiển thị
+                const provinceName = provinceSelect.options[provinceSelect.selectedIndex].text;
+                const districtName = districtSelect.options[districtSelect.selectedIndex].text;
+                const wardName = wardSelect.options[wardSelect.selectedIndex].text;
+                const fullAddress = `${street}, ${wardName}, ${districtName}, ${provinceName}`;
+                
+                alert(`Đăng ký thành công!\nĐịa chỉ đầy đủ: ${fullAddress}`);
+                // Normally, you would submit the form to a server here
+            }
+            
+            return false; // Prevent actual form submission for this example
+        }
+        
+        // Khởi tạo form - lấy danh sách tỉnh/thành phố khi trang tải xong
+        document.addEventListener('DOMContentLoaded', fetchProvinces);
+    </script>
+</body>
+</html>

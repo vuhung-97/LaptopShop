@@ -99,12 +99,12 @@
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <h6>Phí vận chuyển:</h6>
-                                <h6> Free</h6>
+                                <h6>Free</h6>
                             </div>
                             <hr>
                             <div class="d-flex justify-content-between mb-4">
                                 <h5 class="font-weight-bold">Tổng cộng:</h5>
-                                <h5 class="font-weight-bold text-primary">@string.Format("{0:N0}", Model.Sum(x => x.ThanhTien) + 30000) VNĐ</h5>
+                                <h5 class="font-weight-bold text-primary">@string.Format("{0:N0}", Model.Sum(x => x.ThanhTien)) VNĐ</h5>
                             </div>
                             <a asp-action="Index" asp-controller="Checkout" class="btn btn-primary btn-block py-3">
                                 <i class="fa fa-credit-card mr-2"></i>Tiến hành thanh toán

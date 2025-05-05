@@ -1,46 +1,44 @@
 ﻿@model IEnumerable<LaptopShop.ViewModels.LaptopViewModel>
 @foreach (var item in Model)
 {
-    <div class="col-lg-2 col-md-4 col-sm-6 pb-1">
-        <div class="product-item mb-4">
-            <div class="product-card-wrapper">
-                <!-- Product Image with Overlay Effects -->
-                <div class="product-img-container">
-                    <a asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.IdLaptop">
-                        <img class="product-img" src="~/Hinh/Laptop/@item.HinhAnh" alt="@item.TenLapTop">
-                    </a>
-                    <!-- Quick Action Buttons -->
-                    <div class="product-actions">
-                        <a asp-action="AddToListHeartInHome" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-heart"></i></a>
-                        <a asp-action="AddToCartInHome" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-shopping-cart"></i></a>
-                        <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-search"></i></a>
-                    </div>
-                    <!-- Sale Badge if needed -->
-                    <div class="sale-badge">-30%</div>
+    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+        <div class="product-card-wrapper">
+            <!-- Product Image with Overlay Effects -->
+            <div class="product-img-container">
+                <a asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.IdLaptop">
+                    <img class="product-img" src="~/Hinh/Laptop/@item.HinhAnh" alt="@item.TenLapTop">
+                </a>
+                <!-- Quick Action Buttons -->
+                <div class="product-actions">
+                    <a asp-action="AddToListHeartInHome" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-heart"></i></a>
+                    <a asp-action="AddToCartInHome" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-shopping-cart"></i></a>
+                    <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-search"></i></a>
+                </div>
+                <!-- Sale Badge if needed -->
+                <div class="sale-badge">-30%</div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="product-info">
+                <div class="product-category">@item.TenLoai</div>
+                <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="product-name"><h5 class="font-weight-bold">@item.TenLapTop</h5></a>
+
+                <!-- Price Section -->
+                <div class="current-price">
+                    <span class="current-price">@string.Format("{0:N0}", item.GiaBan) VNĐ</span><br />
+                    <span class="original-price">@string.Format("{0:N0}", item.GiaBan * 130 / 100) VNĐ</span>
                 </div>
 
-                <!-- Product Details -->
-                <div class="product-info">
-                    <div class="product-category">@item.TenLoai</div>
-                    <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="product-name"><h5>@item.TenLapTop</h5></a>
-
-                    <!-- Price Section -->
-                    <div class="current-price">
-                        <span class="current-price">@string.Format("{0:N0}", item.GiaBan) VNĐ</span><br />
-                        <span class="original-price">@string.Format("{0:N0}", item.GiaBan * 130 / 100) VNĐ</span>
+                <!-- Ratings -->
+                <div class="product-rating">
+                    <div class="stars">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
                     </div>
-
-                    <!-- Ratings -->
-                    <div class="product-rating">
-                        <div class="stars">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <span class="rating-count">(99)</span>
-                    </div>
+                    <span class="rating-count">(99)</span>
                 </div>
             </div>
         </div>

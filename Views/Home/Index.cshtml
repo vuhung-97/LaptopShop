@@ -3,38 +3,112 @@
     ViewData["Title"] = "Home Page";
     Layout = "_MyLayoutCustomer"; 
 }
+<a href="/Home/Index1">Về Trang Chủ</a>
 
-<!--Products Start-->
-<div class="container-fluid pt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-0"><span class="bg-secondary pr-3">Products</span></h2>
-        <!-- Thêm nút View More -->
-        <a asp-action="Index" asp-controller="Shop" class="btn btn-outline-primary btn-lg px-4 py-2 rounded-pill shadow-sm">View More >></a>
-    </div>
-    <div class="row px-xl-5 pb-3">
-        @await Html.PartialAsync("ProductView", Model.LaptopList)
-    </div>
-</div>
-<!--Products End-->
-
-<!-- Categories Start -->
-<div class="container-fluid pt-5">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categories</span></h2>
-    <div class="row px-xl-5 pb-3">
-        @await Html.PartialAsync("CategoriesView", Model.LoaiList)
-    </div>
-</div>
-<!-- Categories End -->
-
-<!-- Provider Start -->
-<div class="container-fluid py-5">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Provider</span></h2>
-    <div class="row px-xl-5">
-        <div class="col">
-            <div class="owl-carousel vendor-carousel ">
-                @await Html.PartialAsync("ProviderView", Model.ThuongHieuList)
+<!-- Hero Section -->
+<section class="hero-bg text-white py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-center text-lg-left">
+                <h1 class="display-4 font-weight-bold mb-4">Laptop Tương Lai, Giá Cực Hấp Dẫn</h1>
+                <p class="lead mb-4">Khám phá bộ sưu tập laptop hiện đại dành cho công việc, học tập và giải trí.</p>
+                <a href="/Shop/Index" class="btn btn-light btn-lg font-weight-bold">Mua Sắm Ngay</a>
+            </div>
+            <div class="col-lg-6 mt-4 mt-lg-0 ">
+                <img src="~/Hinh/logoshop.jpg" alt="Laptop Hero" class="img-fluid rounded-circle shadow-lg">
             </div>
         </div>
     </div>
-</div>
+</section>
+
+
+<!--Products Start-->
+<section class="py-5" style="background-color: #FFF9E5">
+    <div class="container">
+        <h2 class="text-center font-weight-bold mb-5">Sản Phẩm Nổi Bật</h2>
+        <div class="row px-xl-5 pb-3">
+            @await Html.PartialAsync("ProductView", Model.LaptopList)
+        </div>
+        <div class="text-center">
+        <!-- Thêm nút View More -->
+            <a asp-action="Index" asp-controller="Shop" class="btn btn-outline-primary btn-lg px-4 py-2 rounded-pill shadow-sm">View More >></a>
+        </div>
+    </div>
+</section>
+<!--Products End-->
+
+<!-- Categories Start -->
+<section class="container pt-5">
+    <h2 class="text-center font-weight-bold mb-5">Theo mục đích sử dụng</h2>
+    <div class="row px-xl-5 pb-3">
+        @await Html.PartialAsync("CategoriesView", Model.LoaiList)
+    </div>
+</section>
+<!-- Categories End -->
+
+<!-- Provider Start -->
+<section class="py-5" style="background-color: #FFF9E5 ">
+    <div class="container">
+        <h2 class="text-center font-weight-bold mb-5">Hãng sản xuất</h2>
+        <div class="row px-xl-5">
+            <div class="col">
+                <div class="owl-carousel vendor-carousel ">
+                    @await Html.PartialAsync("ProviderView", Model.ThuongHieuList)
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <!-- Provider End -->
+
+<!-- Testimonials Section -->
+<section class="container py-5">
+    <h2 class="text-center font-weight-bold mb-5">Khách Hàng Nói Gì?</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="testimonial-card card p-4 text-center">
+                <p class="card-text text-muted">"Sản phẩm chất lượng, giao hàng nhanh, nhân viên hỗ trợ nhiệt tình!"</p>
+                <h6 class="card-title font-weight-bold">Nguyễn Văn A</h6>
+                <small class="text-muted">Khách hàng</small>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="testimonial-card card p-4 text-center">
+                <p class="card-text text-muted">"Laptop hoạt động mượt mà, giá cả hợp lý, rất đáng mua!"</p>
+                <h6 class="card-title font-weight-bold">Trần Thị B</h6>
+                <small class="text-muted">Khách hàng</small>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="testimonial-card card p-4 text-center">
+                <p class="card-text text-muted">"Dịch vụ bảo hành tốt, tôi rất hài lòng với trải nghiệm mua sắm!"</p>
+                <h6 class="card-title font-weight-bold">Lê Văn C</h6>
+                <small class="text-muted">Khách hàng</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .body{
+        background-color: white;
+    }
+    .hero-bg {
+        background: linear-gradient(135deg, #FFD333, #FFF4B2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://via.placeholder.com/1920x600') no-repeat center center/cover;
+        opacity: 0.2;
+        z-index: 0;
+    }
+
+</style>

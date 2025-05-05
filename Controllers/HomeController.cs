@@ -17,6 +17,10 @@ namespace LaptopShop.Controllers
             db = context;
         }
 
+        public IActionResult Index1()
+        {
+            return View("Index1");
+        }
         public IActionResult Index()
         {
             var lap = db.Laptops.Select(p => new LaptopViewModel
@@ -27,7 +31,7 @@ namespace LaptopShop.Controllers
                 HinhAnh = p.HinhAnh,
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
                 TenLoai = p.IdLoaiNavigation.TenLoai
-            }).Take(6).OrderBy(p => p.TenLoai);
+            }).Take(4).OrderBy(p => p.TenLoai);
 
             var loai = db.Loais.Select(p => new LoaiViewModel
             {

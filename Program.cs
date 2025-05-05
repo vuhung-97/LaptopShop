@@ -12,6 +12,7 @@ builder.Services.AddSession(options => {
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+//builder.Services.AddScoped<EmailService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

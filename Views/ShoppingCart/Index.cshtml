@@ -17,13 +17,13 @@
                 <div class="col-lg-8 mb-5">
                     <div class="card border-0 shadow-sm mb-4">
                         <div class="card-body p-0">
-                            <table class="table table-hover mb-0">
+                            <table class="table mb-0 table-fixed">
                                 <thead class="bg-primary text-white">
                                     <tr>
-                                        <th class="py-3 pl-4" style="width: 40%;">Sản phẩm</th>
-                                        <th class="py-3 text-center" style="width: 15%;">Đơn giá</th>
-                                        <th class="py-3 text-center" style="width: 15%;">Số lượng</th>
-                                        <th class="py-3 text-center" style="width: 20%;">Thành tiền</th>
+                                        <th class="py-3 pl-4" style="width: 30%;">Sản phẩm</th>
+                                        <th class="py-3 text-center" style="width: 25%;">Đơn giá</th>
+                                        <th class="py-3 text-center" style="width: 10%;">Số lượng</th>
+                                        <th class="py-3 text-center" style="width: 25%;">Thành tiền</th>
                                         <th class="py-3 text-center" style="width: 10%;"></th>
                                     </tr>
                                 </thead>
@@ -46,27 +46,15 @@
                                                 </div>
                                             </td>
                                             <td class="py-3 text-center align-middle">
-                                                <span class="font-weight-medium">@string.Format("{0:N0}", item.Price) VNĐ</span>
+                                                <span class="font-weight-medium" data-price="@item.Price">@string.Format("{0:N0}", item.Price) VNĐ</span>
                                             </td>
                                             <td class="py-3 text-center align-middle">
-                                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                                    <div class="input-group-btn">
-                                                        <a asp-action="GiamSoLuong" asp-controller="ShoppingCart" asp-route-idlaptop="@item.Id"
-                                                           class="btn btn-sm btn-outline-secondary">
-                                                            <i class="fa fa-minus"></i>
-                                                        </a>
-                                                    </div>
-                                                    <input type="text" class="form-control form-control-sm bg-light text-center border-0" value="@item.Amount" readonly>
-                                                    <div class="input-group-btn">
-                                                        <a asp-action="ThemVaoGio" asp-controller="ShoppingCart" asp-route-idlaptop="@item.Id"
-                                                           class="btn btn-sm btn-outline-secondary">
-                                                            <i class="fa fa-plus"></i>
-                                                        </a>
-                                                    </div>
+                                                <div class="quantity mx-auto">
+                                                    <label class="form-control form-control-sm text-center border-0 quantity-input">@item.Amount</label>
                                                 </div>
                                             </td>
                                             <td class="py-3 text-center align-middle">
-                                                <span class="font-weight-bold text-primary">@string.Format("{0:N0}", item.ThanhTien) VNĐ</span>
+                                                <span class="font-weight-bold text-primary thanh-tien">@string.Format("{0:N0}", item.ThanhTien) VNĐ</span>
                                             </td>
                                             <td class="py-3 text-center align-middle">
                                                 <a class="btn btn-sm btn-danger rounded-circle" asp-action="Remove" asp-controller="ShoppingCart" asp-route-idlaptop="@item.Id">
@@ -111,7 +99,7 @@
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <h6>Phí vận chuyển:</h6>
-                                <h6>30,000 VNĐ</h6>
+                                <h6> Free</h6>
                             </div>
                             <hr>
                             <div class="d-flex justify-content-between mb-4">
@@ -132,4 +120,15 @@
         </div>
     </div>
 </div>
-<!-- Cart End -->
+<style>
+    .table-fixed {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .table-fixed th, .table-fixed td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>

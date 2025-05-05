@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<LaptopShop.ViewModels.ThuongHieuViewModel>
 @foreach (var item in Model)
 {
-    <a asp-action="Index" asp-controller="Shop" asp-route-idthuonghieu="@item.IdThuongHieu" class="brand-logo-link">
-        <div class="brand-logo-container">
+    <a asp-action="Index" asp-controller="Shop" asp-route-idthuonghieu="@item.IdThuongHieu" class="brand-logo-link" >
+        <div class="brand-logo-container" style="background-color:aliceblue">
             <div class="brand-logo-inner">
                 <img src="~/Hinh/ThuongHieu/@item.Logo" alt="@item.TenThuongHieu" class="brand-logo-img">
             </div>
@@ -19,8 +19,8 @@
     }
 
     .brand-logo-container {
-        width: 230px;
-        height: 150px;
+        width: 160px;
+        height: 120px;
         background: #ffffff;
         border-radius: 20px;
         display: flex;

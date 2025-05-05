@@ -51,8 +51,6 @@ namespace LaptopShop.Controllers
 
             var result = new CheckoutViewModel() { GioHang = lstCart, ThongTinKhachHang = model };
 
-            HttpContext.Session.Set<List<CartViewModel>>(DsTenKey.ORDER_KEY, lstCart);
-            HttpContext.Session.Remove(DsTenKey.CART_KEY);
 
             ViewBag.Time = DateTime.Now.ToString("dd/MM/yyyy - hh/mm/ss");
 
@@ -61,9 +59,13 @@ namespace LaptopShop.Controllers
                 IdDonHang = IdGenerator.GetNextId().ToString(),
                 NgayDat = DateTime.Now,
                 DiaChiGiao = model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
-                TongTien = Model.GioHang.Sum(x => x.ThanhTien),
+                TongTien = result.GioHang.Sum(x => x.ThanhTien),
                 TrangThai = "ChoXacNhan"
             };
+
+            HttpContext.Session.Set<List<CartViewModel>>(DsTenKey.ORDER_KEY, lstCart);
+            HttpContext.Session.Remove(DsTenKey.CART_KEY);
+
             using (var db = new ShopLaptopContext())
             {
                 db.DonHangs.Add(donhang);

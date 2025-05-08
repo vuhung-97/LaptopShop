@@ -27,18 +27,6 @@ namespace LaptopShop.Controllers
         [HttpPost]
         public IActionResult DatHang(CheckoutViewModel Model)
         {
-            // Kiểm tra model nếu cần
-            //if (!ModelState.IsValid)
-            //{
-            //    var errors = ModelState.Values
-            //    .SelectMany(v => v.Errors)
-            //    .Select(e => e.ErrorMessage)
-            //    .ToList();
-
-            //    TempData["Errors"] = JsonSerializer.Serialize(errors);
-            //    return RedirectToAction("Index");
-            //}
-
             var model = Model.ThongTinKhachHang;            
             var ListCart = HttpContext.Session.Get(DsTenKey.CART_KEY);
             var lstCart = new List<CartViewModel>();
@@ -49,14 +37,23 @@ namespace LaptopShop.Controllers
                 lstCart = JsonSerializer.Deserialize<List<CartViewModel>>(ListCart);
             }    
 
+            HttpContext.Session.Set(DsTenKey.ORDER_KEY, lstCart);
+            HttpContext.Session.Remove(DsTenKey.CART_KEY); // Xóa giỏ hàng sau khi đặt hàng thành công
+
             var result = new CheckoutViewModel() { GioHang = lstCart, ThongTinKhachHang = model };
 
 
             ViewBag.Time = DateTime.Now.ToString("dd/MM/yyyy - hh/mm/ss");
 
+            int count = 0;
+            using(var db = new ShopLaptopContext())
+            {
+                count = db.DonHangs.Count(); 
+            }
+
             var donhang = new DonHang
             {
-                
+                IdDonHang = "DH" + (count + 1).ToString("0000"),
                 NgayDat = DateTime.Now,
                 DiaChiGiao = model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
                 TongTien = result.GioHang.Sum(x => x.ThanhTien),
@@ -65,6 +62,17 @@ namespace LaptopShop.Controllers
             using (var db = new ShopLaptopContext())
             {
                 db.DonHangs.Add(donhang);
+                foreach (var item in lstCart)
+                {
+                    var chitietdonhang = new ChiTietDonHang
+                    {
+                        IdDonHang = donhang.IdDonHang,
+                        IdLaptop = item.Id,
+                        SoLuong = item.Amount,
+                        DonGia = item.Price
+                    };
+                    db.ChiTietDonHangs.Add(chitietdonhang);
+                }
                 db.SaveChanges();
             }
             TempData["Success"] = "Đặt hàng thành công! Thông tin đơn hàng của bạn đã được ghi nhận. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.";
@@ -116,14 +124,4 @@ namespace LaptopShop.Controllers
             }
         }
     }
-    public static class IdGenerator
-    {
-        private static int currentId = 0;
-
-        public static int GetNextId()
-        {
-            return ++currentId;
-        }
-    }
-
 }

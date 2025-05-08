@@ -19,10 +19,12 @@ namespace MyShopApp.Controllers
             var acc_data = d.TaiKhoans.SingleOrDefault(p => p.IdTaiKhoan == us && p.MatKhau == qw);
 
             if (acc_data == null)
+
             {
                 ViewBag.ThongBao = "Sai tài khoản hoặc mật khẩu.";
                 return View("Index");
             }    
+
 
             HttpContext.Session.SetString(DsTenKey.USER_NAME_KEY, us);
 

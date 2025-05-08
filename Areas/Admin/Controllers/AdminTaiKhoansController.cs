@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LaptopShop.Data;
+using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace LaptopShop.Areas.Admin.Controllers
 {
@@ -20,9 +22,36 @@ namespace LaptopShop.Areas.Admin.Controllers
         }
 
         // GET: Admin/AdminTaiKhoans
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString,int? page, string vaitro)
         {
-            return View(await _context.TaiKhoans.ToListAsync());
+            var taikhoanQuery= _context.TaiKhoans.AsQueryable();
+
+            ViewData["searchString"] = searchString;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                taikhoanQuery = taikhoanQuery.Where(tk => tk.HoTen.Contains(searchString) || tk.Email.Contains(searchString) || tk.DiaChi.Contains(searchString));
+            }
+
+            ViewData["VaiTroList"] = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "", Text = "-- Vai trò --" },
+                    new SelectListItem { Value = "Admin", Text = "Quản trị viên" },
+                    new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
+
+                };
+            ViewData["VaiTro"] = vaitro;
+            var validStatuses = new[] { "Admin", "KhachHang" };
+            if (!string.IsNullOrEmpty(vaitro) && validStatuses.Contains(vaitro))
+            {
+                taikhoanQuery = taikhoanQuery.Where(tk => tk.Loai == vaitro);
+            }
+
+
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+            var taikhoanPaged = taikhoanQuery.ToPagedList(pageNumber, pageSize);
+
+            return View(taikhoanPaged);
         }
 
         // GET: Admin/AdminTaiKhoans/Details/5

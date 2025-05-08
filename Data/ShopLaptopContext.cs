@@ -30,6 +30,7 @@ public partial class ShopLaptopContext : DbContext
     public virtual DbSet<ThuongHieu> ThuongHieus { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
         => optionsBuilder.UseSqlServer("Server=DESKTOP-R51A4CO\\HUNGVU;Database=ShopLaptop;Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,7 +65,7 @@ public partial class ShopLaptopContext : DbContext
         {
             entity.HasKey(e => e.IdDonHang);
 
-            entity.ToTable("DonHang");
+            entity.ToTable("DonHang", tb => tb.HasTrigger("trg_ThemDonHang"));
 
             entity.Property(e => e.IdDonHang)
                 .HasMaxLength(50)
@@ -143,7 +144,7 @@ public partial class ShopLaptopContext : DbContext
         {
             entity.HasKey(e => e.IdTaiKhoan);
 
-            entity.ToTable("TaiKhoan");
+            entity.ToTable("TaiKhoan", tb => tb.HasTrigger("trg_TaiKhoanID"));
 
             entity.HasIndex(e => e.HoTen, "UQ__TaiKhoan__27AEE13CC2586400").IsUnique();
 

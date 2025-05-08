@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LaptopShop.Data;
 using LaptopShop.Helpers;
-using NuGet.Protocol.Events;
+using LaptopShop.ViewModels;
 
 namespace MyShopApp.Controllers
 {
@@ -14,86 +14,17 @@ namespace MyShopApp.Controllers
             return View();
         }
 
-        public IActionResult DangKy()
+        public IActionResult CheckAccount(string us, string qw)
         {
-            return View();
-        }
+            var acc_data = d.TaiKhoans.SingleOrDefault(p => p.IdTaiKhoan == us && p.MatKhau == qw);
 
-        public IActionResult CheckDangKy(string IdTaiKhoan, string HoTen, string MatKhau, string? Email, string? DienThoai, string? DiaChi, string? TinhThanh, string? QuanHuyen, string? PhuongXa)
-        {
-            using(var db = new ShopLaptopContext())
+            if (acc_data == null)
             {
-                var tk = db.TaiKhoans.FirstOrDefault(p => p.IdTaiKhoan == IdTaiKhoan);
-                if(tk != null)
-                {
-                    ViewBag.ThongBao = "Tài khoản đã tồn tại, vui lòng nhập tài khoản khác.";
-                    return View("DangKy");
-                }
-            }    
-            string diaChiDayDu = DiaChi + ", " + LayDiaChiAsync(TinhThanh, QuanHuyen, PhuongXa).Result;
-            using(var db = new ShopLaptopContext())
-            {
-                var taikhoan = new LaptopShop.Data.TaiKhoan()
-                {
-                    IdTaiKhoan = IdTaiKhoan,
-                    HoTen = HoTen,
-                    MatKhau = MatKhau,
-                    Email = Email,
-                    DienThoai = DienThoai,
-                    DiaChi = diaChiDayDu,
-                    Loai = "KhachHang"
-                };
-                db.TaiKhoans.Add(taikhoan);
-                db.SaveChanges();
-            }    
-            return View("Index");
-        }    
-
-        public async Task<string> LayDiaChiAsync(string TinhThanh, string QuanHuyen, string PhuongXa)
-        {          
-            using (var httpClient = new HttpClient())
-            {
-                // Lấy tên Tỉnh/Thành
-                if (TinhThanh == null) return "";
-                var tinhResponse = await httpClient.GetStringAsync($"https://provinces.open-api.vn/api/p/{TinhThanh}");
-                dynamic tinhData = Newtonsoft.Json.JsonConvert.DeserializeObject(tinhResponse);
-                string tenTinh = tinhData.name;
-
-                // Lấy tên Quận/Huyện
-                if (QuanHuyen == null) return tenTinh;
-                var huyenResponse = await httpClient.GetStringAsync($"https://provinces.open-api.vn/api/d/{QuanHuyen}?depth=2");
-                dynamic huyenData = Newtonsoft.Json.JsonConvert.DeserializeObject(huyenResponse);
-                string tenHuyen = huyenData.name;
-
-                // Lấy tên Phường/Xã
-                string tenXa = "";
-                if (PhuongXa == null) return tenHuyen + ", " + tenTinh;
-                foreach (var ward in huyenData.wards)
-                {
-                    if (ward.code == PhuongXa)
-                    {
-                        tenXa = ward.name;
-                        break;
-                    }
-                }
-
-                // Tạo địa chỉ đầy đủ
-                string diaChiDayDu = $"{tenXa}, {tenHuyen}, {tenTinh}";
-
-                // TODO: Lưu vào DB
-
-                return diaChiDayDu;
-            }
-        }
-        public IActionResult CheckAccount(string us, string pw)
-        {
-            var acc_data = d.TaiKhoans.SingleOrDefault(p => p.IdTaiKhoan == us && p.MatKhau == pw);
-            if(acc_data == null)
-            {
-                ViewBag.ThongBao = "Tên tài khoản hoặc mật khẩu không đúng!";
+                ViewBag.ThongBao = "Sai tài khoản hoặc mật khẩu.";
                 return View("Index");
             }    
-            HttpContext.Session.SetString(DsTenKey.USER_NAME_KEY, acc_data.HoTen);            
+
+            HttpContext.Session.SetString(DsTenKey.USER_NAME_KEY, us);
 
             return RedirectToAction("Index", "Home");
         }
@@ -103,5 +34,77 @@ namespace MyShopApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public async Task<string> LayDiaChiAsync(LaptopShop.ViewModels.TaiKhoan taiKhoan)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                // Lấy tên Tỉnh/Thành
+                var tinhResponse = await httpClient.GetStringAsync($"https://provinces.open-api.vn/api/p/{taiKhoan.TinhThanh}");
+                dynamic tinhData = Newtonsoft.Json.JsonConvert.DeserializeObject(tinhResponse);
+                string tenTinh = tinhData.name;
+
+                // Lấy tên Quận/Huyện
+                var huyenResponse = await httpClient.GetStringAsync($"https://provinces.open-api.vn/api/d/{taiKhoan.QuanHuyen}?depth=2");
+                dynamic huyenData = Newtonsoft.Json.JsonConvert.DeserializeObject(huyenResponse);
+                string tenHuyen = huyenData.name;
+
+                // Lấy tên Phường/Xã
+                string tenXa = "";
+                foreach (var ward in huyenData.wards)
+                {
+                    if (ward.code == taiKhoan.PhuongXa)
+                    {
+                        tenXa = ward.name;
+                        break;
+                    }
+                }
+
+                // Tạo địa chỉ đầy đủ
+                string diaChiDayDu = $"{taiKhoan.DiaChi}, {tenXa}, {tenHuyen}, {tenTinh}";
+
+                // TODO: Lưu vào DB
+
+                return diaChiDayDu;
+            }
+        }
+
+        public IActionResult DangKyTaiKhoan(LaptopShop.ViewModels.TaiKhoan taiKhoan)
+        {
+            using (var db = new ShopLaptopContext())
+            {
+                var tkcheck = db.TaiKhoans.FirstOrDefault(p => p.IdTaiKhoan == taiKhoan.IdTaiKhoan);
+                if(tkcheck != null)
+                {
+                    ViewBag.thongbao = "Tài khoản đã tồn tại.";
+                    return View("DangKy");
+                }    
+            }    
+
+            string diaChiDayDu = LayDiaChiAsync(taiKhoan).Result;
+
+            var tk = new LaptopShop.Data.TaiKhoan()
+            {
+                IdTaiKhoan = taiKhoan.IdTaiKhoan,
+                HoTen = taiKhoan.HoTen,
+                MatKhau = taiKhoan.MatKhau,
+                Email = taiKhoan.Email,
+                DienThoai = taiKhoan.DienThoai,
+                DiaChi = diaChiDayDu,
+                Loai = "KhachHang"
+            };
+
+            using(var db = new ShopLaptopContext())
+            {
+                db.TaiKhoans.Add(tk);
+                db.SaveChanges();
+            }    
+
+            return View("Index");
+        }
+
+        public IActionResult DangKy()
+        {
+            return View("DangKy");
+        }
     }
 }

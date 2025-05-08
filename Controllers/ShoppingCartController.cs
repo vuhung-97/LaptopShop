@@ -48,7 +48,7 @@ namespace LaptopShop.Controllers
                     {
                         Id = temp.IdLaptop,
                         Name = temp.TenLapTop,
-                        Hinh = temp.HinhAnh?.Split(",").FirstOrDefault(),
+                        Hinh = temp.HinhAnh,
                         Price = temp.GiaBan ?? 0,
                         Amount = soluong
                     };

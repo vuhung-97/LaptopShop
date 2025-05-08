@@ -45,7 +45,7 @@ namespace LaptopShop.Controllers
                 //return RedirectToAction("PageNotFound", "Home");
             }
 
-            var laptop = laptops.Select(p => new LaptopViewModel
+            var lapop = laptops.Select(p => new LaptopViewModel
             {
                 IdLaptop = p.IdLaptop,
                 TenLapTop = p.TenLapTop,
@@ -59,7 +59,7 @@ namespace LaptopShop.Controllers
                 ManHinh = p.IdThongTinNavigation.ManHinh
             });
 
-            var lap = laptop.AsEnumerable().Select(p => new LaptopViewModel
+            var lap = lapop.AsEnumerable().Select(p => new LaptopViewModel
             {
                 IdLaptop = p.IdLaptop,
                 TenLapTop = p.TenLapTop,

@@ -31,7 +31,7 @@ namespace LaptopShop.Controllers
                 HinhAnh = p.HinhAnh,
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
                 TenLoai = p.IdLoaiNavigation.TenLoai
-            }).Take(4).OrderBy(p => p.TenLoai);
+            }).Take(4).OrderBy(p => p.GiaBan);
 
             var lap = laptop.AsEnumerable().Select(p => new LaptopViewModel
             {

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace LaptopShop.Data;
 
 public partial class DonHang
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string IdDonHang { get; set; } = null!;
 
     public string? IdTaiKhoan { get; set; }

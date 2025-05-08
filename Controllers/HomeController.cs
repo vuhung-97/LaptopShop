@@ -23,7 +23,7 @@ namespace LaptopShop.Controllers
         }
         public IActionResult Index()
         {
-            var lap = db.Laptops.Select(p => new LaptopViewModel
+            var laptop = db.Laptops.Select(p => new LaptopViewModel
             {
                 IdLaptop = p.IdLaptop,
                 TenLapTop = p.TenLapTop,
@@ -32,6 +32,16 @@ namespace LaptopShop.Controllers
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
                 TenLoai = p.IdLoaiNavigation.TenLoai
             }).Take(4).OrderBy(p => p.TenLoai);
+
+            var lap = laptop.AsEnumerable().Select(p => new LaptopViewModel
+            {
+                IdLaptop = p.IdLaptop,
+                TenLapTop = p.TenLapTop,
+                GiaBan = p.GiaBan,
+                HinhAnh = p.HinhAnh?.Split(",").FirstOrDefault(),
+                ThuongHieu = p.ThuongHieu,
+                TenLoai = p.TenLoai
+            });
 
             var loai = db.Loais.Select(p => new LoaiViewModel
             {

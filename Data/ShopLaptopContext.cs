@@ -30,14 +30,13 @@ public partial class ShopLaptopContext : DbContext
     public virtual DbSet<ThuongHieu> ThuongHieus { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-
-        => optionsBuilder.UseSqlServer("Data Source=NONAME\\MSSQLSERVER99;Initial Catalog=ShopLaptop;Integrated Security=True;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-R51A4CO\\HUNGVU;Database=ShopLaptop;Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ChiTietDonHang>(entity =>
         {
-            entity.HasKey(e => new { e.IdDonHang, e.IdLaptop }).HasName("PK__ChiTietD__2470A5988B42F52F");
+            entity.HasKey(e => new { e.IdDonHang, e.IdLaptop }).HasName("PK__ChiTietD__2470A5983478ED0C");
 
             entity.ToTable("ChiTietDonHang");
 
@@ -65,7 +64,7 @@ public partial class ShopLaptopContext : DbContext
         {
             entity.HasKey(e => e.IdDonHang);
 
-            entity.ToTable("DonHang", tb => tb.HasTrigger("trg_ThemDonHang"));
+            entity.ToTable("DonHang");
 
             entity.Property(e => e.IdDonHang)
                 .HasMaxLength(50)
@@ -116,20 +115,20 @@ public partial class ShopLaptopContext : DbContext
 
             entity.HasOne(d => d.IdLoaiNavigation).WithMany(p => p.Laptops)
                 .HasForeignKey(d => d.IdLoai)
-                .HasConstraintName("FK__Laptop__ID_Loai__403A8C7D");
+                .HasConstraintName("FK__Laptop__ID_Loai__4E88ABD4");
 
             entity.HasOne(d => d.IdThongTinNavigation).WithMany(p => p.Laptops)
                 .HasForeignKey(d => d.IdThongTin)
-                .HasConstraintName("FK__Laptop__ID_Thong__3F466844");
+                .HasConstraintName("FK__Laptop__ID_Thong__4F7CD00D");
 
             entity.HasOne(d => d.IdThuongHieuNavigation).WithMany(p => p.Laptops)
                 .HasForeignKey(d => d.IdThuongHieu)
-                .HasConstraintName("FK__Laptop__ID_Thuon__3E52440B");
+                .HasConstraintName("FK__Laptop__ID_Thuon__5070F446");
         });
 
         modelBuilder.Entity<Loai>(entity =>
         {
-            entity.HasKey(e => e.IdLoai).HasName("PK__Loai__914C2314A246C954");
+            entity.HasKey(e => e.IdLoai).HasName("PK__Loai__914C231487F55D88");
 
             entity.ToTable("Loai");
 
@@ -144,11 +143,11 @@ public partial class ShopLaptopContext : DbContext
         {
             entity.HasKey(e => e.IdTaiKhoan);
 
-            entity.ToTable("TaiKhoan", tb => tb.HasTrigger("trg_TaiKhoanID"));
+            entity.ToTable("TaiKhoan");
 
-            entity.HasIndex(e => e.HoTen, "UQ__TaiKhoan__27AEE13C7782E4D8").IsUnique();
+            entity.HasIndex(e => e.HoTen, "UQ__TaiKhoan__27AEE13CC2586400").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__TaiKhoan__A9D105348C942FEE").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__TaiKhoan__A9D1053475B7D0B7").IsUnique();
 
             entity.Property(e => e.IdTaiKhoan)
                 .HasMaxLength(50)
@@ -166,7 +165,7 @@ public partial class ShopLaptopContext : DbContext
 
         modelBuilder.Entity<ThongTinChiTiet>(entity =>
         {
-            entity.HasKey(e => e.IdThongTin).HasName("PK__ThongTin__BB9645AF575C81FA");
+            entity.HasKey(e => e.IdThongTin).HasName("PK__ThongTin__BB9645AF9ED0E72D");
 
             entity.ToTable("ThongTinChiTiet");
 
@@ -193,7 +192,7 @@ public partial class ShopLaptopContext : DbContext
 
         modelBuilder.Entity<ThuongHieu>(entity =>
         {
-            entity.HasKey(e => e.IdThuongHieu).HasName("PK__ThuongHi__AB2A011AB9267087");
+            entity.HasKey(e => e.IdThuongHieu).HasName("PK__ThuongHi__AB2A011ACA252538");
 
             entity.ToTable("ThuongHieu");
 

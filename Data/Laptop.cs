@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LaptopShop.Data;
 
 public partial class Laptop
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string IdLaptop { get; set; } = null!;
 
     public string? IdThuongHieu { get; set; }

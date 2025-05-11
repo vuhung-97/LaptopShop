@@ -1,54 +1,54 @@
 ﻿@model LaptopShop.Data.TaiKhoan
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Chi tiết tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Details</h1>
+<h1 class="text-center my-4">Thông tin chi tiết</h1>
 
-<div>
-    <h4>TaiKhoan</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HoTen)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HoTen)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MatKhau)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MatKhau)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DienThoai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DienThoai)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DiaChi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DiaChi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Loai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Loai)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.IdTaiKhoan">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="d-flex justify-content-center">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 700px; border-radius: 1rem;">
+        <div class="card-body">
+            <h5 class="mb-4">#ID: @Model.IdTaiKhoan</h5>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Họ tên</th>
+                        <td>@Model.HoTen</td>
+                    </tr>
+                    <tr>
+                        <th>Mật khẩu</th>
+                        <td>@Model.MatKhau</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <th>Điện thoại</th>
+                        <td>@Model.DienThoai</td>
+                    </tr>
+                    <tr>
+                        <th>Địa chỉ</th>
+                        <td>@Model.DiaChi</td>
+                    </tr>
+                    <tr>
+                        <th>Vai trò</th>
+                        <td>
+                            @{
+                                string loaiHienThi = Model.Loai == "Admin" ? "Quản trị viên" : "Khách hàng";
+                            }
+                            @loaiHienThi
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="text-center mt-4">
+                <a class="btn btn-round btn-primary" asp-action="Edit" asp-route-id="@Model.IdTaiKhoan">Sửa</a>
+                <a class="btn btn-round btn-info" asp-action="Index">Quay lại</a>
+            </div>
+        </div>
+    </div>
 </div>

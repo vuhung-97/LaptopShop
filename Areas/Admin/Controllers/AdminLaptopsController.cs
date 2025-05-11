@@ -94,7 +94,7 @@ namespace LaptopShop.Areas.Admin.Controllers
                 }
             }
 
-            int pageSize = 5;
+            int pageSize = 10;
             int pageNumber = page ?? 1;
             var laptopsPaged = laptopsQuery.ToPagedList(pageNumber, pageSize);
 
@@ -314,10 +314,15 @@ namespace LaptopShop.Areas.Admin.Controllers
                 .Include(l => l.IdThongTinNavigation)
                 .Include(l => l.IdThuongHieuNavigation)
                 .FirstOrDefaultAsync(m => m.IdLaptop == id);
+
+            bool coTrongDonHang = await _context.ChiTietDonHangs.AnyAsync(c => c.IdLaptop == id);
             if (laptop == null)
             {
                 return NotFound();
             }
+            
+            ViewBag.CoTrongDonHang = coTrongDonHang;
+
 
             return View(laptop);
         }
@@ -328,12 +333,18 @@ namespace LaptopShop.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var laptop = await _context.Laptops.FindAsync(id);
+            if (laptop == null)
+            {
+                return NotFound();
+            }
+
+            
             if (laptop != null)
             {
                 _context.Laptops.Remove(laptop);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -47,7 +47,7 @@ namespace LaptopShop.Areas.Admin.Controllers
             }
 
 
-            int pageSize = 5;
+            int pageSize = 10;
             int pageNumber = page ?? 1;
             var taikhoanPaged = taikhoanQuery.ToPagedList(pageNumber, pageSize);
 

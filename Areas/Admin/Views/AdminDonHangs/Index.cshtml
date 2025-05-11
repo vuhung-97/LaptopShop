@@ -84,7 +84,7 @@
                                             {
                                                 <tr>
                                                     <td>@stt</td>
-                                                    <td>@item.IdTaiKhoanNavigation.HoTen</td>
+                                                    <td>@item.IdTaiKhoanNavigation?.HoTen khách hàng</td>
                                                     <td>@item.NgayDat.ToString("dd/MM/yyyy")</td>
                                                     <td>@item.DiaChiGiao</td>
 
@@ -135,41 +135,42 @@
                         </div>
                     </div>
                 </div>
+                @* // tìm kiếm, phân trang *@
+                <div class="d-flex justify-content-center" style="float:right;">
+                    @{
+                        string currentSearch = Context.Request.Query["searchString"];
+                        string currentBrand = Context.Request.Query["trangthai"];
+                        string currentminDate = Context.Request.Query["minDate"];
+                        string currentmaxDate = Context.Request.Query["maxDate"];
+                    }
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new
+                        {
+                            page,
+                            searchString = Context.Request.Query["searchString"],
+                            trangthai = Context.Request.Query["trangthai"],
+                            minDate = Context.Request.Query["minDate"],
+                            maxDate = Context.Request.Query["maxDate"],
+                            sortColumn = ViewData["sortColumn"],
+                            sortOrder = ViewData["sortOrder"]
+                        }),
+                             new PagedListRenderOptions
+                    {
+                        // DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                        // DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                        // DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                        // DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                        UlElementClasses = new[] { "pagination" },
+                        LiElementClasses = new[] { "page-item" },
+                        PageClasses = new[] { "page-link" }
+                    })
+                </div>
             </div>
         </div>
 
     </div>
 </div>
 
-@* // tìm kiếm, phân trang *@
-<div class="d-flex justify-content-center" style="float:right;">
-    @{
-        string currentSearch = Context.Request.Query["searchString"];
-        string currentBrand = Context.Request.Query["trangthai"];
-        string currentminDate = Context.Request.Query["minDate"];
-        string currentmaxDate = Context.Request.Query["maxDate"];
-    }
-    @Html.PagedListPager(Model, page => Url.Action("Index", new
-        {
-            page,
-            searchString = Context.Request.Query["searchString"],
-            trangthai = Context.Request.Query["trangthai"],
-            minDate = Context.Request.Query["minDate"],
-            maxDate = Context.Request.Query["maxDate"],
-            sortColumn = ViewData["sortColumn"],
-            sortOrder = ViewData["sortOrder"]
-        }),
-            new PagedListRenderOptions
-    {
-        // DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-        // DisplayLinkToLastPage = PagedListDisplayMode.Always,
-        // DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-        // DisplayLinkToNextPage = PagedListDisplayMode.Always,
-        UlElementClasses = new[] { "pagination" },
-        LiElementClasses = new[] { "page-item" },
-        PageClasses = new[] { "page-link" }
-    })
-</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 

@@ -297,10 +297,10 @@
 
 
 <div style="margin-top:10px">
-    <a asp-action="Index" class="btn btn-round btn-info" style="float:left;">Back to List</a>
+    <a asp-action="Index" class="btn btn-round btn-info" style="float:left;">Quay lại</a>
     <form id="deleteForm" asp-action="Delete" method="post" style="float: right;">
         <input type="hidden" name="id" value="@Model.IdDonHang" />
-        <button type="button" class="btn btn-danger" onclick="showDeleteConfirmModal()">Xóa đơn hàng</button>
+        <button type="button" class="btn btn-round btn-danger" onclick="showDeleteConfirmModal()">Xóa đơn hàng</button>
     </form>
 
 </div>

@@ -1,0 +1,110 @@
+﻿@model IEnumerable<LaptopShop.Data.ThuongHieu>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var soLuongDict = ViewData["SoLuongSanPham"] as Dictionary<string, int>;
+}
+
+
+
+<style>
+  
+   
+    .container1 {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        align-items: stretch;
+    }
+
+    .table-container {
+        flex: 1;
+        max-width: 70%;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+   
+    .text-warning {
+        font-size: 1.2em;
+        color: #ff6600;
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+
+<h1 style="text-align:center">Danh sách thương hiệu</h1>
+
+
+    <div class="container1">
+    
+    <div class="table-container">
+        <div><a class="btn btn-round btn-success" asp-action="Create" style="float:right">Thêm thương hiệu</a></div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th  width="15px">STT</th>
+                    <th >ID</th>
+                    <th>Thương hiệu</th>
+                    <th >Logo</th>
+                    <th >Số sản phẩm</th>
+                    <th width="20%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var stt = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align:center">@stt</td>
+                        <td>@item.IdThuongHieu</td>
+                        <td>@item.TenThuongHieu</td>
+                        <td style="text-align:center">
+                            <img src="@Url.Content("~/Hinh/ThuongHieu/" + item.Logo)" style="max-height:50px;" />
+
+                        </td>
+                        <td style="text-align:center">
+                            @(soLuongDict != null && soLuongDict.ContainsKey(item.IdThuongHieu)
+                                ? soLuongDict[item.IdThuongHieu]
+                                : 0)
+                        </td>
+
+                        <td>
+                            <a class="btn btn-round btn-success" asp-action="Edit" asp-route-id="@item.IdThuongHieu">Sửa</a>
+                            <a class="btn btn-round btn-danger" asp-action="Delete" asp-route-id="@item.IdThuongHieu">Xóa</a>
+                        </td>
+                    </tr>
+                    stt++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+

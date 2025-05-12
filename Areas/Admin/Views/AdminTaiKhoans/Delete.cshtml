@@ -4,54 +4,126 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<h1 style="text-align:center">Bạn muốn xóa tài khoản này?</h1>
+<div class="d-flex justify-content-center">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width:700px; border-radius: 1rem;">
+        <div class="card-body">
+            <h5 class="mb-4">#ID: @Model.IdTaiKhoan</h5>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Họ tên</th>
+                        <td>@Model.HoTen</td>
+                    </tr>
+                    <tr>
+                        <th>Mật khẩu</th>
+                        <td>@Model.MatKhau</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <th>Điện thoại</th>
+                        <td>@Model.DienThoai</td>
+                    </tr>
+                    <tr>
+                        <th>Địa chỉ</th>
+                        <td>@Model.DiaChi</td>
+                    </tr>
+                    <tr>
+                        <th>Vai trò</th>
+                        <td>
+                            @{
+                                string loaiHienThi = Model.Loai == "Admin" ? "Quản trị viên" : "Khách hàng";
+                            }
+                            @loaiHienThi
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>TaiKhoan</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HoTen)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HoTen)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MatKhau)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MatKhau)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DienThoai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DienThoai)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DiaChi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DiaChi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Loai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Loai)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="IdTaiKhoan" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+            <div class="text-center mt-4">
+                
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="IdTaiKhoan" />
+                    <button type="button" class="btn btn-round btn-danger" onclick="openConfirmDeleteModal(event)">Xóa</button>
+                    <a asp-action="Index" class="btn btn-round btn-info">Quay lại</a>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+<!-- Modal xác nhận xóa -->
+<div id="confirmDeleteModal" class="modalDelete">
+    <div class="modalDelete-content">
+        <span class="close" onclick="closeConfirmDeleteModal()">&times;</span>
+        <h3>Bạn có chắc muốn xóa tài khoản này?</h3>
+
+        <button type="button" class="modalDelete-button modalDelete-button-confirm" onclick="submitDelete()">Xóa</button>
+        <button type="button" class="modalDelete-button modalDelete-button-cancel" onclick="closeConfirmDeleteModal()">Hủy</button>
+
+    </div>
+</div>
+
+<style>
+    /* Modal xác nhận xóa */
+    .modalDelete {
+        display: none; /* Ẩn modal theo mặc định */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Căn giữa modal cả chiều dọc và chiều ngang */
+        z-index: 1000;
+        width: 300px;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    /* Nội dung modal */
+    .modalDelete-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .modalDelete-button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .modalDelete-button-confirm {
+        background-color: red;
+        color: white;
+    }
+
+    .modalDelete-button-cancel {
+        background-color: gray;
+        color: white;
+    }
+</style>
+
+<script>
+    //modal xác nhận xóa
+        // Mở modal xác nhận xóa
+    function openConfirmDeleteModal(event) {
+        event.preventDefault(); // Ngừng hành động mặc định của form
+        document.getElementById('confirmDeleteModal').style.display = 'block';
+    }
+
+    // Đóng modal xác nhận xóa
+    function closeConfirmDeleteModal() {
+        document.getElementById('confirmDeleteModal').style.display = 'none';
+    }
+
+    // Thực hiện xóa khi xác nhận
+    function submitDelete() {
+        document.querySelector('form').submit();  // Submit form để xóa
+        closeConfirmDeleteModal();  // Đóng modal
+    }
+
+</script>

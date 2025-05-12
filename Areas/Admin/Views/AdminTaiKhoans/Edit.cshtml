@@ -1,59 +1,72 @@
 ﻿@model LaptopShop.Data.TaiKhoan
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Chỉnh sửa tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1 class="text-center mt-4 mb-4">Chỉnh sửa tài khoản</h1>
 
-<h4>TaiKhoan</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdTaiKhoan" />
-            <div class="form-group">
-                <label asp-for="HoTen" class="control-label"></label>
-                <input asp-for="HoTen" class="form-control" />
-                <span asp-validation-for="HoTen" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MatKhau" class="control-label"></label>
-                <input asp-for="MatKhau" class="form-control" />
-                <span asp-validation-for="MatKhau" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DienThoai" class="control-label"></label>
-                <input asp-for="DienThoai" class="form-control" />
-                <span asp-validation-for="DienThoai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiaChi" class="control-label"></label>
-                <input asp-for="DiaChi" class="form-control" />
-                <span asp-validation-for="DiaChi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Loai" class="control-label"></label>
-                <input asp-for="Loai" class="form-control" />
-                <span asp-validation-for="Loai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="d-flex justify-content-center">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 700px; border-radius: 1rem;">
+        <div class="card-body">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3"></div>
+                <input type="hidden" asp-for="IdTaiKhoan" />
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="HoTen" class="form-label fw-semibold">Họ tên</label>
+                        <input asp-for="HoTen" class="form-control rounded-pill shadow-sm px-3" placeholder="Nhập họ tên..." />
+                        <span asp-validation-for="HoTen" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label fw-semibold">Email</label>
+                        <input asp-for="Email" class="form-control rounded-pill shadow-sm px-3" placeholder="example@gmail.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="MatKhau" class="form-label fw-semibold mt-3">Mật khẩu</label>
+                        <input asp-for="MatKhau" class="form-control rounded-pill shadow-sm px-3" placeholder="Nhập mật khẩu..." />
+                        <span asp-validation-for="MatKhau" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DienThoai" class="form-label fw-semibold mt-3">Điện thoại</label>
+                        <input asp-for="DienThoai" class="form-control rounded-pill shadow-sm px-3" placeholder="Số điện thoại..." />
+                        <span asp-validation-for="DienThoai" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="DiaChi" class="form-label fw-semibold mt-3">Địa chỉ</label>
+                        <input asp-for="DiaChi" class="form-control rounded-pill shadow-sm px-3" placeholder="Nhập địa chỉ..." />
+                        <span asp-validation-for="DiaChi" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 d-flex align-items-center mt-3">
+                        <label asp-for="Loai" class="form-label fw-semibold mt-3" style="min-width: 100px;">Loại tài khoản</label>
+                        <select asp-for="Loai" class="form-control rounded-pill shadow-sm px-3" style="max-width: 150px;">
+                            <option value="">-- Chọn loại --</option>
+                            <option value="Admin">Quản trị viên</option>
+                            <option value="KhachHang">Khách hàng</option>
+                        </select>
+                        <span asp-validation-for="Loai" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 me-2 shadow-sm">Lưu</button>
+                    <a asp-action="Index" class="btn btn-round btn-info">Quay lại</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

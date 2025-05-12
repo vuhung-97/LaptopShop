@@ -5,70 +5,77 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Thêm Laptap mới</h1>
-<hr />
+<h1 style="text-align: center">Thêm sản phẩm mới</h1>
 
 
-<div class="container mt-4">
-    <div class="card shadow-sm">
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 1100px; border-radius: 1rem;">
         <div class="card-body">
-            <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <form asp-action="Create" enctype="multipart/form-data" onsubmit="return submitForm(event)">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3"></div>
+                <input type="hidden" asp-for="IdLaptop" />
 
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                
-
-                <div class="row">
+                <div class="row g-3">
                     <!-- Phần thông tin laptop -->
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="form-group">
-                            <label asp-for="TenLapTop" class="control-label">Tên laptop</label>
-                            <input asp-for="TenLapTop" class="form-control" />
+                            <label asp-for="TenLapTop" class="form-label fw-semibold">Tên laptop</label>
+                            <input asp-for="TenLapTop" class="form-control rounded-pill shadow-sm px-3" />
                             <span asp-validation-for="TenLapTop" class="text-danger"></span>
                         </div>
 
-                        <div class="form-group">
-                            <label asp-for="IdThuongHieu" class="control-label">Thương hiệu</label>
-                            <select asp-for="IdThuongHieu" class="form-control" asp-items="ViewBag.IdThuongHieu"></select>
-                            <span asp-validation-for="IdThuongHieu" class="text-danger"></span>
+                        <div class="row">
+                            <!-- Loại laptop -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="IdLoai" class="form-label fw-semibold">Loại laptop</label>
+                                    <select asp-for="IdLoai" class="form-control rounded-pill shadow-sm px-3" asp-items="ViewBag.IdLoai"></select>
+                                    <span asp-validation-for="IdLoai" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-- Thương hiệu -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="IdThuongHieu" class="form-label fw-semibold">Thương hiệu</label>
+                                    <select asp-for="IdThuongHieu" class="form-control rounded-pill shadow-sm px-3" asp-items="ViewBag.IdThuongHieu"></select>
+                                    <span asp-validation-for="IdThuongHieu" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="IdThongTin" class="control-label">Cấu hình</label>
-                            <select asp-for="IdThongTin" class="form-control" asp-items="@(ViewData["IdThongTin"] as List<SelectListItem>)" id="infoDropdown"></select>
+                            <label asp-for="IdThongTin" class="form-label fw-semibold">Cấu hình</label>
+                            <select asp-for="IdThongTin" class="form-control rounded-pill shadow-sm px-3" asp-items="@(ViewData["IdThongTin"] as List<SelectListItem>)" id="infoDropdown"></select>
                             <span asp-validation-for="IdThongTin" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="IdLoai" class="control-label">Loại laptop</label>
-                            <select asp-for="IdLoai" class="form-control" asp-items="ViewBag.IdLoai"></select>
-                            <span asp-validation-for="IdLoai" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="SoLuong" class="control-label">Tồn Kho</label>
-                            <input asp-for="SoLuong" class="form-control" min="0" />
+                            <label asp-for="SoLuong" class="form-label fw-semibold">Tồn Kho</label>
+                            <input asp-for="SoLuong" class="form-control rounded-pill shadow-sm px-3" min="0" value="0"/>
                             <span asp-validation-for="SoLuong" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="GiaBan" class="control-label">Giá bán (VND)</label>
+                            <label asp-for="GiaBan" class="form-label fw-semibold">Giá bán (VND)</label>
                             <div class="input-group">
-                                <!-- Người dùng gõ vào ô này (chỉ dùng ID và class thôi) -->
-                                <input type="text" id="GiaBanFormatted" class="form-control" oninput="formatCurrencyVND(this)" />
-
-                                <!-- Dữ liệu thật được submit (ẩn) -->
+                                <input type="text" id="GiaBanFormatted" class="form-control rounded-pill shadow-sm" oninput="formatCurrencyVND(this)"/>
                                 <input type="hidden" asp-for="GiaBan" />
                             </div>
                             <span asp-validation-for="GiaBan" class="text-danger"></span>
                         </div>
-
-
+                        <div class="text-center mt-4">
+                            <button type="submit" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-primary">Tạo mới</button>
+                            <a asp-action="Index" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-info">Quay lại</a>
+                        </div>
                     </div>
 
+
                     <!-- Phần hình ảnh -->
-                    <div class="col-md-6">
-                        <label asp-for="HinhAnh" class="control-label">Hình ảnh hiện có:</label>
-                        <div id="imagePreviewContainer" class="d-flex flex-wrap overflow-auto" style="max-height: 300px; border: 1px solid #ddd; padding: 10px;">
+                    <div class="col-md-5">
+                        <label asp-for="HinhAnh" class="control-label">Ảnh sản phẩm</label>
+                        <div id="imagePreviewContainer" class="d-flex flex-wrap overflow-auto" style="max-height: 300px; padding: 10px;">
                             @if (Model != null && !string.IsNullOrEmpty(Model.HinhAnh))
                             {
                                 var images = Model.HinhAnh.Split(",");
@@ -89,13 +96,9 @@
                         </div>
                         <span asp-validation-for="HinhAnh" class="text-danger"></span>
                     </div>
+
                 </div>
 
-                <!-- Nút lưu -->
-                <div class="text-center mt-4">
-                    <button type="submit" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-primary">Tạo mới</button>
-                    <a asp-action="Index" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-info">Quay lại</a>
-                </div>
             </form>
         </div>
     </div>

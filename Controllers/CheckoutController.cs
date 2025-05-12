@@ -55,7 +55,7 @@ namespace LaptopShop.Controllers
             {
                 IdDonHang = "DH" + (count + 1).ToString("0000"),
                 NgayDat = DateTime.Now,
-                DiaChiGiao = model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
+                DiaChiGiao = model.Ho + " " + model.Ten + ", SĐT: " + model.SoDienThoai+ ", ĐC: " +  model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
                 TongTien = result.GioHang.Sum(x => x.ThanhTien),
                 TrangThai = "ChoXacNhan"
             };

@@ -1,7 +1,9 @@
 ﻿
 @using X.PagedList
 @using X.PagedList.Mvc.Core
-@model IPagedList<LaptopShop.Data.DonHang> 
+@* @model IPagedList<LaptopShop.Data.DonHang> *@
+@model IPagedList<LaptopShop.Areas.Model.DonHangTam>
+
 @using System.Web
 
 
@@ -84,9 +86,9 @@
                                             {
                                                 <tr>
                                                     <td>@stt</td>
-                                                    <td>@item.IdTaiKhoanNavigation?.HoTen khách hàng</td>
+                                                    <td>@item.HoTenNguoiNhan</td>
                                                     <td>@item.NgayDat.ToString("dd/MM/yyyy")</td>
-                                                    <td>@item.DiaChiGiao</td>
+                                                    <td>@item.DiaChiNguoiNhan</td>
 
                                                     <td>
                                                         <span id="formattedCurrency_@item.IdDonHang"></span>

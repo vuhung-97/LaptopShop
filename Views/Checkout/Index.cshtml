@@ -30,8 +30,8 @@
                                     <input asp-for="ThongTinKhachHang.Ho" class="form-control" type="text" placeholder="Nguyễn">
                                 </div>
                                 <div class="col-md-6 form-group mb-3">
-                                    <label class="font-weight-bold mb-2">Tên</label>
-                                    <input asp-for="ThongTinKhachHang.Ten" class="form-control" type="text" placeholder="Văn A">
+                                    <label class="font-weight-bold mb-2" >Tên</label>
+									<input asp-for="ThongTinKhachHang.Ten" class="form-control" type="text" placeholder="Văn A" required>
                                 </div>
                                 <div class="col-md-6 form-group mb-3">
                                     <label class="font-weight-bold mb-2">Email</label>
@@ -39,15 +39,15 @@
                                 </div>
                                 <div class="col-md-6 form-group mb-3">
                                     <label class="font-weight-bold mb-2">Số điện thoại</label>
-                                    <input asp-for="ThongTinKhachHang.SoDienThoai" class="form-control" type="tel" placeholder="0912 345 678">
+                                    <input asp-for="ThongTinKhachHang.SoDienThoai" class="form-control" type="tel" placeholder="0912 345 678" required>
                                 </div>
                                 
-                                <div class="col-md-12 form-group mb-3">
+                               @*  <div class="col-md-12 form-group mb-3">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="newaccount">
                                         <label class="custom-control-label" for="newaccount">Tạo tài khoản mới</label>
                                     </div>
-                                </div>
+                                </div> *@
                                 @* <div class="col-md-12">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="shipto">
@@ -68,14 +68,14 @@
                                 <div class="row">
                                     <div class="col-md-12 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Địa chỉ</label>
-                                        <input asp-for="ThongTinKhachHang.DiaChi" class="form-control" type="text" placeholder="123 Đường ABC">
+                                        <input asp-for="ThongTinKhachHang.DiaChi" class="form-control" type="text" placeholder="123 Đường ABC" required>
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Tỉnh/Thành phố</label>
                                         <select id="tinhThanhSelect" name="TinhThanhCode" class="form-control">
                                             <option selected disabled>Chọn Tỉnh/Thành phố</option>
                                         </select>
-                                        <input type="hidden" id="tinhThanhName" name="ThongTinKhachHang.TinhThanh" asp-for="ThongTinKhachHang.TinhThanh" />
+                                        <input type="hidden" id="tinhThanhName" name="ThongTinKhachHang.TinhThanh" asp-for="ThongTinKhachHang.TinhThanh" required />
                                     </div>
 
                                     <div class="col-md-6 form-group mb-3">
@@ -83,7 +83,7 @@
                                         <select id="quanHuyenSelect" name="QuanHuyenCode" class="form-control">
                                             <option selected disabled>Chọn Quận/Huyện</option>
                                         </select>
-                                        <input type="hidden" id="quanHuyenName" name="ThongTinKhachHang.QuanHuyen" asp-for="ThongTinKhachHang.QuanHuyen" />
+                                        <input type="hidden" id="quanHuyenName" name="ThongTinKhachHang.QuanHuyen" asp-for="ThongTinKhachHang.QuanHuyen" required />
                                     </div>
 
                                     <div class="col-md-6 form-group mb-3">
@@ -91,7 +91,7 @@
                                         <select id="phuongXaSelect" name="PhuongXaCode" class="form-control">
                                             <option selected disabled>Chọn Phường/Xã</option>
                                         </select>
-                                        <input type="hidden" id="phuongXaName" name="ThongTinKhachHang.PhuongXa" asp-for="ThongTinKhachHang.PhuongXa" />
+                                        <input type="hidden" id="phuongXaName" name="ThongTinKhachHang.PhuongXa" asp-for="ThongTinKhachHang.PhuongXa" required />
                                     </div>
                                     <div class="col-md-6 form-group mb-3">
                                         <label class="font-weight-bold mb-2">Mã bưu điện</label>

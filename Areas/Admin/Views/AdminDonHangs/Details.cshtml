@@ -1,4 +1,5 @@
-﻿@model LaptopShop.Data.DonHang
+﻿@* @model LaptopShop.Data.DonHang *@
+@model LaptopShop.Areas.Model.DonHangTam
 
 @{
     ViewData["Title"] = "Details";
@@ -127,21 +128,21 @@
             <thead>
                 <tr>
                     <th>Khách hàng</th>
-                    <th>@Html.DisplayFor(model => model.IdTaiKhoanNavigation.HoTen)</th>
+                    <th>@Model.HoTenNguoiNhan</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Ngày đặt hàng</td>
-                    <td>@Html.DisplayFor(model => model.NgayDat)</td>
+                    <td>@Model.NgayDat</td>
                 </tr>
                 <tr>
                     <td>Số điện thoại</td>
-                    <td>@Html.DisplayFor(model => model.IdTaiKhoanNavigation.DienThoai)</td>
+                    <td>@Model.SoDienThoaiNguoiNhan</td>
                 </tr>
                 <tr>
                     <td>Địa chỉ</td>
-                    <td>@Html.DisplayFor(model => model.DiaChiGiao)</td>
+                    <td>@Model.DiaChiNguoiNhan</td>
                 </tr>
 
             </tbody>

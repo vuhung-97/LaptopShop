@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using LaptopShop.Data;
 using X.PagedList.Extensions;
 using Microsoft.Data.SqlClient;
+using X.PagedList;
+using LaptopShop.Areas.Model;
 
 namespace LaptopShop.Areas.Admin.Controllers
 {
@@ -116,10 +118,48 @@ namespace LaptopShop.Areas.Admin.Controllers
             int pageSize = 5;
             int pageNumber = page ?? 1;
             var donhangsPaged = donhangsQuery.ToPagedList(pageNumber, pageSize);
-            
-            
 
-            return View(donhangsPaged);
+            // Chuyển sang ViewModel tạm
+            var donHangTamList = new List<DonHangTam>();
+            foreach (var donHang in donhangsPaged)
+            {
+                var model = new DonHangTam
+                {
+                    IdDonHang = donHang.IdDonHang,
+                    NgayDat = donHang.NgayDat,
+                    TongTien = donHang.TongTien,
+                    TrangThai = donHang.TrangThai,
+
+                };
+
+                if (donHang.IdTaiKhoanNavigation == null && !string.IsNullOrEmpty(donHang.DiaChiGiao))
+                {
+                    var parts = donHang.DiaChiGiao.Split('/');
+                    if (parts.Length >= 3)
+                    {
+                        model.HoTenNguoiNhan = parts[0].Trim();
+                        model.SoDienThoaiNguoiNhan = parts[1].Trim();
+                        model.DiaChiNguoiNhan = parts[2].Trim();
+                    }
+                }
+                else if (donHang.IdTaiKhoanNavigation != null)
+                {
+                    model.HoTenNguoiNhan = donHang.IdTaiKhoanNavigation.HoTen;
+                    model.SoDienThoaiNguoiNhan = donHang.IdTaiKhoanNavigation.DienThoai;
+                    model.DiaChiNguoiNhan = donHang.IdTaiKhoanNavigation.DiaChi;
+                }
+
+                donHangTamList.Add(model);
+            }
+
+            // Phân trang lại với ViewModel tạm
+            var donHangTamPaged = new StaticPagedList<DonHangTam>(
+                donHangTamList, donhangsPaged.GetMetaData()
+            );
+
+            return View(donHangTamPaged);
+
+            //return View(donhangsPaged);
         }
 
 
@@ -127,29 +167,53 @@ namespace LaptopShop.Areas.Admin.Controllers
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var donHang = _context.DonHangs
-                    .Include(d => d.IdTaiKhoanNavigation)
-                     .Include(d => d.ChiTietDonHangs) // THÊM DÒNG NÀY
-                        .ThenInclude(ct => ct.IdLaptopNavigation)
-                            .ThenInclude(l => l.IdThuongHieuNavigation) // Nếu cần thương hiệu
-                    .Include(d => d.ChiTietDonHangs)
-                     .ThenInclude(ct => ct.IdLaptopNavigation)
-                        .ThenInclude(l => l.IdLoaiNavigation) // Nếu cần dòng sản phẩm
-                        .FirstOrDefault(d => d.IdDonHang == id);
+                .Include(d => d.IdTaiKhoanNavigation)
+                .Include(d => d.ChiTietDonHangs)
+                    .ThenInclude(ct => ct.IdLaptopNavigation)
+                        .ThenInclude(l => l.IdThuongHieuNavigation)
+                .Include(d => d.ChiTietDonHangs)
+                    .ThenInclude(ct => ct.IdLaptopNavigation)
+                        .ThenInclude(l => l.IdLoaiNavigation)
+                .FirstOrDefault(d => d.IdDonHang == id);
+
             if (donHang == null)
-            {
                 return NotFound();
+
+            var model = new DonHangTam
+            {
+                IdDonHang = donHang.IdDonHang,
+                NgayDat = donHang.NgayDat,
+                TongTien = donHang.TongTien,
+                TrangThai = donHang.TrangThai,
+                ChiTietDonHangs = donHang.ChiTietDonHangs.ToList()
+            };
+
+            if (donHang.IdTaiKhoanNavigation == null && !string.IsNullOrEmpty(donHang.DiaChiGiao))
+            {
+                var parts = donHang.DiaChiGiao.Split('/');
+                if (parts.Length >= 3)
+                {
+                    model.HoTenNguoiNhan = parts[0].Trim();
+                    model.SoDienThoaiNguoiNhan = parts[1].Trim();
+                    model.DiaChiNguoiNhan = parts[2].Trim();
+                }
+            }
+            else if (donHang.IdTaiKhoanNavigation != null)
+            {
+                model.HoTenNguoiNhan = donHang.IdTaiKhoanNavigation.HoTen;
+                model.SoDienThoaiNguoiNhan = donHang.IdTaiKhoanNavigation.DienThoai;
+                model.DiaChiNguoiNhan = donHang.IdTaiKhoanNavigation.DiaChi;
             }
 
-            return View(donHang);
+            return View(model);
         }
 
+
         // GET: Admin/AdminDonHangs/Create
-     
+
 
         // POST: Admin/AdminDonHangs/trangthai
         // To protect from overposting attacks, enable the specific properties you want to bind to.

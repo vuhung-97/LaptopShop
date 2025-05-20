@@ -1,7 +1,7 @@
 ﻿@{
     string user = Context.Session.GetString(LaptopShop.Helpers.DsTenKey.USER_NAME_KEY) ?? "";
 }
-<a asp-area="Admin" asp-controller="home" asp-action="Index">go to admin</a>
+
 <!-- Navbar Start -->
 <div class="container-fluid bg-dark">
     <div class="row px-xl-5">
@@ -91,9 +91,9 @@
                                         <a asp-action="Logout" asp-controller="Login" class="logout-btn">
                                             <i class="fa fa-sign-out-alt mr-1"></i> Log out
                                         </a>
-                                        @if(user == "admin")
+                                        @if(user.ToLower() == "admin")
                                         {
-                                            <a asp-action="Index" asp-controller="Setting" class="setting-btn mr-2">
+                                            <a asp-area="Admin" asp-controller="home" asp-action="Index" class="setting-btn mr-2">
                                                 <i class="fa fa-cog mr-1"></i> Setting
                                             </a>
                                         }

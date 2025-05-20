@@ -46,14 +46,26 @@ namespace LaptopShop.Controllers
             ViewBag.Time = DateTime.Now.ToString("dd/MM/yyyy - hh/mm/ss");
 
             int count = 0;
+            string iddonhang="";
+
             using(var db = new ShopLaptopContext())
             {
-                count = db.DonHangs.Count(); 
+                count = db.DonHangs.Count();
+                do
+                {
+                    iddonhang = "DH" + (count + 1).ToString("0000");
+                    var dh = db.DonHangs.FirstOrDefault(t => t.IdDonHang == iddonhang);
+                    if (dh != null)
+                        count++;
+                    else break;
+                }
+                while (true);
             }
 
             var donhang = new DonHang
             {
-                IdDonHang = "DH" + (count + 1).ToString("0000"),
+                IdDonHang = iddonhang,
+                
                 NgayDat = DateTime.Now,
                 DiaChiGiao = model.Ho + " " + model.Ten + "/" + model.SoDienThoai+ "/" +  model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
                 TongTien = result.GioHang.Sum(x => x.ThanhTien),

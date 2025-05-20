@@ -216,7 +216,7 @@
             var currentPage = 1; // Reset về trang đầu khi lọc
 
             var url = '@Url.Action("Index", "AdminDonHangs")' + '?';
-
+            //dựa theo gì để truyền đúng biến?
             if (currentSearch)
                 url += 'searchString=' + encodeURIComponent(currentSearch) + '&';
             if (trangthai)

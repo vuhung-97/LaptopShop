@@ -5,7 +5,7 @@
 }
 
 <!-- Cart Start -->
-<div class="container-fluid py-5">
+<div class="container py-5">
     <div class="container">
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
             <span class="bg-secondary pr-3">Giỏ hàng của bạn</span>
@@ -14,15 +14,15 @@
         <div class="row px-xl-5">
             @if (Model != null && Model.Any())
             {
-                <div class="col-lg-8 mb-5">
+                <div class="col-lg-12 mb-5">
                     <div class="card border-0 shadow-sm mb-4">
                         <div class="card-body p-0">
                             <table class="table mb-0 table-fixed">
                                 <thead class="bg-primary text-white">
                                     <tr>
-                                        <th class="py-3 pl-4" style="width: 30%;">Sản phẩm</th>
-                                        <th class="py-3 text-center" style="width: 25%;">Đơn giá</th>
-                                        <th class="py-3 text-center" style="width: 10%;">Số lượng</th>
+                                        <th class="py-3 pl-4" style="width: 25%;">Sản phẩm</th>
+                                        <th class="py-3 text-center" style="width: 20%;">Đơn giá</th>
+                                        <th class="py-3 text-center" style="width: 20%;">Số lượng</th>
                                         <th class="py-3 text-center" style="width: 25%;">Thành tiền</th>
                                         <th class="py-3 text-center" style="width: 10%;"></th>
                                     </tr>
@@ -32,7 +32,7 @@
                                     {
                                         <tr>
                                             <td class="py-3 pl-4">
-                                                <div class="d-flex align-items-center">
+                                                <div class="d-flex align-items-center" data-id="@item.Id">
                                                     <div class="mr-3">
                                                         <img src="~/Hinh/Laptop/@item.Hinh" alt="@item.Name"
                                                              class="img-fluid rounded" style="min-width: 80px; height: 80px; object-fit: cover;">
@@ -49,9 +49,20 @@
                                                 <span class="font-weight-medium" data-price="@item.Price">@string.Format("{0:N0}", item.Price) VNĐ</span>
                                             </td>
                                             <td class="py-3 text-center align-middle">
-                                                <div class="quantity mx-auto">
-                                                    <label class="form-control form-control-sm text-center border-0 quantity-input">@item.Amount</label>
+                                                <div class="input-group quantity mr-3">
+                                                    <div class="input-group-btn">
+                                                        <button class="btn btn-primary btn-minus" type="button">
+                                                            <i class="fa fa-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="text" class="form-control bg-secondary border-0 text-center quantity-input" value="@item.Amount" name="soluong">
+                                                    <div class="input-group-btn">
+                                                        <button class="btn btn-primary btn-plus" type="button">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
+                                                <button href="#" class="btn btn-success btn-update" data-id="@item.Id">Cập nhật</button>                                                
                                             </td>
                                             <td class="py-3 text-center align-middle">
                                                 <span class="font-weight-bold text-primary thanh-tien">@string.Format("{0:N0}", item.ThanhTien) VNĐ</span>
@@ -73,21 +84,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-header bg-primary text-white py-3">
-                            <h5 class="mb-0">Mã giảm giá</h5>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Nhập mã giảm giá">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary">Áp dụng</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="col-lg-6">
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-primary text-white py-3">
                             <h5 class="mb-0">Thông tin đơn hàng</h5>
@@ -132,3 +129,61 @@
         white-space: nowrap;
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const minQuantity = 1;
+
+        // Duyệt tất cả các nhóm sản phẩm
+        document.querySelectorAll('.quantity').forEach(group => {
+            const input = group.querySelector('.quantity-input');
+            const btnMinus = group.querySelector('.btn-minus');
+            const btnPlus = group.querySelector('.btn-plus');
+
+            // Ví dụ: gán maxQuantity là 10 tạm thời hoặc bạn có thể gắn `data-max="10"` vào group
+            const maxQuantity = 10; // hoặc parseInt(group.dataset.max)
+
+            function updateButtonStates() {
+                const value = parseInt(input.value) || minQuantity;
+                btnMinus.disabled = value <= minQuantity;
+                btnPlus.disabled = value >= maxQuantity;
+
+                btnMinus.classList.toggle('opacity-50', btnMinus.disabled);
+                btnPlus.classList.toggle('opacity-50', btnPlus.disabled);
+            }
+
+            btnMinus.addEventListener('click', function () {
+                let value = parseInt(input.value) || minQuantity;
+                updateButtonStates();
+            });
+
+            btnPlus.addEventListener('click', function () {
+                let value = parseInt(input.value) || minQuantity;
+                updateButtonStates();
+            });
+
+            input.addEventListener('input', function () {
+                let value = parseInt(input.value);
+                if (isNaN(value) || value < minQuantity) input.value = minQuantity;
+                else if (value > maxQuantity) input.value = maxQuantity;
+                updateButtonStates();
+            });
+
+            // Khởi tạo
+            updateButtonStates();
+        });
+
+        document.querySelectorAll('.btn-update').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const container = button.closest('td');
+                const input = container.querySelector('.quantity-input');
+                const quantity = input.value;
+                const id = button.dataset.id;
+
+                // Chuyển hướng thủ công
+                window.location.href = `/ShoppingCart/UpdateQuantity?idlaptop=${id}&soluong=${quantity}`;
+            });
+        });
+    });
+</script>

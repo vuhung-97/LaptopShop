@@ -15,7 +15,15 @@
                     <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-search"></i></a>
                 </div>
                 <!-- Sale Badge if needed -->
-                <div class="sale-badge">-30%</div>
+                    @if (item.SoLuong > 0)
+                    {
+                        <div class="sale-badge">-30%</div>
+                        //<div class="sale-badge">Còn hàng</div>
+                    }
+                    else
+                    {
+                        <div class="sale-badge">Hết hàng</div>
+                    }
             </div>
 
             <!-- Product Details -->
@@ -26,19 +34,10 @@
                 <!-- Price Section -->
                 <div class="current-price">
                     <span class="current-price">@string.Format("{0:N0}", item.GiaBan) VNĐ</span><br />
-                    <span class="original-price">@string.Format("{0:N0}", item.GiaBan * 130 / 100) VNĐ</span>
-                </div>
-
-                <!-- Ratings -->
-                <div class="product-rating">
-                    <div class="stars">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
-                    <span class="rating-count">(99)</span>
+                    @if(item.SoLuong > 0)
+                    {
+                        <span class="original-price">@string.Format("{0:N0}", item.GiaBan * 130 / 100) VNĐ</span>
+                    }                    
                 </div>
             </div>
         </div>

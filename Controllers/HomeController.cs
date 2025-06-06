@@ -28,6 +28,7 @@ namespace LaptopShop.Controllers
                 IdLaptop = p.IdLaptop,
                 TenLapTop = p.TenLapTop,
                 GiaBan = p.GiaBan ?? 0,
+                SoLuong = p.SoLuong ?? 0,
                 HinhAnh = p.HinhAnh,
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
                 TenLoai = p.IdLoaiNavigation.TenLoai
@@ -38,6 +39,7 @@ namespace LaptopShop.Controllers
                 IdLaptop = p.IdLaptop,
                 TenLapTop = p.TenLapTop,
                 GiaBan = p.GiaBan,
+                SoLuong = p.SoLuong,
                 HinhAnh = p.HinhAnh?.Split(",").FirstOrDefault(),
                 ThuongHieu = p.ThuongHieu,
                 TenLoai = p.TenLoai

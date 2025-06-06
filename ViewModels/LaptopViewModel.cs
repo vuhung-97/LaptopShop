@@ -12,6 +12,8 @@ namespace LaptopShop.ViewModels
 
         public double GiaBan { get; set; }
 
+        public int SoLuong { get; set; }
+
         public string? HinhAnh { get; set; }
 
         public string? TenLoai { get; set; }

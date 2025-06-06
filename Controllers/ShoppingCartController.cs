@@ -23,11 +23,14 @@ namespace LaptopShop.Controllers
             Add(idlaptop, soluong);
             return RedirectToAction("Index", "Shop");
         }
+
+
         public IActionResult AddToCartInHome(string idlaptop, int soluong = 1)
         {
             Add(idlaptop, soluong);
             return RedirectToAction("Index", "Home");
         }
+
         public IActionResult AddToCartAndShow(string idlaptop, int soluong = 1)
         {
             Add(idlaptop, soluong);
@@ -50,7 +53,8 @@ namespace LaptopShop.Controllers
                         Name = temp.TenLapTop,
                         Hinh = temp.HinhAnh?.Split(",").FirstOrDefault(),
                         Price = temp.GiaBan ?? 0,
-                        Amount = soluong
+                        Amount = soluong,
+                        Quantity = temp.SoLuong ?? 0
                     };
                     giohang.Add(cart);
                 }
@@ -75,6 +79,22 @@ namespace LaptopShop.Controllers
                 }
             }
             HttpContext.Session.Set(DsTenKey.CART_KEY, giohang);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult UpdateQuantity(string idlaptop, int soluong)
+        {
+            if (soluong < 1) soluong = 1;
+
+            var cart = HttpContext.Session.Get<List<CartViewModel>>(DsTenKey.CART_KEY);
+            var item = cart?.FirstOrDefault(x => x.Id == idlaptop);
+            if (item != null)
+            {
+                item.Amount = soluong;
+                //item.ThanhTien = item.Price * soluong;
+            }
+            HttpContext.Session.Set(DsTenKey.CART_KEY, cart);
+
             return RedirectToAction("Index");
         }
 

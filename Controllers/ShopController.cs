@@ -45,12 +45,18 @@ namespace LaptopShop.Controllers
                 //return RedirectToAction("PageNotFound", "Home");
             }
 
-            var lapop = laptops.Select(p => new LaptopViewModel
+            var laptop = laptops
+                .Include(p=>p.IdThuongHieuNavigation)
+                .Include(p=>p.IdLoaiNavigation)
+                .Include(p=>p.IdThongTinNavigation)
+                .AsEnumerable()
+                .Select(p => new LaptopViewModel
             {
                 IdLaptop = p.IdLaptop,
                 TenLapTop = p.TenLapTop,
                 GiaBan = p.GiaBan ?? 0,
-                HinhAnh = p.HinhAnh,
+                SoLuong = p.SoLuong ?? 0,
+                HinhAnh = p.HinhAnh.Split(",").FirstOrDefault(),
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
                 TenLoai = p.IdLoaiNavigation.TenLoai,
                 Cpu = p.IdThongTinNavigation.Cpu,
@@ -59,30 +65,16 @@ namespace LaptopShop.Controllers
                 ManHinh = p.IdThongTinNavigation.ManHinh
             });
 
-            var lap = lapop.AsEnumerable().Select(p => new LaptopViewModel
-            {
-                IdLaptop = p.IdLaptop,
-                TenLapTop = p.TenLapTop,
-                GiaBan = p.GiaBan,
-                HinhAnh = p.HinhAnh?.Split(",").FirstOrDefault(),
-                ThuongHieu = p.ThuongHieu,
-                TenLoai = p.TenLoai,
-                Cpu = p.Cpu,
-                Ram = p.Ram,
-                Ocung = p.Ocung,
-                ManHinh = p.ManHinh
-            });
-
             if (sapxeptang == true)
             {
-                lap = lap.OrderBy(p => p.GiaBan);
+                laptop = laptop.OrderBy(p => p.GiaBan);
             }
             else if (sapxeptang == false)
             {
-                lap = lap.OrderByDescending(p => p.GiaBan);
+                laptop = laptop.OrderByDescending(p => p.GiaBan);
             }
 
-            return View(lap.ToList());
+            return View(laptop.ToList());
         }
 
         public IActionResult Search(string? query)
@@ -99,12 +91,17 @@ namespace LaptopShop.Controllers
                 return RedirectToAction("PageNotFound", "Home");
             }
 
-            var result = laptops.Select(p => new LaptopViewModel
+            var result = laptops
+                .Include(p=>p.IdThuongHieuNavigation)
+                .Include(p=> p.IdLoaiNavigation)
+                .Include(p => p.IdThongTinNavigation)
+                .AsEnumerable().Select(p => new LaptopViewModel
             {
                 IdLaptop = p.IdLaptop,
                 TenLapTop = p.TenLapTop,
                 GiaBan = p.GiaBan ?? 0,
-                HinhAnh = p.HinhAnh,
+                HinhAnh = p.HinhAnh?.Split(',').FirstOrDefault(),
+                SoLuong = p.SoLuong ?? 0,
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
                 TenLoai = p.IdLoaiNavigation.TenLoai,
                 Cpu = p.IdThongTinNavigation.Cpu,
@@ -128,7 +125,8 @@ namespace LaptopShop.Controllers
                 IdLaptop = lt.IdLaptop,
                 TenLapTop = lt.TenLapTop,
                 GiaBan = lt.GiaBan ?? 0,
-                HinhAnh = lt.HinhAnh,
+                SoLuong = lt.SoLuong ?? 0,
+                HinhAnh = lt.HinhAnh?.Split(',').FirstOrDefault(),
                 ThuongHieu = lt.IdThuongHieuNavigation.TenThuongHieu,
                 TenLoai = lt.IdLoaiNavigation.TenLoai
             };
@@ -165,6 +163,7 @@ namespace LaptopShop.Controllers
                 TenLapTop = p.TenLapTop,
                 GiaBan = p.GiaBan ?? 0,
                 HinhAnh = p.HinhAnh,
+                SoLuong = p.SoLuong ?? 0,
                 ThuongHieu = p.IdThuongHieuNavigation.TenThuongHieu,
                 TenLoai = p.IdLoaiNavigation.TenLoai,
                 Cpu = p.IdThongTinNavigation.Cpu,

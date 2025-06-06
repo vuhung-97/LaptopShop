@@ -1,252 +1,203 @@
 ﻿@model IEnumerable<LaptopShop.ViewModels.LaptopViewModel>
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
 
 @foreach (var item in Model)
 {
-    <div class="col-lg-4 col-md-6 col-sm-6 mb-4" data-product-id="@item.IdLaptop" data-price="@item.GiaBan">
-        <div class="product-card-wrapper">
-            <!-- Product Image with Overlay Effects -->
-            <div class="product-img-container">
-                    
-                <img class="product-img" style="height:400px;" src="~/Hinh/Laptop/@item.HinhAnh" alt="@item.TenLapTop">
-                <!-- Quick Action Buttons -->
-                <div class="product-actions">
-                    <a asp-action="AddToListHeart" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-heart"></i></a>
-                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="action-btn"><i class="fa fa-shopping-cart"></i></a>
-                    <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop = "@item.IdLaptop" class="action-btn"><i class="fa fa-search"></i></a>
+    <div class="col-lg-4 col-md-6 mb-4" data-product-id="@item.IdLaptop" data-price="@item.GiaBan">
+        <div class="product-card">
+            <div class="product-image-wrapper">
+                <img src="~/Hinh/Laptop/@item.HinhAnh" alt="@item.TenLapTop">
+                <div class="status-badge @(item.SoLuong > 0 ? "sale" : "out")">
+                    @(item.SoLuong > 0 ? "GIẢM 30%" : "HẾT HÀNG")
                 </div>
-                <!-- Sale Badge if needed -->
-                <div class="sale-badge">-30%</div>
+                <div class="action-overlay">
+                    <a asp-action="AddToListHeart" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" title="Yêu thích">
+                        <i class="fa fa-heart"></i>
+                    </a>
+                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" title="Thêm vào giỏ">
+                        <i class="fa fa-shopping-cart"></i>
+                    </a>
+                    <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" title="Xem chi tiết">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                </div>
             </div>
-
-            <!-- Product Details -->
-            <div class="product-info">
+            <div class="product-content">
                 <div class="product-category">@item.TenLoai</div>
-                <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="product-name"><h5>@item.TenLapTop</h5></a>
-                <p>@item.Cpu,   @item.Ram,   @item.Ocung,   @item.Ocung</p>
-                <!-- Price Section -->
-                <div class="product-price">
-                    <span class="current-price">@string.Format("{0:N0}", item.GiaBan) VNĐ</span>
-                    <span class="original-price">@string.Format("{0:N0}", item.GiaBan * 130 / 100) VNĐ</span>
+                <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="product-title">@item.TenLapTop</a>
+                <div class="product-specs">@item.Cpu • @item.Ram • @item.Ocung</div>
+                <div class="price">
+                    <span>@string.Format("{0:N0}", item.GiaBan) ₫</span>
+                    @if (item.SoLuong > 0)
+                    {
+                        <small class="old">@string.Format("{0:N0}", item.GiaBan * 130 / 100) ₫</small>
+                        <span class="discount">-30%</span>
+                    }
                 </div>
-
-                <!-- Ratings -->
-                <div class="product-rating">
-                    <div class="stars">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
-                    <span class="rating-count">(99)</span>
-                </div>
+                @if (item.SoLuong > 0)
+                {
+                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="btn-add">
+                        <i class="fa fa-shopping-cart"></i> Thêm
+                    </a>
+                }
+                else
+                {
+                    <button class="btn-add disabled" disabled><i class="fa fa-ban"></i> Hết hàng</button>
+                }
             </div>
         </div>
     </div>
 }
-
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-
-        // Hiệu ứng hover cho sản phẩm
-        $('.product-card').hover(
-            function() {
-                $(this).addClass('shadow');
-                $(this).find('.product-action').fadeIn(300);
-            },
-            function() {
-                $(this).removeClass('shadow');
-                $(this).find('.product-action').fadeOut(300);
-            }
-        );
-
-        // Giới hạn tiêu đề sản phẩm
-        $('.product-title').each(function() {
-            var text = $(this).text();
-            if (text.length > 40) {
-                $(this).text(text.substring(0, 40) + '...');
-            }
-        });
-    });
-</script>
-
 <style>
     .product-card {
-        transition: all 0.3s ease;
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        transition: .3s ease;
+        display: flex;
+        flex-direction: column;
     }
 
         .product-card:hover {
             transform: translateY(-5px);
         }
 
-    .product-action {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 10px 0;
-        display: none;
-    }
-
-    .object-fit-cover {
-        object-fit: cover;
-    }
-
-    .product-badge {
-        font-size: 0.8rem;
-        font-weight: 500;
-    }
-
-    .product-item {
-        transition: all 0.3s ease;
-    }
-
-    .product-card-wrapper {
-        background-color: #fff;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .product-card-wrapper:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
-        }
-
-    .product-img-container {
+    .product-image-wrapper {
         position: relative;
+        height: 200px;
         overflow: hidden;
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
     }
 
-    .product-img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
-
-    .product-img-container:hover .product-img {
-        transform: scale(1.08);
-    }
-
-    .product-actions {
-        position: absolute;
-        bottom: -50px;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        padding: 10px 0;
-        background: rgba(255, 255, 255, 0.9);
-        transition: bottom 0.3s ease;
-    }
-
-    .product-img-container:hover .product-actions {
-        bottom: 0;
-    }
-
-    .action-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: #fff;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-        .action-btn:hover {
-            background: #007bff;
-            color: white;
+        .product-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-    .sale-badge {
+    .status-badge {
         position: absolute;
         top: 10px;
-        right: 10px;
-        background: #ff6b6b;
-        color: white;
-        padding: 2px 8px;
+        left: 10px;
+        padding: 4px 8px;
         border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
+        font-size: 11px;
+        color: #fff;
     }
 
-    .product-info {
-        padding: 18px 15px;
-        text-align: center;
+        .status-badge.sale {
+            background: #e74c3c;
+        }
+
+        .status-badge.out {
+            background: #7f8c8d;
+        }
+
+    .action-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: .3s;
+    }
+
+    .product-card:hover .action-overlay {
+        opacity: 1;
+    }
+
+    .action-overlay a {
+        color: #fff;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+        padding: 10px;
+        font-size: 16px;
+        transition: .3s;
+    }
+
+        .action-overlay a:hover {
+            background: #3498db;
+        }
+
+    .product-content {
+        padding: 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .product-category {
-        color: #6c757d;
-        font-size: 13px;
-        margin-bottom: 6px;
+        font-size: 11px;
+        color: #888;
+        margin-bottom: 5px;
+        text-transform: uppercase;
     }
 
-    .product-name {
-        display: block;
-        color: #343a40;
-        font-weight: 600;
+    .product-title {
         font-size: 15px;
+        font-weight: bold;
+        color: #333;
         text-decoration: none;
-        margin-bottom: 12px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        transition: color 0.2s ease;
+        margin-bottom: 8px;
+        display: block;
     }
 
-        .product-name:hover {
-            color: #007bff;
-        }
+    .product-specs {
+        font-size: 13px;
+        color: #777;
+        margin-bottom: 12px;
+    }
 
-    .product-price {
+    .price {
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 10px;
+        gap: 6px;
+        font-weight: bold;
         margin-bottom: 10px;
     }
 
-    .current-price {
-        color: #343a40;
-        font-size: 18px;
-        font-weight: 700;
+        .price .old {
+            color: #aaa;
+            text-decoration: line-through;
+            font-size: 13px;
+        }
+
+        .price .discount {
+            background: #e74c3c;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
+    .btn-add {
+        background: #007bff;
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+        padding: 8px;
+        border-radius: 8px;
+        display: block;
+        font-size: 13px;
+        transition: .3s;
     }
 
-    .original-price {
-        color: #adb5bd;
-        font-size: 14px;
-        text-decoration: line-through;
-    }
+        .btn-add:hover {
+            background: #0056b3;
+        }
 
-    .product-rating {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-    }
-
-    .stars {
-        color: #ffc107;
-        letter-spacing: 2px;
-    }
-
-    .rating-count {
-        font-size: 12px;
-        color: #6c757d;
-    }
+        .btn-add.disabled {
+            background: #888;
+            cursor: not-allowed;
+        }
 </style>
+<script>
+    // Tự động cắt tiêu đề nếu dài > 45 ký tự
+    $('.product-title').each(function () {
+        if ($(this).text().length > 45) {
+            $(this).text($(this).text().substring(0, 45) + '...');
+        }
+    });
+</script>

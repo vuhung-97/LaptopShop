@@ -61,7 +61,7 @@ namespace LaptopShop.Controllers
             }
             else
             {
-                laptop.Amount = soluong;
+                laptop.Amount += soluong;
             }
             HttpContext.Session.Set(DsTenKey.CART_KEY, giohang);
         }

@@ -28,9 +28,9 @@ namespace LaptopShop.Controllers
         }
 
         [HttpPost]
-        public IActionResult DatHang(CheckoutViewModel Model)
+        public IActionResult DatHang(OrderInfoViewModel Model)
         {
-            var model = Model.ThongTinKhachHang;            
+            var model = Model;            
             var ListCart = HttpContext.Session.Get(DsTenKey.CART_KEY);
             var lstCart = new List<CartViewModel>();
 

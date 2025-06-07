@@ -7,6 +7,9 @@
 }
 
 <style>
+   
+
+
     /* Đảm bảo chiều cao card bằng nhau */
     .card-equal-height {
     display: flex;
@@ -67,7 +70,7 @@
 
     /* Các card-header trong các thẻ card */
     .card-header h1 {
-    font-size: 1.25rem;
+    font-size: 2rem;
     font-weight: 600;
     margin: 0;
     }
@@ -79,13 +82,13 @@
 
     /* Chỉnh sửa kích thước chữ của các con số */
     .card-body .display-4 {
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: bold;
     }
 
     /* Các thẻ p trong card-body */
     .card-body p {
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: #f8f9fa;
     }
 
@@ -98,7 +101,7 @@
 
     /* Chỉnh sửa cho phần bên trái (col-5) có số lớn hơn */
     .card-body .col-5 h2.display-4 {
-    font-size: 3rem; /* Tăng kích thước chữ số lên (ví dụ: 4rem) */
+    font-size: 2rem; /* Tăng kích thước chữ số lên (ví dụ: 4rem) */
     font-weight: bold;
     align-items: flex-start; /* Căn trái */
     }
@@ -171,12 +174,14 @@
     }
 
 </style>
-<div class="row">
+<div class="row align-items-stretch">
     <!-- Tổng số laptop -->
-    <div class="col-md-3">
-        <a asp-area="Admin" asp-controller="AdminLaptops" asp-action="Index" class="text-decoration-none text-white">
-            <div class="card text-white bg-primary mb-3 card-equal-height">
-                <div class="card-header"><h1><i class="fa fa-laptop"></i> Laptop</h1></div>
+    <div class="col-md-3 mb-3 d-flex ">
+        <a asp-area="Admin" asp-controller="AdminLaptops" asp-action="Index" class="text-decoration-none text-white w-100">
+            <div class="card card-equal-height text-white bg-primary mb-3 w-100 h-100">
+                <div class="card-header">
+                    <h1><i class="fa fa-laptop"></i> Laptop</h1>
+                    </div>
                 <div class="card-body">
                     <div class="row">
                         <!-- Bên trái: Tổng số -->
@@ -185,9 +190,10 @@
                         </div>
                         <!-- Bên phải: Chi tiết -->
                         <div class="col-7">
-                            <p class="mb-1">Tổng số: <strong>@Model.TongSoLuongLaptop</strong></p>
-                            <p class="mb-1">Laptop còn hàng: <strong>@Model.SoLuongConHang</strong></p>
-                            <p class="mb-0">Laptop hết hàng: <strong>@Model.SoLuongHetHang</strong></p>
+                            
+                            <p class="mb-1">Còn hàng: <strong>@Model.SoLuongConHang</strong></p>
+                            <p class="mb-0">Hết hàng: <strong>@Model.SoLuongHetHang</strong></p>
+                            <p class="mb-1">Tồn kho: <strong>@Model.TongSoLuongLaptop</strong></p>
                         </div>
                     </div>
                 </div>
@@ -196,9 +202,9 @@
     </div>
 
     <!-- Tổng số đơn hàng -->
-    <div class="col-md-3">
-        <a asp-area="Admin" asp-controller="AdminDonHangs" asp-action="Index" class="text-decoration-none text-white">
-            <div class="card text-white bg-success mb-3 card-equal-height don-hang-card">
+    <div class="col-md-3 mb-3 d-flex">
+        <a asp-area="Admin" asp-controller="AdminDonHangs" asp-action="Index" class="text-decoration-none text-white w-100">
+            <div class="card card-equal-height text-white bg-success mb-3 don-hang-card w-100 h-100">
                 <div class="card-header"> <h1><i class="fa fa-archive"></i> Đơn hàng</h1></div>
                 <div class="card-body">
                     <div class="row">
@@ -225,16 +231,36 @@
         </a>
     </div>
 
-    <!-- Doanh thu tháng hiện tại -->
-    <div class="col-md-3">
-        <a  class="text-decoration-none text-white">
-            <div class="card text-white bg-warning mb-3 card-equal-height">
+    <!-- Doanh thu  -->
+    <div class="col-md-3 mb-3 d-flex">
+        <a class="text-decoration-none text-white w-100">
+            <div class="card card-equal-height text-white bg-warning mb-3 w-100 h-100">
                 <div class="card-header"><h1> <i class="fa fa-money"></i> Doanh thu </h1></div>
                 <div class="card-body">
                     <div class="row">
+                        @{
+                            double doanhThu = Model.DoanhThuThangHienTai;
+                            string hienThi;
+
+                            if (doanhThu >= 1_000_000_000)
+                            {
+                                hienThi = (doanhThu / 1000000000).ToString("N0") + " tỷ";
+                            }
+                            else if (doanhThu >= 1_000_000)
+                            {
+                                hienThi = (doanhThu / 1000000).ToString("N0") + " triệu";
+                            }
+                            else
+                            {
+                                hienThi = doanhThu.ToString("N0");
+                            }
+                        }
                         <div class="d-flex align-items-center">
-                            <h2 class="display-4 mb-0" style="font-size: 3rem; word-break: break-word; white-space: normal; overflow-wrap: break-word;">@Model.DoanhThuThangHienTai.ToString("N0") <i class="fa fa-money"></i></h2>
+                            <h2 class="display-4 mb-0 text-shrink" style="font-size: 2rem; word-break: break-word; white-space: normal; overflow-wrap: break-word;">
+                                <i class="fa fa-money"></i> @hienThi
+                            </h2>
                         </div>
+
                         
                     </div>
                 </div>
@@ -243,9 +269,9 @@
     </div>
 
     <!-- Tổng số tài khoản -->
-    <div class="col-md-3">
-        <a asp-area="Admin" asp-controller="AdminTaiKhoans" asp-action="Index" class="text-decoration-none text-white">
-            <div class="card text-white bg-danger mb-3 card-equal-height">
+    <div class="col-md-3 mb-3 d-flex">
+        <a asp-area="Admin" asp-controller="AdminTaiKhoans" asp-action="Index" class="text-decoration-none text-white w-100">
+            <div class="card card-equal-height text-white bg-danger mb-3 w-100 h-100 ">
                 <div class="card-header"><h1> <i class="fa fa-users"></i> Tài khoản</h1></div>
                 <div class="card-body">
                     <div class="row">
@@ -273,20 +299,22 @@
 
 <!--Biểu đồ-->
 
-<div style="display: flex;">
+<div class="row">
     <!-- Biểu đồ thống kê -->
-    <div style="flex: 1;">
+    <div class="col-md-8 mb-3">
         <form asp-action="Index" method="get" class="mb-4">
             <label>Từ ngày: <input type="date" name="fromDate" value="@ViewBag.TuNgay" /></label>
             <label>Đến ngày: <input type="date" name="toDate" value="@ViewBag.DenNgay" /></label>
             <button type="submit" class="btn btn-sm btn-primary">Thống kê</button>
         </form>
 
-        <canvas id="thongKeTheoNgay" width="1100" height="600"></canvas>
+        <div style="width: 100%; overflow-x: auto;">
+            <canvas id="thongKeTheoNgay" style="width:100%; height:400px;"></canvas>
+        </div>
     </div>
 
     <!-- Danh sách 5 laptop bán chạy nhất -->
-    <div style="flex: 1; margin-left: 30px;">
+    <div class="col-md-4 mb-3">
         <h4>Laptop bán chạy nhất</h4>
         @if (ViewBag.NoLaptopSales != null)
         {
@@ -296,15 +324,14 @@
         }
         else
         {
-            <!-- Hiển thị bảng laptop bán chạy -->
             <div class="table-container">
-                <table class="table" >
-                    <thead >
+                <table class="table table-bordered table-sm">
+                    <thead>
                         <tr>
-                            <th style="width:10%;text-align: center">STT</th>
-                            <th style="width:40%;text-align: center">Tên laptop</th>
-                            <th style="width:20%;text-align: center">Số lượng</th>
-                            <th style="width:30%;text-align: center">Doanh thu</th>
+                            <th style="text-align: center">STT</th>
+                            <th style="text-align: center">Tên laptop</th>
+                            <th style="text-align: center">Số lượng</th>
+                            <th style="text-align: center">Doanh thu</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -317,7 +344,9 @@
                                 <td style="text-align: center">@stt</td>
                                 <td style="text-align: center">@laptop.Ten</td>
                                 <td style="text-align: center">@laptop.SoLuong</td>
-                                <td style="text-align: center">@laptop.DoanhThu VND</td>
+                                <td style="text-align: center">
+                                    @String.Format("{0:N0}", laptop.DoanhThu) VND
+                                </td>
                             </tr>
                             stt++;
                         }
@@ -325,9 +354,9 @@
                 </table>
             </div>
         }
-
     </div>
 </div>
+
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

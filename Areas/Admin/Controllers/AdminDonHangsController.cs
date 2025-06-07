@@ -113,6 +113,11 @@ namespace LaptopShop.Areas.Admin.Controllers
                         break;
                 }
             }
+            else
+            {
+                // Mặc định nếu không chọn cột sắp xếp
+                donhangsQuery = donhangsQuery.OrderByDescending(l => l.NgayDat);
+            }
 
             // Phân trang
             int pageSize = 5;
@@ -123,7 +128,22 @@ namespace LaptopShop.Areas.Admin.Controllers
             
             var donHangTamList = donhangsPaged.Select(MapDonHangToViewModel).ToList();
 
-
+            switch (sortColumn)
+            {
+                case "HoTen":
+                    donHangTamList = (sortOrder == "asc")
+                        ? donHangTamList.OrderBy(d => d.HoTenNguoiNhan).ToList()
+                        : donHangTamList.OrderByDescending(d => d.HoTenNguoiNhan).ToList();
+                    break;
+                case "DiaChi":
+                    donHangTamList = (sortOrder == "asc")
+                        ? donHangTamList.OrderBy(d => d.DiaChiNguoiNhan).ToList()
+                        : donHangTamList.OrderByDescending(d => d.DiaChiNguoiNhan).ToList();
+                    break;
+                default:
+                    // Giữ nguyên danh sách
+                    break;
+            }
             // Phân trang lại với ViewModel tạm
             var donHangTamPaged = new StaticPagedList<DonHangTam>(
                 donHangTamList, donhangsPaged.GetMetaData()
@@ -206,7 +226,7 @@ namespace LaptopShop.Areas.Admin.Controllers
             if (donHang != null)
             {
                 // Chỉ hoàn lại số lượng nếu đơn hàng chưa bị hủy và chưa được giao
-                if (donHang.TrangThai != "dahuy" && donHang.TrangThai != "dagiao")
+                if (donHang.TrangThai != "DaHuy" && donHang.TrangThai != "DaGiao")
                 {
                     foreach (var ct in donHang.ChiTietDonHangs)
                     {

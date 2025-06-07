@@ -1,12 +1,18 @@
-using LaptopShop.Data;
+﻿using LaptopShop.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<phanquyen>(); //  Gắn filter toàn cục
+});
+
 builder.Services.AddDbContext<ShopLaptopContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("ShopLaptop")));
 builder.Services.AddDistributedMemoryCache();
+
+//bật lưu dữ liệu vào sesion
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
@@ -22,6 +28,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+
+
 app.UseStatusCodePagesWithReExecute("/Home/PageNotFound");
 app.UseHttpsRedirection();
 app.UseStaticFiles();

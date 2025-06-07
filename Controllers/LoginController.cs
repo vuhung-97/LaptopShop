@@ -27,6 +27,8 @@ namespace MyShopApp.Controllers
 
 
             HttpContext.Session.SetString(DsTenKey.USER_NAME_KEY, acc_data.HoTen);
+            // phân quyền
+            HttpContext.Session.SetString("Role", acc_data.Loai);
 
             return RedirectToAction("Index", "Home");
         }

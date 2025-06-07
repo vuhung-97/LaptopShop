@@ -26,7 +26,15 @@ namespace LaptopShop.Areas.Admin.Controllers
         //GET: Admin/AdminLaptops
         public async Task<IActionResult> Index(string searchString, string thuonghieu, int? minPrice, int? maxPrice, int? page, string sortColumn, string sortOrder)
         {
-            ViewData["ThuongHieuList"] = new SelectList(_context.ThuongHieus, "IdThuongHieu", "TenThuongHieu");
+            var thuongHieuList = _context.ThuongHieus
+                .Select(th => new { th.IdThuongHieu, th.TenThuongHieu })
+                 .ToList();
+
+            // Thêm mục "Tất cả" vào đầu danh sách
+            thuongHieuList.Insert(0, new { IdThuongHieu = "", TenThuongHieu = "--Thương hiệu--" });
+
+            ViewData["ThuongHieuList"] = new SelectList(thuongHieuList, "IdThuongHieu", "TenThuongHieu", thuonghieu);
+
             ViewData["searchString"] = searchString;
             ViewData["thuonghieu"] = thuonghieu;
             ViewData["minPrice"] = minPrice;
@@ -50,6 +58,10 @@ namespace LaptopShop.Areas.Admin.Controllers
             if (!string.IsNullOrEmpty(thuonghieu))
             {
                 laptopsQuery = laptopsQuery.Where(l => l.IdThuongHieu.ToString() == thuonghieu);
+            }
+            if (!string.IsNullOrEmpty(thuonghieu))
+            {
+                laptopsQuery = laptopsQuery.Where(l => l.IdThuongHieu == thuonghieu);
             }
 
             if (minPrice.HasValue)
@@ -315,13 +327,13 @@ namespace LaptopShop.Areas.Admin.Controllers
                 .Include(l => l.IdThuongHieuNavigation)
                 .FirstOrDefaultAsync(m => m.IdLaptop == id);
 
-            bool coTrongDonHang = await _context.ChiTietDonHangs.AnyAsync(c => c.IdLaptop == id);
+           
             if (laptop == null)
             {
                 return NotFound();
             }
             
-            ViewBag.CoTrongDonHang = coTrongDonHang;
+           
 
 
             return View(laptop);

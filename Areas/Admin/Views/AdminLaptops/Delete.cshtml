@@ -269,37 +269,26 @@
         <button id="cancelDeleteButton" class="modal-button modal-button-cancel">Hủy</button>
     </div>
 </div>
-<!-- Modal thông báo lỗi -->
-<div id="errorModal" class="modal" >
-    <div class="modal-content">
-        <h4>Không thể xóa!</br>Thông tin sản phẩm xuất hiện trong các đơn hàng, xin hãy xóa toàn bộ đơn hàng trước!</h4>
-        <button id="cancelerrorButton" class="modal-button modal-button-cancel">Đóng</button>
-    </div>
-</div>
 
-@{
-    var coTrongDonHang = ViewBag.CoTrongDonHang != null && (bool)ViewBag.CoTrongDonHang;
-}
+
 
 <script>
-    var dacoTrongDonHang = @(coTrongDonHang.ToString().ToLower());
+   
     //cho nuts delete
     var deleteModal=document.getElementById("deleteConfirmModal");
-    var errorModal=document.getElementById("errorModal");
+   
 
     var confirmDeleteButton = document.getElementById("confirmDeleteButton");
 
     var cancelDeleteButton = document.getElementById("cancelDeleteButton");
-    var cancelerrorButton = document.getElementById("cancelerrorButton");
+  
 
     var deleteForm = document.getElementById("deleteForm");
 
     function showDeleteConfirmModal() {
-        if(dacoTrongDonHang){
-            errorModal.style.display = "block";
-        } else{
+       
         deleteModal.style.display = "block";
-        }
+       
     }
 
     confirmDeleteButton.onclick = function () {
@@ -309,9 +298,7 @@
     cancelDeleteButton.onclick = function () {
         deleteModal.style.display = "none";
     }
-    cancelerrorButton.onclick = function () {
-        errorModal.style.display = "none";
-    }
+    
 </script>
 
 

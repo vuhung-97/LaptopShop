@@ -120,37 +120,9 @@ namespace LaptopShop.Areas.Admin.Controllers
             var donhangsPaged = donhangsQuery.ToPagedList(pageNumber, pageSize);
 
             // Chuyển sang ViewModel tạm
-            var donHangTamList = new List<DonHangTam>();
-            foreach (var donHang in donhangsPaged)
-            {
-                var model = new DonHangTam
-                {
-                    IdDonHang = donHang.IdDonHang,
-                    NgayDat = donHang.NgayDat,
-                    TongTien = donHang.TongTien,
-                    TrangThai = donHang.TrangThai,
+            
+            var donHangTamList = donhangsPaged.Select(MapDonHangToViewModel).ToList();
 
-                };
-
-                if (donHang.IdTaiKhoanNavigation == null && !string.IsNullOrEmpty(donHang.DiaChiGiao))
-                {
-                    var parts = donHang.DiaChiGiao.Split('/');
-                    if (parts.Length >= 3)
-                    {
-                        model.HoTenNguoiNhan = parts[0].Trim();
-                        model.SoDienThoaiNguoiNhan = parts[1].Trim();
-                        model.DiaChiNguoiNhan = parts[2].Trim();
-                    }
-                }
-                else if (donHang.IdTaiKhoanNavigation != null)
-                {
-                    model.HoTenNguoiNhan = donHang.IdTaiKhoanNavigation.HoTen;
-                    model.SoDienThoaiNguoiNhan = donHang.IdTaiKhoanNavigation.DienThoai;
-                    model.DiaChiNguoiNhan = donHang.IdTaiKhoanNavigation.DiaChi;
-                }
-
-                donHangTamList.Add(model);
-            }
 
             // Phân trang lại với ViewModel tạm
             var donHangTamPaged = new StaticPagedList<DonHangTam>(
@@ -170,21 +142,98 @@ namespace LaptopShop.Areas.Admin.Controllers
                 return NotFound();
 
             var donHang = _context.DonHangs
-    .Include(d => d.IdTaiKhoanNavigation)
-    .Include(d => d.ChiTietDonHangs)
-    .FirstOrDefault(d => d.IdDonHang == id);
+                .Include(d => d.IdTaiKhoanNavigation)
+                .Include(d => d.ChiTietDonHangs)
+                .FirstOrDefault(d => d.IdDonHang == id);
 
 
             if (donHang == null)
                 return NotFound();
 
+            var model = MapDonHangToViewModel(donHang);
+            return View(model);
+
+        }
+
+
+        // GET: Admin/AdminDonHangs/Create
+
+
+        // POST: Admin/AdminDonHangs/trangthai
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult ChuyenTrangThai(string id, string newStatus)
+        {
+            var donHang = _context.DonHangs
+                .Include(d => d.ChiTietDonHangs)
+                .FirstOrDefault(d => d.IdDonHang == id);
+
+            if (donHang != null)
+            {
+                // Nếu chuyển sang "dahuy" và trước đó không phải "dahuy"
+                if (newStatus == "DaHuy" && donHang.TrangThai != "DaHuy")
+                {
+                    foreach (var ct in donHang.ChiTietDonHangs)
+                    {
+                        var laptop = _context.Laptops.FirstOrDefault(l => l.IdLaptop == ct.IdLaptop);
+                        if (laptop != null)
+                        {
+                            laptop.SoLuong += ct.SoLuong;
+                        }
+                    }
+                }
+
+                donHang.TrangThai = newStatus;
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Details", new { id });
+        }
+
+
+        // POST: Admin/AdminDonHangs/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var donHang = await _context.DonHangs
+                .Include(d => d.ChiTietDonHangs)
+                .FirstOrDefaultAsync(d => d.IdDonHang == id);
+
+            if (donHang != null)
+            {
+                // Chỉ hoàn lại số lượng nếu đơn hàng chưa bị hủy và chưa được giao
+                if (donHang.TrangThai != "dahuy" && donHang.TrangThai != "dagiao")
+                {
+                    foreach (var ct in donHang.ChiTietDonHangs)
+                    {
+                        var laptop = await _context.Laptops.FirstOrDefaultAsync(l => l.IdLaptop == ct.IdLaptop);
+                        if (laptop != null)
+                        {
+                            laptop.SoLuong += ct.SoLuong;
+                        }
+                    }
+                }
+
+                _context.DonHangs.Remove(donHang);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        private DonHangTam MapDonHangToViewModel(DonHang donHang)
+        {
             var model = new DonHangTam
             {
                 IdDonHang = donHang.IdDonHang,
                 NgayDat = donHang.NgayDat,
                 TongTien = donHang.TongTien,
                 TrangThai = donHang.TrangThai,
-                ChiTietDonHangs = donHang.ChiTietDonHangs.ToList()
+                ChiTietDonHangs = donHang.ChiTietDonHangs?.ToList() ?? new List<ChiTietDonHang>()
             };
 
             if (donHang.IdTaiKhoanNavigation == null && !string.IsNullOrEmpty(donHang.DiaChiGiao))
@@ -206,46 +255,8 @@ namespace LaptopShop.Areas.Admin.Controllers
                 model.DiaChiNguoiNhan = donHang.IdTaiKhoanNavigation.DiaChi;
             }
 
-            return View(model);
+            return model;
         }
-
-
-        // GET: Admin/AdminDonHangs/Create
-
-
-        // POST: Admin/AdminDonHangs/trangthai
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public IActionResult ChuyenTrangThai(string id, string newStatus)
-        {
-            var donHang = _context.DonHangs.FirstOrDefault(d => d.IdDonHang == id);
-            if (donHang != null)
-            {
-                donHang.TrangThai = newStatus;
-                _context.SaveChanges();
-            }
-            return RedirectToAction("Details", new { id });
-        }
-
-
-        // POST: Admin/AdminDonHangs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var donHang = await _context.DonHangs.FindAsync(id);
-            if (donHang != null)
-            {
-                _context.DonHangs.Remove(donHang);
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-
 
         private bool DonHangExists(string id)
         {

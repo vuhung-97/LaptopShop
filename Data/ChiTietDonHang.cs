@@ -7,7 +7,7 @@ namespace LaptopShop.Data;
 public partial class ChiTietDonHang
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public string IdChiTiet { get; set; } = null!;
+    public string? IdChiTiet { get; set; } = null!;
 
     public string IdDonHang { get; set; } = null!;
 

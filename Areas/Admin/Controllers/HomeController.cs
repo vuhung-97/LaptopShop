@@ -132,36 +132,23 @@ namespace LaptopShop.Areas.Admin.Controllers
 
 
             //tính toán laptop bán chạy
-            var laptopBanChay = _context.DonHangs
-      .Where(d => d.TrangThai == "dagiao" && d.NgayDat >= fromDate && d.NgayDat <= toDate)
-      .SelectMany(d => d.ChiTietDonHangs)
-      .GroupBy(d => d.IdLaptop)
-      .Select(group => new
-      {
-          LaptopId = group.Key,
-          SoLuongBan = group.Sum(g => g.SoLuong),
-          DoanhThu = group.Sum(ct => ct.SoLuong * ct.DonGia)
-      })
-      .OrderByDescending(x => x.SoLuongBan)
-      .Take(5)
-      .ToList();
-
-            // Lấy thông tin chi tiết laptop bán chạy
-            var laptopThongTin = laptopBanChay
-                .Select(l =>
-                {
-                    var laptop = _context.Laptops.FirstOrDefault(lap => lap.IdLaptop == l.LaptopId);
-                    return new LaptopBanChay
-                    {
-                        Ten = laptop?.TenLapTop ?? "Không có laptop bán chạy",  // Giá trị mặc định khi không tìm thấy laptop
-                        SoLuong = l.SoLuongBan,
-                        DoanhThu = (double)l.DoanhThu
-                    };
-                })
-                .ToList();
+            var laptopBanChays = _context.DonHangs
+             .Where(d => d.TrangThai == "dagiao" && d.NgayDat >= fromDate && d.NgayDat <= toDate)
+             .SelectMany(d => d.ChiTietDonHangs)
+             .Where(ct => !string.IsNullOrEmpty(ct.TenLaptop))
+             .GroupBy(ct => ct.TenLaptop)
+             .Select(group => new LaptopBanChay
+             {
+                 Ten = group.Key,
+                 SoLuong = group.Sum(g => g.SoLuong) ?? 0,
+                 DoanhThu = (double)(group.Sum(g => g.SoLuong * g.DonGia) ?? 0)
+             })
+             .OrderByDescending(x => x.SoLuong)
+             .Take(5)
+             .ToList();
 
             // Kiểm tra nếu không có laptop bán chạy
-            if (!laptopThongTin.Any())
+            if (!laptopBanChays.Any())
             {
                 ViewBag.NoLaptopSales = "Không có laptop nào bán được trong khoảng thời gian này.";
             }
@@ -181,7 +168,7 @@ namespace LaptopShop.Areas.Admin.Controllers
                 DoanhThuThangHienTai = doanhThuThang,
                 TongTaiKhoan = (int)tongTaiKhoan,
                 TaiKhoanTheoVaiTro = taiKhoanTheoVaiTro,
-                LaptopBanChay = laptopThongTin
+                LaptopBanChay = laptopBanChays
             };
 
             return View(viewModel);

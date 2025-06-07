@@ -170,14 +170,10 @@ namespace LaptopShop.Areas.Admin.Controllers
                 return NotFound();
 
             var donHang = _context.DonHangs
-                .Include(d => d.IdTaiKhoanNavigation)
-                .Include(d => d.ChiTietDonHangs)
-                    .ThenInclude(ct => ct.IdLaptopNavigation)
-                        .ThenInclude(l => l.IdThuongHieuNavigation)
-                .Include(d => d.ChiTietDonHangs)
-                    .ThenInclude(ct => ct.IdLaptopNavigation)
-                        .ThenInclude(l => l.IdLoaiNavigation)
-                .FirstOrDefault(d => d.IdDonHang == id);
+    .Include(d => d.IdTaiKhoanNavigation)
+    .Include(d => d.ChiTietDonHangs)
+    .FirstOrDefault(d => d.IdDonHang == id);
+
 
             if (donHang == null)
                 return NotFound();
@@ -194,17 +190,19 @@ namespace LaptopShop.Areas.Admin.Controllers
             if (donHang.IdTaiKhoanNavigation == null && !string.IsNullOrEmpty(donHang.DiaChiGiao))
             {
                 var parts = donHang.DiaChiGiao.Split('/');
-                if (parts.Length >= 3)
+                if (parts.Length >= 4)
                 {
                     model.HoTenNguoiNhan = parts[0].Trim();
                     model.SoDienThoaiNguoiNhan = parts[1].Trim();
-                    model.DiaChiNguoiNhan = parts[2].Trim();
+                    model.EmailNguoiNhan = parts[2].Trim();
+                    model.DiaChiNguoiNhan = parts[3].Trim();
                 }
             }
             else if (donHang.IdTaiKhoanNavigation != null)
             {
                 model.HoTenNguoiNhan = donHang.IdTaiKhoanNavigation.HoTen;
                 model.SoDienThoaiNguoiNhan = donHang.IdTaiKhoanNavigation.DienThoai;
+                model.EmailNguoiNhan = donHang.IdTaiKhoanNavigation.Email;
                 model.DiaChiNguoiNhan = donHang.IdTaiKhoanNavigation.DiaChi;
             }
 
@@ -238,23 +236,15 @@ namespace LaptopShop.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var donHang = await _context.DonHangs
-                .Include(d => d.ChiTietDonHangs) // Nạp danh sách chi tiết đơn hàng
-                .FirstOrDefaultAsync(d => d.IdDonHang == id);
-
+            var donHang = await _context.DonHangs.FindAsync(id);
             if (donHang != null)
             {
-                // Xóa toàn bộ chi tiết đơn hàng
-                _context.ChiTietDonHangs.RemoveRange(donHang.ChiTietDonHangs);
-
-                // Xóa đơn hàng
                 _context.DonHangs.Remove(donHang);
-
                 await _context.SaveChangesAsync();
             }
-
             return RedirectToAction(nameof(Index));
         }
+
 
 
         private bool DonHangExists(string id)

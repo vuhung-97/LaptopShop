@@ -122,7 +122,7 @@
 
 
 <div class="container1">
-    <!-- Bảng thông tin cấu hình -->
+    <!-- Bảng thông tin khách hàng -->
     <div class="table-container">
         <table class="table">
             <thead>
@@ -139,6 +139,10 @@
                 <tr>
                     <td>Số điện thoại</td>
                     <td>@Model.SoDienThoaiNguoiNhan</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>@Model.EmailNguoiNhan</td>
                 </tr>
                 <tr>
                     <td>Địa chỉ</td>
@@ -220,7 +224,7 @@
 
     </div>
 
-    <!-- Gallery hình ảnh -->
+    <!-- thông tin đơn hàng -->
     <div class="image-gallery">
         <div class="x_content">
             <div class="row">
@@ -232,7 +236,6 @@
                                     <th style="width: 50px;">STT</th>
                                     <th>Tên Laptop</th>
                                     <th >Thương hiệu</th>
-                                    <th >Dòng Sản Phẩm</th>
                                     <th >Số Lượng</th>
                                     <th >Đơn giá</th>
                                     <th> Thành tiền</th>
@@ -254,9 +257,8 @@
                                     {
                                         <tr>
                                             <td>@stt</td>
-                                            <td>@item.IdLaptopNavigation.TenLapTop</td>
-                                            <td>@item.IdLaptopNavigation.IdThuongHieuNavigation.TenThuongHieu</td>
-                                            <td>@item.IdLaptopNavigation.IdLoaiNavigation.TenLoai</td>
+                                            <td>@item.TenLaptop</td>
+                                            <td>@item.ThuongHieu</td>
                                             <td>@item.SoLuong</td>
                                             <td>
                                                 <span id="donGia_@item.IdLaptop"></span>

@@ -30,14 +30,14 @@ namespace LaptopShop.Controllers
         [HttpPost]
         public IActionResult DatHang(CheckoutViewModel Model)
         {
-            var model = Model.ThongTinKhachHang;            
+            var model = Model.ThongTinKhachHang;
             var ListCart = HttpContext.Session.Get(DsTenKey.CART_KEY);
             var lstCart = new List<CartViewModel>();
 
-            if(ListCart != null)
+            if (ListCart != null)
             {
                 lstCart = JsonSerializer.Deserialize<List<CartViewModel>>(ListCart);
-            }    
+            }
 
             HttpContext.Session.Set(DsTenKey.ORDER_KEY, lstCart);
             HttpContext.Session.Remove(DsTenKey.CART_KEY); // Xóa giỏ hàng sau khi đặt hàng thành công
@@ -47,9 +47,9 @@ namespace LaptopShop.Controllers
             ViewBag.Time = DateTime.Now.ToString("dd/MM/yyyy - hh/mm/ss");
 
             int count = 0;
-            string iddonhang="";
+            string iddonhang = "";
 
-            using(var db = new ShopLaptopContext())
+            using (var db = new ShopLaptopContext())
             {
                 count = db.DonHangs.Count();
                 do
@@ -66,37 +66,45 @@ namespace LaptopShop.Controllers
             var donhang = new DonHang
             {
                 IdDonHang = iddonhang,
-                
+
                 NgayDat = DateTime.Now,
-                DiaChiGiao = model.Ho + " " + model.Ten + "/" + model.SoDienThoai+ "/" + model.Email + "/" +  model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
+                DiaChiGiao = model.Ho + " " + model.Ten + "/" + model.SoDienThoai + "/" + model.Email + "/" + model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
                 TongTien = result.GioHang.Sum(x => x.ThanhTien),
                 TrangThai = "ChoXacNhan"
             };
             using (var db = new ShopLaptopContext())
             {
                 db.DonHangs.Add(donhang);
+
                 foreach (var item in lstCart)
                 {
-                    var chitietdonhang = new ChiTietDonHang
+                    var laptop = db.Laptops
+    .Include(l => l.IdThuongHieuNavigation) // load navigation Thương Hiệu
+    .FirstOrDefault(p => p.IdLaptop == item.Id);
+
+                    if (laptop != null)
                     {
-                        IdDonHang = donhang.IdDonHang,
-                        IdLaptop = item.Id,
-                        SoLuong = item.Amount,
-                        DonGia = item.Price
-                    };
-                    db.ChiTietDonHangs.Add(chitietdonhang);
-                    var laptop = db.Laptops.FirstOrDefault(p => p.IdLaptop == item.Id);
-                    if(laptop != null)
-                    {
+                        var chitietdonhang = new ChiTietDonHang
+                        {
+                            IdDonHang = donhang.IdDonHang,
+                            IdLaptop = item.Id,
+                            TenLaptop = laptop.TenLapTop,   // đúng tên property
+                            ThuongHieu = laptop.IdThuongHieuNavigation?.TenThuongHieu,  // lấy tên thương hiệu từ navigation
+                            SoLuong = item.Amount,
+                            DonGia = item.Price
+                        };
+
+                        db.ChiTietDonHangs.Add(chitietdonhang);
+
                         laptop.SoLuong -= item.Amount;
                     }
                 }
-                db.SaveChanges();
+
+                TempData["Success"] = "Đặt hàng thành công! Thông tin đơn hàng của bạn đã được ghi nhận. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.";
+                SendContact(result, iddonhang);
+                ViewBag.madonhang = iddonhang;
+                return View(result);
             }
-            TempData["Success"] = "Đặt hàng thành công! Thông tin đơn hàng của bạn đã được ghi nhận. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.";
-            SendContact(result, iddonhang);
-            ViewBag.madonhang = iddonhang;
-            return View(result);
         }
 
         public IActionResult ShowOrder()

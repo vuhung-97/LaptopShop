@@ -71,7 +71,7 @@
 <script>
         // Tạo phân trang cho danh sách sản phẩm
     const products = @Html.Raw(Json.Serialize(Model));
-    let productsPerPage = 12; // Mặc định
+    let productsPerPage = 10; // Mặc định
     let currentPage = 1;
     let currentSortOrder = "";
 
@@ -79,7 +79,7 @@
     function displayProducts(page) {
         currentPage = page;
 
-        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
+        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.mb-4');
         const totalProducts = productElements.length;
 
         productElements.forEach((product, index) => {
@@ -98,7 +98,7 @@
 
     // Tạo nút phân trang
     function setupPagination() {
-        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
+        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.mb-4');
         const totalProducts = productElements.length;
         const pageCount = productsPerPage === 0 ? 1 : Math.ceil(totalProducts / productsPerPage);
         const pagination = document.getElementById('pagination');
@@ -181,7 +181,7 @@
 
     // Cập nhật trạng thái phân trang
     function updatePaginationButtons() {
-        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
+        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.mb-4');
         const pageCount = productsPerPage === 0 ? 1 : Math.ceil(productElements.length / productsPerPage);
         const pageItems = document.querySelectorAll('.pagination .page-item');
 
@@ -221,7 +221,7 @@
 
     // Khởi tạo khi trang được tải
     document.addEventListener('DOMContentLoaded', function() {
-        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.col-sm-6');
+        const productElements = document.querySelectorAll('.product-list .col-lg-4.col-md-6.mb-4');
         productElements.forEach(product => {
             product.style.display = 'block';
         });

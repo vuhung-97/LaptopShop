@@ -68,7 +68,7 @@ namespace LaptopShop.Controllers
                 IdDonHang = iddonhang,
                 
                 NgayDat = DateTime.Now,
-                DiaChiGiao = model.Ho + " " + model.Ten + "/" + model.SoDienThoai+ "/" +  model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
+                DiaChiGiao = model.Ho + " " + model.Ten + "/" + model.SoDienThoai+ "/" + model.Email + "/" +  model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
                 TongTien = result.GioHang.Sum(x => x.ThanhTien),
                 TrangThai = "ChoXacNhan"
             };

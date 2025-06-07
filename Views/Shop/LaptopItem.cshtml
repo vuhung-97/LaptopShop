@@ -7,19 +7,22 @@
             <div class="product-image-wrapper">
                 <img src="~/Hinh/Laptop/@item.HinhAnh" alt="@item.TenLapTop">
                 <div class="status-badge @(item.SoLuong > 0 ? "sale" : "out")">
-                    @(item.SoLuong > 0 ? "GIẢM 30%" : "HẾT HÀNG")
+                    @(item.SoLuong > 0 ? "CÒN HÀNG" : "HẾT HÀNG")
                 </div>
-                <div class="action-overlay">
-                    <a asp-action="AddToListHeart" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" title="Yêu thích">
-                        <i class="fa fa-heart"></i>
-                    </a>
-                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" title="Thêm vào giỏ">
-                        <i class="fa fa-shopping-cart"></i>
-                    </a>
-                    <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" title="Xem chi tiết">
-                        <i class="fa fa-eye"></i>
-                    </a>
-                </div>
+                @if(item.SoLuong > 0)
+                {
+                    <div class="action-overlay">
+                        <a asp-action="AddToListHeart" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" class="action-btn heart-btn" title="Yêu thích">
+                            <i class="fa fa-heart"></i>
+                        </a>
+                        <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="action-btn cart-btn-in-shop" title="Thêm vào giỏ">
+                            <i class="fa fa-shopping-cart"></i>
+                        </a>
+                        <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="action-btn view-btn" title="Xem chi tiết">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </div>
+                }
             </div>
             <div class="product-content">
                 <div class="product-category">@item.TenLoai</div>
@@ -110,16 +113,16 @@
 
     .action-overlay a {
         color: #fff;
-        background: rgba(255,255,255,0.1);
+        /* background: rgba(255,255,255,0.1); */
         border-radius: 50%;
         padding: 10px;
         font-size: 16px;
         transition: .3s;
     }
 
-        .action-overlay a:hover {
-            background: #3498db;
-        }
+        /* .action-overlay a:hover { */
+        /*     background: #3498db; */
+        /* } */
 
     .product-content {
         padding: 16px;
@@ -192,6 +195,41 @@
             background: #888;
             cursor: not-allowed;
         }
+
+    .action-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 16px;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .heart-btn {
+        background: rgba(239, 68, 68, 0.9);
+        color: white;
+    }
+
+    .cart-btn-in-shop {
+        background: rgba(34, 197, 94, 0.9);
+        color: white;
+    }
+
+    .view-btn {
+        background: rgba(59, 130, 246, 0.9);
+        color: white;
+    }
+
+    .action-btn:hover {
+        transform: scale(1.15) translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
 </style>
 <script>
     // Tự động cắt tiêu đề nếu dài > 45 ký tự

@@ -37,10 +37,14 @@ public partial class ShopLaptopContext : DbContext
     {
         modelBuilder.Entity<ChiTietDonHang>(entity =>
         {
-            entity.HasKey(e => new { e.IdDonHang, e.IdLaptop }).HasName("PK__ChiTietD__2470A5983478ED0C");
+            entity.HasKey(e => e.IdChiTiet).HasName("PK__ChiTietD__1EF2F70530DADEEF");
 
-            entity.ToTable("ChiTietDonHang");
+            entity.ToTable("ChiTietDonHang", tb => tb.HasTrigger("trg_Insert_ChiTietDonHang"));
 
+            entity.Property(e => e.IdChiTiet)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("ID_ChiTiet");
             entity.Property(e => e.IdDonHang)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -49,23 +53,19 @@ public partial class ShopLaptopContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("ID_Laptop");
+            entity.Property(e => e.TenLaptop).HasMaxLength(255);
+            entity.Property(e => e.ThuongHieu).HasMaxLength(255);
 
             entity.HasOne(d => d.IdDonHangNavigation).WithMany(p => p.ChiTietDonHangs)
                 .HasForeignKey(d => d.IdDonHang)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ChiTietDo__ID_Do__4E88ABD4");
-
-            entity.HasOne(d => d.IdLaptopNavigation).WithMany(p => p.ChiTietDonHangs)
-                .HasForeignKey(d => d.IdLaptop)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ChiTietDonHang_Laptop");
+                .HasConstraintName("FK_ChiTietDonHang_DonHang");
         });
 
         modelBuilder.Entity<DonHang>(entity =>
         {
             entity.HasKey(e => e.IdDonHang);
 
-            entity.ToTable("DonHang", tb => tb.HasTrigger("trg_ThemDonHang"));
+            entity.ToTable("DonHang");
 
             entity.Property(e => e.IdDonHang)
                 .HasMaxLength(50)
@@ -116,20 +116,20 @@ public partial class ShopLaptopContext : DbContext
 
             entity.HasOne(d => d.IdLoaiNavigation).WithMany(p => p.Laptops)
                 .HasForeignKey(d => d.IdLoai)
-                .HasConstraintName("FK__Laptop__ID_Loai__4E88ABD4");
+                .HasConstraintName("FK__Laptop__ID_Loai__4CA06362");
 
             entity.HasOne(d => d.IdThongTinNavigation).WithMany(p => p.Laptops)
                 .HasForeignKey(d => d.IdThongTin)
-                .HasConstraintName("FK__Laptop__ID_Thong__4F7CD00D");
+                .HasConstraintName("FK__Laptop__ID_Thong__4D94879B");
 
             entity.HasOne(d => d.IdThuongHieuNavigation).WithMany(p => p.Laptops)
                 .HasForeignKey(d => d.IdThuongHieu)
-                .HasConstraintName("FK__Laptop__ID_Thuon__5070F446");
+                .HasConstraintName("FK__Laptop__ID_Thuon__4E88ABD4");
         });
 
         modelBuilder.Entity<Loai>(entity =>
         {
-            entity.HasKey(e => e.IdLoai).HasName("PK__Loai__914C231487F55D88");
+            entity.HasKey(e => e.IdLoai).HasName("PK__Loai__914C231452DBEFB7");
 
             entity.ToTable("Loai");
 
@@ -144,11 +144,9 @@ public partial class ShopLaptopContext : DbContext
         {
             entity.HasKey(e => e.IdTaiKhoan);
 
-            entity.ToTable("TaiKhoan", tb => tb.HasTrigger("trg_TaiKhoanID"));
+            entity.ToTable("TaiKhoan");
 
-            entity.HasIndex(e => e.HoTen, "UQ__TaiKhoan__27AEE13CC2586400").IsUnique();
-
-            entity.HasIndex(e => e.Email, "UQ__TaiKhoan__A9D1053475B7D0B7").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__TaiKhoan__A9D10534D55E6312").IsUnique();
 
             entity.Property(e => e.IdTaiKhoan)
                 .HasMaxLength(50)
@@ -166,7 +164,7 @@ public partial class ShopLaptopContext : DbContext
 
         modelBuilder.Entity<ThongTinChiTiet>(entity =>
         {
-            entity.HasKey(e => e.IdThongTin).HasName("PK__ThongTin__BB9645AF9ED0E72D");
+            entity.HasKey(e => e.IdThongTin).HasName("PK__ThongTin__BB9645AFA7C473CF");
 
             entity.ToTable("ThongTinChiTiet");
 
@@ -193,7 +191,7 @@ public partial class ShopLaptopContext : DbContext
 
         modelBuilder.Entity<ThuongHieu>(entity =>
         {
-            entity.HasKey(e => e.IdThuongHieu).HasName("PK__ThuongHi__AB2A011ACA252538");
+            entity.HasKey(e => e.IdThuongHieu).HasName("PK__ThuongHi__AB2A011A87E57822");
 
             entity.ToTable("ThuongHieu");
 

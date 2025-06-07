@@ -16,7 +16,7 @@ namespace LaptopShop.Controllers
         public IActionResult Index()
         {
             var lstCart = HttpContext.Session.Get<List<CartViewModel>>(DsTenKey.CART_KEY);
-            if (lstCart == null) 
+            if (lstCart == null)
                 lstCart = new List<CartViewModel>();
             var info = new OrderInfoViewModel();
             var checkoutInfor = new CheckoutViewModel
@@ -30,14 +30,14 @@ namespace LaptopShop.Controllers
         [HttpPost]
         public IActionResult DatHang(OrderInfoViewModel Model)
         {
-            var model = Model;            
+            var model = Model;
             var ListCart = HttpContext.Session.Get(DsTenKey.CART_KEY);
             var lstCart = new List<CartViewModel>();
 
-            if(ListCart != null)
+            if (ListCart != null)
             {
                 lstCart = JsonSerializer.Deserialize<List<CartViewModel>>(ListCart);
-            }    
+            }
 
             HttpContext.Session.Set(DsTenKey.ORDER_KEY, lstCart);
             HttpContext.Session.Remove(DsTenKey.CART_KEY); // Xóa giỏ hàng sau khi đặt hàng thành công
@@ -47,9 +47,9 @@ namespace LaptopShop.Controllers
             ViewBag.Time = DateTime.Now.ToString("dd/MM/yyyy - hh/mm/ss");
 
             int count = 0;
-            string iddonhang="";
+            string iddonhang = "";
 
-            using(var db = new ShopLaptopContext())
+            using (var db = new ShopLaptopContext())
             {
                 count = db.DonHangs.Count();
                 do
@@ -66,9 +66,9 @@ namespace LaptopShop.Controllers
             var donhang = new DonHang
             {
                 IdDonHang = iddonhang,
-                
+
                 NgayDat = DateTime.Now,
-                DiaChiGiao = model.Ho + " " + model.Ten + "/" + model.SoDienThoai+ "/" + model.Email + "/" +  model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
+                DiaChiGiao = model.Ho + " " + model.Ten + "/" + model.SoDienThoai + "/" + model.Email + "/" + model.DiaChi + ", " + model.PhuongXa + ", " + model.QuanHuyen + ", " + model.TinhThanh,
                 TongTien = result.GioHang.Sum(x => x.ThanhTien),
                 TrangThai = "ChoXacNhan"
             };
@@ -77,16 +77,21 @@ namespace LaptopShop.Controllers
                 db.DonHangs.Add(donhang);
                 foreach (var item in lstCart)
                 {
+                    var laptops = db.Laptops
+    .Include(l => l.IdThuongHieuNavigation) // load navigation Thương Hiệu
+    .FirstOrDefault(p => p.IdLaptop == item.Id);
                     var chitietdonhang = new ChiTietDonHang
                     {
                         IdDonHang = donhang.IdDonHang,
                         IdLaptop = item.Id,
+                        TenLaptop=item.Name,
+                        ThuongHieu=laptops.IdThuongHieuNavigation.TenThuongHieu,
                         SoLuong = item.Amount,
                         DonGia = item.Price
                     };
                     db.ChiTietDonHangs.Add(chitietdonhang);
                     var laptop = db.Laptops.FirstOrDefault(p => p.IdLaptop == item.Id);
-                    if(laptop != null)
+                    if (laptop != null)
                     {
                         laptop.SoLuong -= item.Amount;
                     }
@@ -113,14 +118,14 @@ namespace LaptopShop.Controllers
         [HttpPost]
         public void SendContact(CheckoutViewModel model, string madonhang)
         {
-            
+
             var mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("khoaphcn109@gmail.com", "LaptopShop");
             mailMessage.To.Add(model.ThongTinKhachHang.Email);
             mailMessage.Subject = "Thông tin đơn hàng";
             double tonggiatri = 0;
             string dshang = "";
-            foreach(var item in model.GioHang)
+            foreach (var item in model.GioHang)
             {
                 tonggiatri += item.ThanhTien;
                 dshang += "\n\t+ " + item.Name + "; Số lượng: " + item.Amount + "; Tổng giá: " + item.ThanhTien + "VNĐ";
@@ -149,7 +154,7 @@ namespace LaptopShop.Controllers
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 

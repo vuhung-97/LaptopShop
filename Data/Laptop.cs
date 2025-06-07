@@ -23,7 +23,6 @@ public partial class Laptop
 
     public string? IdLoai { get; set; }
 
-    public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; } = new List<ChiTietDonHang>();
 
     public virtual Loai? IdLoaiNavigation { get; set; }
 

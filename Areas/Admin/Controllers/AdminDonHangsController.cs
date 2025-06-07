@@ -120,37 +120,9 @@ namespace LaptopShop.Areas.Admin.Controllers
             var donhangsPaged = donhangsQuery.ToPagedList(pageNumber, pageSize);
 
             // Chuyển sang ViewModel tạm
-            var donHangTamList = new List<DonHangTam>();
-            foreach (var donHang in donhangsPaged)
-            {
-                var model = new DonHangTam
-                {
-                    IdDonHang = donHang.IdDonHang,
-                    NgayDat = donHang.NgayDat,
-                    TongTien = donHang.TongTien,
-                    TrangThai = donHang.TrangThai,
+            
+            var donHangTamList = donhangsPaged.Select(MapDonHangToViewModel).ToList();
 
-                };
-
-                if (donHang.IdTaiKhoanNavigation == null && !string.IsNullOrEmpty(donHang.DiaChiGiao))
-                {
-                    var parts = donHang.DiaChiGiao.Split('/');
-                    if (parts.Length >= 3)
-                    {
-                        model.HoTenNguoiNhan = parts[0].Trim();
-                        model.SoDienThoaiNguoiNhan = parts[1].Trim();
-                        model.DiaChiNguoiNhan = parts[2].Trim();
-                    }
-                }
-                else if (donHang.IdTaiKhoanNavigation != null)
-                {
-                    model.HoTenNguoiNhan = donHang.IdTaiKhoanNavigation.HoTen;
-                    model.SoDienThoaiNguoiNhan = donHang.IdTaiKhoanNavigation.DienThoai;
-                    model.DiaChiNguoiNhan = donHang.IdTaiKhoanNavigation.DiaChi;
-                }
-
-                donHangTamList.Add(model);
-            }
 
             // Phân trang lại với ViewModel tạm
             var donHangTamPaged = new StaticPagedList<DonHangTam>(
@@ -172,43 +144,15 @@ namespace LaptopShop.Areas.Admin.Controllers
             var donHang = _context.DonHangs
                 .Include(d => d.IdTaiKhoanNavigation)
                 .Include(d => d.ChiTietDonHangs)
-                    .ThenInclude(ct => ct.IdLaptopNavigation)
-                        .ThenInclude(l => l.IdThuongHieuNavigation)
-                .Include(d => d.ChiTietDonHangs)
-                    .ThenInclude(ct => ct.IdLaptopNavigation)
-                        .ThenInclude(l => l.IdLoaiNavigation)
                 .FirstOrDefault(d => d.IdDonHang == id);
+
 
             if (donHang == null)
                 return NotFound();
 
-            var model = new DonHangTam
-            {
-                IdDonHang = donHang.IdDonHang,
-                NgayDat = donHang.NgayDat,
-                TongTien = donHang.TongTien,
-                TrangThai = donHang.TrangThai,
-                ChiTietDonHangs = donHang.ChiTietDonHangs.ToList()
-            };
-
-            if (donHang.IdTaiKhoanNavigation == null && !string.IsNullOrEmpty(donHang.DiaChiGiao))
-            {
-                var parts = donHang.DiaChiGiao.Split('/');
-                if (parts.Length >= 3)
-                {
-                    model.HoTenNguoiNhan = parts[0].Trim();
-                    model.SoDienThoaiNguoiNhan = parts[1].Trim();
-                    model.DiaChiNguoiNhan = parts[2].Trim();
-                }
-            }
-            else if (donHang.IdTaiKhoanNavigation != null)
-            {
-                model.HoTenNguoiNhan = donHang.IdTaiKhoanNavigation.HoTen;
-                model.SoDienThoaiNguoiNhan = donHang.IdTaiKhoanNavigation.DienThoai;
-                model.DiaChiNguoiNhan = donHang.IdTaiKhoanNavigation.DiaChi;
-            }
-
+            var model = MapDonHangToViewModel(donHang);
             return View(model);
+
         }
 
 
@@ -223,12 +167,29 @@ namespace LaptopShop.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ChuyenTrangThai(string id, string newStatus)
         {
-            var donHang = _context.DonHangs.FirstOrDefault(d => d.IdDonHang == id);
+            var donHang = _context.DonHangs
+                .Include(d => d.ChiTietDonHangs)
+                .FirstOrDefault(d => d.IdDonHang == id);
+
             if (donHang != null)
             {
+                // Nếu chuyển sang "dahuy" và trước đó không phải "dahuy"
+                if (newStatus == "DaHuy" && donHang.TrangThai != "DaHuy")
+                {
+                    foreach (var ct in donHang.ChiTietDonHangs)
+                    {
+                        var laptop = _context.Laptops.FirstOrDefault(l => l.IdLaptop == ct.IdLaptop);
+                        if (laptop != null)
+                        {
+                            laptop.SoLuong += ct.SoLuong;
+                        }
+                    }
+                }
+
                 donHang.TrangThai = newStatus;
                 _context.SaveChanges();
             }
+
             return RedirectToAction("Details", new { id });
         }
 
@@ -239,23 +200,63 @@ namespace LaptopShop.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var donHang = await _context.DonHangs
-                .Include(d => d.ChiTietDonHangs) // Nạp danh sách chi tiết đơn hàng
+                .Include(d => d.ChiTietDonHangs)
                 .FirstOrDefaultAsync(d => d.IdDonHang == id);
 
             if (donHang != null)
             {
-                // Xóa toàn bộ chi tiết đơn hàng
-                _context.ChiTietDonHangs.RemoveRange(donHang.ChiTietDonHangs);
+                // Chỉ hoàn lại số lượng nếu đơn hàng chưa bị hủy và chưa được giao
+                if (donHang.TrangThai != "dahuy" && donHang.TrangThai != "dagiao")
+                {
+                    foreach (var ct in donHang.ChiTietDonHangs)
+                    {
+                        var laptop = await _context.Laptops.FirstOrDefaultAsync(l => l.IdLaptop == ct.IdLaptop);
+                        if (laptop != null)
+                        {
+                            laptop.SoLuong += ct.SoLuong;
+                        }
+                    }
+                }
 
-                // Xóa đơn hàng
                 _context.DonHangs.Remove(donHang);
-
                 await _context.SaveChangesAsync();
             }
 
             return RedirectToAction(nameof(Index));
         }
 
+        private DonHangTam MapDonHangToViewModel(DonHang donHang)
+        {
+            var model = new DonHangTam
+            {
+                IdDonHang = donHang.IdDonHang,
+                NgayDat = donHang.NgayDat,
+                TongTien = donHang.TongTien,
+                TrangThai = donHang.TrangThai,
+                ChiTietDonHangs = donHang.ChiTietDonHangs?.ToList() ?? new List<ChiTietDonHang>()
+            };
+
+            if (donHang.IdTaiKhoanNavigation == null && !string.IsNullOrEmpty(donHang.DiaChiGiao))
+            {
+                var parts = donHang.DiaChiGiao.Split('/');
+                if (parts.Length >= 4)
+                {
+                    model.HoTenNguoiNhan = parts[0].Trim();
+                    model.SoDienThoaiNguoiNhan = parts[1].Trim();
+                    model.EmailNguoiNhan = parts[2].Trim();
+                    model.DiaChiNguoiNhan = parts[3].Trim();
+                }
+            }
+            else if (donHang.IdTaiKhoanNavigation != null)
+            {
+                model.HoTenNguoiNhan = donHang.IdTaiKhoanNavigation.HoTen;
+                model.SoDienThoaiNguoiNhan = donHang.IdTaiKhoanNavigation.DienThoai;
+                model.EmailNguoiNhan = donHang.IdTaiKhoanNavigation.Email;
+                model.DiaChiNguoiNhan = donHang.IdTaiKhoanNavigation.DiaChi;
+            }
+
+            return model;
+        }
 
         private bool DonHangExists(string id)
         {

@@ -64,7 +64,10 @@
 
 <div id="pagination"></div>
 <div class="row product-list">
-    @await Html.PartialAsync("LaptopItem", Model)
+    @foreach(var item in Model)
+    {
+        @await Html.PartialAsync("LaptopItem", item)
+    }
 </div>
 
 

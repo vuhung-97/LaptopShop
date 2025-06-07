@@ -1,55 +1,53 @@
-﻿@model IEnumerable<LaptopShop.ViewModels.LaptopViewModel>
+﻿@model LaptopShop.ViewModels.LaptopViewModel
 
-@foreach (var item in Model)
-{
-    <div class="col-lg-4 col-md-6 mb-4" data-product-id="@item.IdLaptop" data-price="@item.GiaBan">
-        <div class="product-card">
-            <div class="product-image-wrapper">
-                <img src="~/Hinh/Laptop/@item.HinhAnh" alt="@item.TenLapTop">
-                <div class="status-badge @(item.SoLuong > 0 ? "sale" : "out")">
-                    @(item.SoLuong > 0 ? "CÒN HÀNG" : "HẾT HÀNG")
-                </div>
-                @if(item.SoLuong > 0)
-                {
-                    <div class="action-overlay">
-                        <a asp-action="AddToListHeart" asp-controller="Heart" asp-route-idlaptop="@item.IdLaptop" class="action-btn heart-btn" title="Yêu thích">
-                            <i class="fa fa-heart"></i>
-                        </a>
-                        <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="action-btn cart-btn-in-shop" title="Thêm vào giỏ">
-                            <i class="fa fa-shopping-cart"></i>
-                        </a>
-                        <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="action-btn view-btn" title="Xem chi tiết">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                    </div>
-                }
+<div class="col-lg-4 col-md-6 mb-4" data-product-id="@Model.IdLaptop" data-price="@Model.GiaBan">
+    <div class="product-card">
+        <div class="product-image-wrapper">
+            <img src="~/Hinh/Laptop/@Model.HinhAnh" alt="@Model.TenLapTop">
+            <div class="status-badge @(Model.SoLuong > 0 ? "sale" : "out")">
+                @(Model.SoLuong > 0 ? "CÒN HÀNG" : "HẾT HÀNG")
             </div>
-            <div class="product-content">
-                <div class="product-category">@item.TenLoai</div>
-                <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@item.IdLaptop" class="product-title">@item.TenLapTop</a>
-                <div class="product-specs">@item.Cpu • @item.Ram • @item.Ocung</div>
-                <div class="price">
-                    <span>@string.Format("{0:N0}", item.GiaBan) ₫</span>
-                    @if (item.SoLuong > 0)
-                    {
-                        <small class="old">@string.Format("{0:N0}", item.GiaBan * 130 / 100) ₫</small>
-                        <span class="discount">-30%</span>
-                    }
-                </div>
-                @if (item.SoLuong > 0)
-                {
-                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@item.IdLaptop" class="btn-add">
-                        <i class="fa fa-shopping-cart"></i> Thêm
+            @if (Model.SoLuong > 0)
+            {
+                <div class="action-overlay">
+                    <a asp-action="AddToListHeart" asp-controller="Heart" asp-route-idlaptop="@Model.IdLaptop" class="action-btn heart-btn" title="Yêu thích">
+                        <i class="fa fa-heart"></i>
                     </a>
-                }
-                else
+                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@Model.IdLaptop" class="action-btn cart-btn-in-shop" title="Thêm vào giỏ">
+                        <i class="fa fa-shopping-cart"></i>
+                    </a>
+                    <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@Model.IdLaptop" class="action-btn view-btn" title="Xem chi tiết">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                </div>
+            }
+        </div>
+        <div class="product-content">
+            <div class="product-category">@Model.TenLoai</div>
+            <a asp-action="Detail" asp-controller="Shop" asp-route-idlaptop="@Model.IdLaptop" class="product-title">@Model.TenLapTop</a>
+            <div class="product-specs">@Model.Cpu • @Model.Ram • @Model.Ocung</div>
+            <div class="price">
+                <span>@string.Format("{0:N0}", Model.GiaBan) ₫</span>
+                @if (Model.SoLuong > 0)
                 {
-                    <button class="btn-add disabled" disabled><i class="fa fa-ban"></i> Hết hàng</button>
+                    <small class="old">@string.Format("{0:N0}", Model.GiaBan * 130 / 100) ₫</small>
+                    <span class="discount">-30%</span>
                 }
             </div>
+            @if (Model.SoLuong > 0)
+            {
+                <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-idlaptop="@Model.IdLaptop" class="btn-add">
+                    <i class="fa fa-shopping-cart"></i> Thêm
+                </a>
+            }
+            else
+            {
+                <button class="btn-add disabled" disabled><i class="fa fa-ban"></i> Hết hàng</button>
+            }
         </div>
     </div>
-}
+</div>
+
 <style>
     .product-card {
         background: #fff;

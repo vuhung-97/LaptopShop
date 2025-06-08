@@ -14,12 +14,13 @@
     gap: 20px;
     align-items: stretch; /* Đảm bảo các phần tử có chiều cao bằng nhau */
     height: 70vh; /* Đảm bảo container chính có chiều cao đầy đủ */
+        
     }
 
     /* Bảng thông tin bên trái */
     .table-container {
     flex: 1;
-    max-width: 35%;
+    max-width: 45%;
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 8px;
@@ -27,6 +28,7 @@
     display: flex;
     flex-direction: column;
         height: 100%;
+        overflow-x: auto;
     }
 
     /* Bảng */
@@ -99,6 +101,18 @@
         background-color: gray;
         color: white;
     }
+
+    .card {
+        width: 100%;
+        max-width: 100%;
+       
+        box-sizing: border-box;
+    }
+
+        .card * {
+            box-sizing: border-box;
+        }
+
 </style>
 
 <h1 style="text-align: center">Thông tin đơn hàng #@Model.IdDonHang</h1>
@@ -114,7 +128,7 @@
     <!-- Bảng thông tin khách hàng -->
     <div class="table-container">
         <h2>
-            <span class="badge bg-warning text-dark" style="font-size: 1.5rem;">
+            <span class="badge bg-warning text-dark w-100 d-block text-wrap" style="font-size: 1.5rem; white-space: normal; word-break: break-word;">
                 Trạng thái đơn hàng:
                 @{
                     var trangThaiHienThi = Model.TrangThai switch
@@ -129,6 +143,7 @@
                 @trangThaiHienThi
             </span>
         </h2>
+
         <table class="table">
             <thead >
                 <tr>
@@ -194,15 +209,16 @@
             }
         }
        
-        <div class="card mt-3" style="padding: 15px;">
-            <h5>Thao tác xử lý đơn hàng</h5>
-        <div style="display: flex; gap: 10px; align-items: center;">
+        <div class="card mt-3" style="padding: 5px;">
+            <h5>Xử lý đơn hàng</h5>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; overflow: hidden; word-wrap: break-word; max-width: 100%;">
+
             @if (showStatusButton)
             {
                 <form asp-area="Admin" asp-controller="AdminDonHangs" asp-action="ChuyenTrangThai" method="post" style="display:inline">
                     <input type="hidden" name="id" value="@Model.IdDonHang" />
                     <input type="hidden" name="newStatus" value="@nextStatus" />
-                    <button type="submit" class="btn btn-success">@buttonLabel</button>
+                    <button type="submit" class="btn btn-sm btn-success">@buttonLabel</button>
                 </form>
             }
 
@@ -213,7 +229,7 @@
                     <input type="hidden" name="id" value="@Model.IdDonHang" />
                     <input type="hidden" name="newStatus" value="DaHuy" />
                     <!-- Nút Hủy đơn hàng, chỉ hiển thị khi người dùng muốn xác nhận -->
-                    <button type="button" class="btn btn-danger"  onclick="showConfirmModal(event)" >Hủy đơn hàng</button>
+                    <button type="button" class="btn btn-sm btn-danger"  onclick="showConfirmModal(event)" >Hủy đơn hàng</button>
                 </form>
             }
            
@@ -225,9 +241,9 @@
                     <button id="cancelButton" class="modal-button modal-button-cancel">Hủy</button>
                 </div>
             </div>
-                <form id="deleteForm" asp-action="Delete" method="post" style="display:inline; margin-left: auto;">
+                <form id="deleteForm" asp-action="Delete" method="post" class="ms-auto">
                     <input type="hidden" name="id" value="@Model.IdDonHang" />
-                    <button type="button" class="btn btn-danger" onclick="showDeleteConfirmModal()">Xóa đơn hàng</button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="showDeleteConfirmModal()">Xóa đơn hàng</button>
                 </form>
         </div>
             

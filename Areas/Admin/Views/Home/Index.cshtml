@@ -101,7 +101,7 @@
 
     /* Chỉnh sửa cho phần bên trái (col-5) có số lớn hơn */
     .card-body .col-5 h2.display-4 {
-    font-size: 2rem; /* Tăng kích thước chữ số lên (ví dụ: 4rem) */
+    font-size: 3rem; /* Tăng kích thước chữ số lên (ví dụ: 4rem) */
     font-weight: bold;
     align-items: flex-start; /* Căn trái */
     }
@@ -186,7 +186,7 @@
                     <div class="row">
                         <!-- Bên trái: Tổng số -->
                         <div class="col-5 d-flex align-items-center">
-                            <h2 class="display-4 mb-0">@Model.TongSanPham <i class="fa fa-laptop"></i></h2>
+                            <h2 class="display-4 mb-0">@Model.TongSanPham </h2>
                         </div>
                         <!-- Bên phải: Chi tiết -->
                         <div class="col-7">
@@ -209,7 +209,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-5 d-flex align-items-center">
-                            <h2 class="display-4 mb-0">@Model.TongDonHang <i class="fa fa-archive"></i></h2>
+                            <h2 class="display-4 mb-0">@Model.TongDonHang</h2>
                         </div>
                         <div class="col-7">
                             @foreach (var dh in Model.DonHangTheoTrangThai)
@@ -276,7 +276,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-5 d-flex align-items-center">
-                            <h2 class="display-4 mb-0">@Model.TongTaiKhoan <i class="fa fa-users"></i></h2>
+                            <h2 class="display-4 mb-0">@Model.TongTaiKhoan</h2>
                         </div>
                         <div class="col-7">
                             @foreach (var tk in Model.TaiKhoanTheoVaiTro)

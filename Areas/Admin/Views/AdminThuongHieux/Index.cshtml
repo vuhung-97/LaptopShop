@@ -61,8 +61,7 @@
 
     <div class="container1">
     
-    <div class="table-container">
-        <div><a class="btn btn-round btn-success" asp-action="Create" style="float:right">Thêm thương hiệu</a></div>
+    <div class="table-container">       
         <table class="table">
             <thead>
                 <tr>
@@ -71,7 +70,9 @@
                     <th>Thương hiệu</th>
                     <th >Logo</th>
                     <th >Số sản phẩm</th>
-                    <th width="20%"></th>
+                    <th width="20%" >
+                        <a class="btn btn-sm btn-success" asp-action="Create" >Thêm thương hiệu</a>
+                    </th>
                 </tr>
             </thead>
             <tbody>

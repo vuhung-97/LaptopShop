@@ -1,4 +1,4 @@
-﻿@* @model LaptopShop.Data.DonHang *@
+﻿
 @model LaptopShop.Areas.Model.DonHangTam
 
 @{
@@ -101,21 +101,10 @@
     }
 </style>
 
-<h1 style="text-align: center">Thông tin đơn hàng</h1>
-    <h2>#ID: @Model.IdDonHang</h2>
-<h2>
-    Trạng thái đơn hàng: @{
-        var trangThaiHienThi = Model.TrangThai switch
-        {
-            "DaHuy" => "Đã hủy",
-            "ChoXacNhan" => "Chờ xác nhận",
-            "DaGiao" => "Đã giao",
-            "DangGiao" => "Đang giao",
-            _ => "Không xác định"
-        };
-    }
-    @trangThaiHienThi
-</h2>
+<h1 style="text-align: center">Thông tin đơn hàng #@Model.IdDonHang</h1>
+    
+
+
    
 
 <div class="clearfix"></div>
@@ -124,8 +113,24 @@
 <div class="container1">
     <!-- Bảng thông tin khách hàng -->
     <div class="table-container">
+        <h2>
+            <span class="badge bg-warning text-dark" style="font-size: 1.5rem;">
+                Trạng thái đơn hàng:
+                @{
+                    var trangThaiHienThi = Model.TrangThai switch
+                    {
+                        "DaHuy" => "Đã hủy",
+                        "ChoXacNhan" => "Chờ xác nhận",
+                        "DaGiao" => "Đã giao",
+                        "DangGiao" => "Đang giao",
+                        _ => "Không xác định"
+                    };
+                }
+                @trangThaiHienThi
+            </span>
+        </h2>
         <table class="table">
-            <thead>
+            <thead >
                 <tr>
                     <th>Khách hàng</th>
                     <th>@Model.HoTenNguoiNhan</th>
@@ -189,25 +194,26 @@
             }
         }
        
-
+        <div class="card mt-3" style="padding: 15px;">
+            <h5>Thao tác xử lý đơn hàng</h5>
         <div style="display: flex; gap: 10px; align-items: center;">
             @if (showStatusButton)
             {
                 <form asp-area="Admin" asp-controller="AdminDonHangs" asp-action="ChuyenTrangThai" method="post" style="display:inline">
                     <input type="hidden" name="id" value="@Model.IdDonHang" />
                     <input type="hidden" name="newStatus" value="@nextStatus" />
-                    <button type="submit" class="btn btn-round btn-success">@buttonLabel</button>
+                    <button type="submit" class="btn btn-success">@buttonLabel</button>
                 </form>
             }
 
             @if (showCancelButton)
             {
                 <!-- Form Hủy đơn hàng -->
-                <form id="cancelForm" asp-area="Admin" asp-controller="AdminDonHangs" asp-action="ChuyenTrangThai" method="post" style="display:inline; margin-left: auto;">
+                <form id="cancelForm" asp-area="Admin" asp-controller="AdminDonHangs" asp-action="ChuyenTrangThai" method="post" >
                     <input type="hidden" name="id" value="@Model.IdDonHang" />
                     <input type="hidden" name="newStatus" value="DaHuy" />
                     <!-- Nút Hủy đơn hàng, chỉ hiển thị khi người dùng muốn xác nhận -->
-                    <button type="button" class="btn btn-round btn-danger"  onclick="showConfirmModal(event)" >Hủy đơn hàng</button>
+                    <button type="button" class="btn btn-danger"  onclick="showConfirmModal(event)" >Hủy đơn hàng</button>
                 </form>
             }
            
@@ -219,9 +225,13 @@
                     <button id="cancelButton" class="modal-button modal-button-cancel">Hủy</button>
                 </div>
             </div>
-
+                <form id="deleteForm" asp-action="Delete" method="post" style="display:inline; margin-left: auto;">
+                    <input type="hidden" name="id" value="@Model.IdDonHang" />
+                    <button type="button" class="btn btn-danger" onclick="showDeleteConfirmModal()">Xóa đơn hàng</button>
+                </form>
         </div>
-
+            
+        </div>
     </div>
 
     <!-- thông tin đơn hàng -->
@@ -231,8 +241,8 @@
                 <div class="col-sm-12">
                     <div class="card-box table-responsive">
                         <table class="table table-striped table-bordered" style="width:100%">
-                            <thead>
-                                <tr>
+                            <thead >
+                                <tr >
                                     <th style="width: 50px;">STT</th>
                                     <th>Tên Laptop</th>
                                     <th >Thương hiệu</th>
@@ -301,12 +311,10 @@
 
 <div style="margin-top:10px">
     <a asp-action="Index" class="btn btn-round btn-info" style="float:left;">Quay lại</a>
-    <form id="deleteForm" asp-action="Delete" method="post" style="float: right;">
-        <input type="hidden" name="id" value="@Model.IdDonHang" />
-        <button type="button" class="btn btn-round btn-danger" onclick="showDeleteConfirmModal()">Xóa đơn hàng</button>
-    </form>
+    
 
 </div>
+<div class="clearfix"></div>
 <!-- modul cho xoas-->
 <div id="deleteConfirmModal" class="modal">
     <div class="modal-content">

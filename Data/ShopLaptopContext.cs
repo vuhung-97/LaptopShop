@@ -31,7 +31,7 @@ public partial class ShopLaptopContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
-        => optionsBuilder.UseSqlServer("Server=localhost\\HUNGVU;Database=ShopLaptop;Integrated Security=True;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Server=NONAME\\MSSQLSERVER99;Database=ShopLaptop;Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

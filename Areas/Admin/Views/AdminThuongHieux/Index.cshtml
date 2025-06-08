@@ -95,7 +95,7 @@
                         </td>
 
                         <td>
-                            <a class="btn btn-round btn-success" asp-action="Edit" asp-route-id="@item.IdThuongHieu">Sửa</a>
+                            <a class="btn btn-round btn-primary" asp-action="Edit" asp-route-id="@item.IdThuongHieu">Sửa</a>
                             <a class="btn btn-round btn-danger" asp-action="Delete" asp-route-id="@item.IdThuongHieu">Xóa</a>
                         </td>
                     </tr>
@@ -106,5 +106,46 @@
     </div>
 </div>
 
+@section Scripts {
+<script>
+@if (TempData["editmess"] != null)
+{
+    <text>
+        new PNotify({
+        title: 'Thông báo',
+        text: '@Html.Raw(TempData["editmess"])',
+        type: 'info',
+        styling: 'bootstrap3',
+        delay: 3000
+        });
+    </text>
+}
+        @if (TempData["createmess"] != null)
+        {
+            <text>
+                    new PNotify({
+                    title: 'Thông báo',
+                                text: '@Html.Raw(TempData["createmess"])',
+                    type: 'info',
+                    styling: 'bootstrap3',
+                    delay: 3000
+                    });
+            </text>
+        }
 
+@if (TempData["deletemess"] != null)
+{
+    <text>
+        new PNotify({
+        title: 'Thông báo',
+        text: '@Html.Raw(TempData["deletemess"])',
+        type: 'error',
+        styling: 'bootstrap3',
+        delay: 3000
+        });
+    </text>
+}
+
+    </script>
+}
 

@@ -31,6 +31,15 @@
     <!-- Nhúng Lightbox -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
 
+    <!-- PNotify v3.x -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.nonblock.css" rel="stylesheet" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.nonblock.js"></script>
+
     <style>
         body.nav-sm .site_title span {
             display: none !important;
@@ -165,13 +174,12 @@
     <!-- Datatables -->
     <script src="~/adminassets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="~/adminassets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-
+    <!-- PNotify -->
+    <script src="~/adminassets//vendors/pnotify/dist/pnotify.js"></script>
+    <script src="~/adminassets//vendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="~/adminassets//vendors/pnotify/dist/pnotify.nonblock.js"></script>
 
    
-
-
-
-
 
     <!-- Custom Theme Scripts -->
     <script src="~/adminassets/build/js/custom.min.js"></script>
@@ -183,6 +191,8 @@
    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+    
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

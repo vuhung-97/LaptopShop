@@ -89,6 +89,7 @@ namespace LaptopShop.Areas.Admin.Controllers
 
                 _context.Add(thuongHieu);
                 await _context.SaveChangesAsync();
+                TempData["createmess"] = "Đã thêm mới thương hiệu!";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -161,6 +162,7 @@ namespace LaptopShop.Areas.Admin.Controllers
 
                     _context.Update(thuongHieuCu);
                     await _context.SaveChangesAsync();
+                    TempData["editmess"] = "Cập nhập thương hiệu thành công!";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -206,6 +208,7 @@ namespace LaptopShop.Areas.Admin.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["deletemess"] = "Tài khoản đã bị xóa!";
             return RedirectToAction(nameof(Index));
         }
 

@@ -7,7 +7,7 @@ namespace LaptopShop.Data;
 public partial class Laptop
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public string IdLaptop { get; set; } = null!;
+    public string? IdLaptop { get; set; } = null!;
 
     public string? IdThuongHieu { get; set; }
 

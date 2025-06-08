@@ -142,8 +142,33 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
+@section Scripts {
 <script>
+    @if (TempData["editmess"] != null)
+    {
+        <text>
+                                new PNotify({
+                                    title: 'Thông báo',
+                                    text: '@Html.Raw(TempData["editmess"])',
+                                    type: 'info',
+                                    styling: 'bootstrap3',
+                                    delay: 3000
+                                });
+        </text>
+    }
+
+    @if (TempData["deletemess"] != null)
+    {
+        <text>
+                                new PNotify({
+                                    title: 'Thông báo',
+                                    text: '@Html.Raw(TempData["deletemess"])',
+                                    type: 'error',
+                                    styling: 'bootstrap3',
+                                    delay: 3000
+                                });
+        </text>
+    }
     
     //lọc
     $(document).ready(function () {
@@ -182,3 +207,4 @@
         }
     });
 </script>
+}

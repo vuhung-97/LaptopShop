@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LaptopShop.Data;
 
 public partial class ThongTinChiTiet
 {
-    public string IdThongTin { get; set; } = null!;
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public string? IdThongTin { get; set; } = null!;
 
     public string? Cpu { get; set; }
 

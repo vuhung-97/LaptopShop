@@ -1,4 +1,4 @@
-﻿@model LaptopShop.Data.Laptop
+﻿@model LaptopShop.Areas.Model.LaptopCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -9,76 +9,135 @@
 
 
 
+
+
 <div class="d-flex justify-content-center">
-    <div class="card shadow-sm p-4" style="width: 100%; max-width: 1100px; border-radius: 1rem;">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 80%; border-radius: 1rem;">
         <div class="card-body">
             <form asp-action="Create" enctype="multipart/form-data" onsubmit="return submitForm(event)">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3"></div>
-                <input type="hidden" asp-for="IdLaptop" />
+                <input type="hidden" asp-for="Laptop.IdLaptop" />
 
                 <div class="row g-3">
                     <!-- Phần thông tin laptop -->
                     <div class="col-md-7">
                         <div class="form-group">
-                            <label asp-for="TenLapTop" class="form-label fw-semibold">Tên laptop</label>
-                            <input asp-for="TenLapTop" class="form-control rounded-pill shadow-sm px-3" />
-                            <span asp-validation-for="TenLapTop" class="text-danger"></span>
+                            <label asp-for="Laptop.TenLapTop" class="form-label fw-semibold">Tên laptop</label>
+                            <input asp-for="Laptop.TenLapTop" class="form-control rounded-pill shadow-sm px-3" />
+                            <span asp-validation-for="Laptop.TenLapTop" class="text-danger"></span>
                         </div>
 
                         <div class="row">
                             <!-- Loại laptop -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label asp-for="IdLoai" class="form-label fw-semibold">Loại laptop</label>
-                                    <select asp-for="IdLoai" class="form-control rounded-pill shadow-sm px-3" asp-items="ViewBag.IdLoai"></select>
-                                    <span asp-validation-for="IdLoai" class="text-danger"></span>
+                                    <label asp-for="Laptop.IdLoai" class="form-label fw-semibold">Loại laptop</label>
+                                    <select asp-for="Laptop.IdLoai" class="form-control rounded-pill shadow-sm px-3" asp-items="ViewBag.IdLoai"></select>
+                                    <span asp-validation-for="Laptop.IdLoai" class="text-danger"></span>
                                 </div>
                             </div>
 
                             <!-- Thương hiệu -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label asp-for="IdThuongHieu" class="form-label fw-semibold">Thương hiệu</label>
-                                    <select asp-for="IdThuongHieu" class="form-control rounded-pill shadow-sm px-3" asp-items="ViewBag.IdThuongHieu"></select>
-                                    <span asp-validation-for="IdThuongHieu" class="text-danger"></span>
+                                    <label asp-for="Laptop.IdThuongHieu" class="form-label fw-semibold">Thương hiệu</label>
+                                    <select asp-for="Laptop.IdThuongHieu" class="form-control rounded-pill shadow-sm px-3" asp-items="ViewBag.IdThuongHieu"></select>
+                                    <span asp-validation-for="Laptop.IdThuongHieu" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label asp-for="IdThongTin" class="form-label fw-semibold">Cấu hình</label>
-                            <select asp-for="IdThongTin" class="form-control rounded-pill shadow-sm px-3" asp-items="@(ViewData["IdThongTin"] as List<SelectListItem>)" id="infoDropdown"></select>
-                            <span asp-validation-for="IdThongTin" class="text-danger"></span>
+                        <!-- Thông tin chi tiết -->
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                            <label asp-for="ThongTin.Cpu" class="form-label fw-semibold">CPU</label>
+                            <input asp-for="ThongTin.Cpu" class="form-control rounded-pill shadow-sm px-3" />
+                            <span asp-validation-for="ThongTin.Cpu" class="text-danger"></span>
                         </div>
-
-                        <div class="form-group">
-                            <label asp-for="SoLuong" class="form-label fw-semibold">Tồn Kho</label>
-                            <input asp-for="SoLuong" class="form-control rounded-pill shadow-sm px-3" min="0" value="0"/>
-                            <span asp-validation-for="SoLuong" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="GiaBan" class="form-label fw-semibold">Giá bán (VND)</label>
-                            <div class="input-group">
-                                <input type="text" id="GiaBanFormatted" class="form-control rounded-pill shadow-sm" oninput="formatCurrencyVND(this)"/>
-                                <input type="hidden" asp-for="GiaBan" />
+                            <div class="form-group col-md-6">
+                                <label asp-for="ThongTin.DoHoa" class="form-label fw-semibold">Đồ họa</label>
+                                <input asp-for="ThongTin.DoHoa" class="form-control rounded-pill shadow-sm px-3" />
+                                <span asp-validation-for="ThongTin.DoHoa" class="text-danger"></span>
                             </div>
-                            <span asp-validation-for="GiaBan" class="text-danger"></span>
                         </div>
+
+                            <div class="row">
+                            <div class="form-group col-md-6">
+                            <label asp-for="ThongTin.Ram" class="form-label fw-semibold">RAM</label>
+                            <input asp-for="ThongTin.Ram" class="form-control rounded-pill shadow-sm px-3" />
+                            <span asp-validation-for="ThongTin.Ram" class="text-danger"></span>
+                        </div>
+
+                            <div class="form-group col-md-6">
+                            <label asp-for="ThongTin.Ocung" class="form-label fw-semibold">Ổ cứng</label>
+                            <input asp-for="ThongTin.Ocung" class="form-control rounded-pill shadow-sm px-3" />
+                            <span asp-validation-for="ThongTin.Ocung" class="text-danger"></span>
+                        </div>
+                        </div>
+
+                                <div class="row">
+                            <div class="form-group col-md-6">
+                            <label asp-for="ThongTin.ManHinh" class="form-label fw-semibold">Màn hình</label>
+                            <input asp-for="ThongTin.ManHinh" class="form-control rounded-pill shadow-sm px-3" />
+                            <span asp-validation-for="ThongTin.ManHinh" class="text-danger"></span>
+                        </div>
+                            <div class="form-group col-md-6">
+                            <label asp-for="ThongTin.HeDieuHanh" class="form-label fw-semibold">Hệ điều hành</label>
+                            <input asp-for="ThongTin.HeDieuHanh" class="form-control rounded-pill shadow-sm px-3" />
+                            <span asp-validation-for="ThongTin.HeDieuHanh" class="text-danger"></span>
+                        </div>
+                        </div>
+                                                
+                        <div class="form-group">
+                            <label asp-for="ThongTin.CongGiaoTiep" class="form-label fw-semibold">Cổng giao tiếp</label>
+                            <input asp-for="ThongTin.CongGiaoTiep" class="form-control rounded-pill shadow-sm px-3" />
+                            <span asp-validation-for="ThongTin.CongGiaoTiep" class="text-danger"></span>
+                        </div>
+
+                                    <div class="row">
+                            <div class="form-group col-md-6">
+                            <label asp-for="ThongTin.Pin" class="form-label fw-semibold">Pin</label>
+                            <input asp-for="ThongTin.Pin" class="form-control rounded-pill shadow-sm px-3" />
+                            <span asp-validation-for="ThongTin.Pin" class="text-danger"></span>
+                        </div>
+
+                            <div class="form-group col-md-6">
+                            <label asp-for="ThongTin.TrongLuong" class="form-label fw-semibold">Trọng lượng</label>
+                            <input asp-for="ThongTin.TrongLuong" class="form-control rounded-pill shadow-sm px-3" />
+                            <span asp-validation-for="ThongTin.TrongLuong" class="text-danger"></span>
+                        </div>
+                                    </div>
+
+                                        <div class="row">
+                            <div class="form-group col-md-6">
+                            <label asp-for="Laptop.SoLuong" class="form-label fw-semibold">Tồn Kho</label>
+                            <input asp-for="Laptop.SoLuong" class="form-control rounded-pill shadow-sm px-3" min="0" value="0" />
+                            <span asp-validation-for="Laptop.SoLuong" class="text-danger"></span>
+                        </div>
+
+                            <div class="form-group col-md-6">
+                            <label asp-for="Laptop.GiaBan" class="form-label fw-semibold">Giá bán (VND)</label>
+                            <div class="input-group">
+                                <input type="text" id="GiaBanFormatted" class="form-control rounded-pill shadow-sm" oninput="formatCurrencyVND(this)" />
+                                <input type="hidden" asp-for="Laptop.GiaBan" />
+                            </div>
+                            <span asp-validation-for="Laptop.GiaBan" class="text-danger"></span>
+                        </div>
+                                    </div>
+
                         <div class="text-center mt-4">
                             <button type="submit" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-primary">Tạo mới</button>
                             <a asp-action="Index" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-info">Quay lại</a>
                         </div>
                     </div>
 
-
                     <!-- Phần hình ảnh -->
                     <div class="col-md-5">
-                        <label asp-for="HinhAnh" class="control-label">Ảnh sản phẩm</label>
+                        <label asp-for="Laptop.HinhAnh" class="control-label">Ảnh sản phẩm</label>
                         <div id="imagePreviewContainer" class="d-flex flex-wrap overflow-auto" style="max-height: 300px; padding: 10px;">
-                            @if (Model != null && !string.IsNullOrEmpty(Model.HinhAnh))
+                            @if (Model != null && !string.IsNullOrEmpty(Model.Laptop.HinhAnh))
                             {
-                                var images = Model.HinhAnh.Split(",");
+                                var images = Model.Laptop.HinhAnh.Split(",");
                                 foreach (var img in images)
                                 {
                                     <div class="image-wrapper position-relative">
@@ -94,7 +153,7 @@
                             <label for="fileUpload" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" class="btn btn-round btn-primary">Chọn ảnh mới</label>
                             <input type="file" id="fileUpload" name="HinhAnhMoi" class="d-none" multiple accept="image/*" onchange="previewNewImages(event)" />
                         </div>
-                        <span asp-validation-for="HinhAnh" class="text-danger"></span>
+                        <span asp-validation-for="Laptop.HinhAnh" class="text-danger"></span>
                     </div>
 
                 </div>
@@ -103,6 +162,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Modal xem ảnh lớn -->
 <div id="imageModal" class="modal" onclick="closeImageModal()">
@@ -157,7 +217,7 @@
         const rawValue = input.value.replace(/\D/g, ''); // chỉ lấy số
         input.value = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-        const hiddenInput = document.querySelector('[name="GiaBan"]');
+        const hiddenInput = document.querySelector('[name="Laptop.GiaBan"]');
         if (hiddenInput) {
             hiddenInput.value = rawValue;
         }
@@ -170,7 +230,7 @@
 
     window.onload = function () {
         // Khi load trang (ví dụ đang ở chế độ Edit), tự động định dạng lại giá hiển thị
-        const hiddenInput = document.querySelector('[name="GiaBan"]');
+        const hiddenInput = document.querySelector('[name="Laptop.GiaBan"]');
         const displayInput = document.getElementById('GiaBanFormatted');
         if (hiddenInput && displayInput) {
             let value = hiddenInput.value;

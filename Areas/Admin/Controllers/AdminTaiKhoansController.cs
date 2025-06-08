@@ -140,6 +140,7 @@ namespace LaptopShop.Areas.Admin.Controllers
                         throw;
                     }
                 }
+                TempData["editmess"] = "Đã cập nhập tài khoản!";
                 return RedirectToAction(nameof(Index));
             }
             return View(taiKhoan);
@@ -175,6 +176,7 @@ namespace LaptopShop.Areas.Admin.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["deletemess"] = "Tài khoản đã bị xóa!";
             return RedirectToAction(nameof(Index));
         }
 

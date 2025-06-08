@@ -204,6 +204,7 @@ namespace LaptopShop.Areas.Admin.Controllers
                             laptop.SoLuong += ct.SoLuong;
                         }
                     }
+                   
                 }
 
                 donHang.TrangThai = newStatus;
@@ -241,7 +242,7 @@ namespace LaptopShop.Areas.Admin.Controllers
                 _context.DonHangs.Remove(donHang);
                 await _context.SaveChangesAsync();
             }
-
+            TempData["mess"] = "Đơn hàng đã bị xóa!";
             return RedirectToAction(nameof(Index));
         }
 
